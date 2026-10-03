@@ -15,7 +15,13 @@ Prima versione, col nome **Varco**. Repository: <https://github.com/varco-sanita
 - Guardia: ogni host di `umbria.it` e `puntozeroscarl.it` è produzione, salvo l'host di test della wiki con il flag del collaudo regionale e un'`AdesioneUmbria`. Nessuna chiamata ai sistemi umbri, nemmeno al test; i certificati di test pubblici non si scaricano.
 - `strumenti/umbria_server_finto.py`: server HTTPS locale con mTLS che verifica i due JWT e i corpi sugli schemi dell'OpenAPI; risposte sintetiche in `conformita/risposte/umbria/`.
 - Conformità: famiglia `umbria`, 28 casi (`UMB-001`..`UMB-014`, `UMB-101`..`UMB-114`); con l'OpenAPI scaricata (`--gruppi umbria`, sha256 nel manifesto) le richieste si validano anche contro quella (`--openapi-umbria`, `$VARCO_OPENAPI_UMBRIA`).
-- Documentazione: `docs/SAR_UMBRIA.md` (17 difetti delle specifiche in sez. 7), bozza `docs/PROPOSTA_UMBRIA.md`. Dipendenza di test in più: PyYAML.
+- Documentazione: `docs/SAR_UMBRIA.md` (18 punti delle specifiche in sez. 7), bozza `docs/PROPOSTA_UMBRIA.md`. Dipendenza di test in più: PyYAML.
+- Revisione esterna prima del merge (GPT-6 Astra, rapporto in `kit-mmg-review/2026-10-03-dopo-pubblicazione/revisione-umbria/`): quattro bug alti corretti, test `tests/unit/test_revisione_umbria.py`.
+  - B1: senza adesione `CanaleUmbria` consegna con `consegna(..., solo_locale=True)`: il trasporto perde tutti i permessi per la chiamata, e un redirect verso il test umbro non porta più i JWT fuori da localhost anche se il trasporto ha il flag del collaudo.
+  - B2: registro, nel JSON si tolgono le componenti del lotto NRE (`lotto`, `codLotto`, `codRagLotto`, `identificativoLotto`) e il testo di `esito`, `tipoErrore`, `nota` (i codici numerici restano leggibili).
+  - B3: `TrasportoHTTP` tratta una risposta troncata o malformata (`http.client.HTTPException`) come errore di trasporto; dopo un invio qualunque guasto del trasporto è `InvioIncertoUmbria`.
+  - B4: le ricevute si controllano contro gli schemi delle risposte dell'OpenAPI (`json_umbria.SCHEMI_RISPOSTE`, confrontati con l'OpenAPI da un test); fuori schema è `ErroreTrasporto` (dopo un invio `InvioIncertoUmbria`), non più `ConfigurazioneNonValida` né un esito «0000».
+  - Medi e basso (server finto su `opzioni` e SmartCUP, `annulla` del contratto comune senza CF dell'assistito, tipi dei dati importati da JSON, durata frazionaria dei JWT): issue aperte.
 
 ### Correzioni delle issue del giro 3 (03/10/2026)
 

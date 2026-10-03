@@ -166,6 +166,91 @@ class RispostaNonConforme(ValueError):
     """La risposta 2xx non rispetta l'OpenAPI (campo obbligatorio assente, tipo sbagliato)."""
 
 
+# Schemi delle risposte, trascritti da components/schemas dell'OpenAPI del prescrittore
+# (sar-open-api-prescrittore.yaml, commit 3cd93d86): per ogni oggetto i campi obbligatori e il tipo di
+# ogni campo dichiarato. «s» = string; («o», Nome) = oggetto; («a», Nome) = array di oggetti. Nessuno
+# schema dichiara additionalProperties: i campi in più si accettano (e si ignorano). Un test confronta
+# questa tabella con l'OpenAPI scaricata (tests/unit/test_revisione_umbria.py).
+_S = "s"
+_ERRORI_RICETTE = ("o", "ElencoErroriRicetteType")
+_COMUNICAZIONI = ("o", "ElencoComunicazioniType")
+SCHEMI_RISPOSTE: dict[str, tuple[tuple[str, ...], dict[str, Any]]] = {
+    "ComunicazioneType": (("codice", "messaggio"), {"codice": _S, "messaggio": _S}),
+    "ElencoComunicazioniType": (("comunicazione",), {"comunicazione": ("a", "ComunicazioneType")}),
+    "ErroreRicettaType": (("codEsito",), {"codEsito": _S, "esito": _S, "progPresc": _S, "tipoErrore": _S}),
+    "ElencoErroriRicetteType": (("erroreRicetta",), {"erroreRicetta": ("a", "ErroreRicettaType")}),
+    "ErroreType": (("codEsito",), {"codEsito": _S, "esito": _S, "tipoErrore": _S}),
+    "ElencoErroriType": (("errore",), {"errore": ("a", "ErroreType")}),
+    "NotaType": ((), {"progrPresc": _S, "codProdPrest": _S, "tipoAmbulatorio": _S}),
+    "ElencoNotaType": (("nota",), {"nota": ("a", "NotaType")}),
+    "DettaglioPrescrizioneType": (("quantita",), {k: _S for k in (
+        "codProdPrest", "descrProdPrest", "codGruppoEquival", "descrGruppoEquival", "testoLibero",
+        "descrTestoLiberoNote", "nonSost", "motivazNote", "codMotivazione", "notaProd", "quantita",
+        "prescrizione1", "prescrizione2", "codCatalogoPrescr", "tipoAccesso", "numeroNota", "condErogabilita",
+        "approprPrescrittiva", "patologia", "numsedute")}),
+    "ElencoDettagliPrescrizioniType": (("dettaglioPrescrizione",),
+                                       {"dettaglioPrescrizione": ("a", "DettaglioPrescrizioneType")}),
+    "NreUtilRecordType": ((), {k: _S for k in ("nre", "cfMedico", "tipoPrescrizione", "dataCompilazioneRicetta",
+                                               "cfAssistito", "provenienza", "lotto", "codAutenticazione")}),
+    "ElencoNreUtilRecordType": ((), {"nreUtilRecord": ("a", "NreUtilRecordType")}),
+    "InvioPrescrittoRicevuta": (("codEsitoInserimento",), {
+        "nre": _S, "codAutenticazione": _S, "dataInserimento": _S, "codEsitoInserimento": _S,
+        "elencoErroriRicette": _ERRORI_RICETTE, "elencoComunicazioni": _COMUNICAZIONI,
+        "elencoNota": ("o", "ElencoNotaType"), "flagPromemoria": _S, "pdfPromemoria": _S}),
+    "VisualizzaPrescrittoRicevuta": (("codEsitoVisualizzazione",), {
+        **{k: _S for k in (
+            "nre", "cfMedico1", "cfMedico2", "codRegione", "codASLAo", "codStruttura", "codSpecializzazione",
+            "testata1", "testata2", "tipoRic", "codiceAss", "cognNome", "indirizzo", "oscuramDati", "numTessSasn",
+            "socNavigaz", "tipoPrescrizione", "ricettaInterna", "codEsenzione", "nonEsente", "reddito",
+            "codDiagnosi", "descrizioneDiagnosi", "dataCompilazione", "tipoVisita", "dispReg", "provAssistito",
+            "aslAssistito", "indicazionePrescr", "altro", "classePriorita", "statoEstero", "istituzCompetente",
+            "numIdentPers", "numIdentTess", "dataNascitaEstero", "dataScadTessera", "statoProcesso",
+            "codAutenticazione", "dataInserimento", "codEsitoVisualizzazione")},
+        "elencoDettagliPrescrizioni": ("o", "ElencoDettagliPrescrizioniType"),
+        "elencoErroriRicette": _ERRORI_RICETTE, "elencoComunicazioni": _COMUNICAZIONI,
+        "elencoNota": ("o", "ElencoNotaType")}),
+    "AnnullaPrescrittoRicevuta": (("codEsitoAnnullamento", "nre"), {
+        "nre": _S, "codEsitoAnnullamento": _S, "elencoErroriRicette": _ERRORI_RICETTE,
+        "elencoComunicazioni": _COMUNICAZIONI}),
+    "InterrogaNreUtilRicevuta": (("codEsitoInterrogaNreUtilizzati",), {
+        "codEsitoInterrogaNreUtilizzati": _S, "elencoNreUtilRecord": ("o", "ElencoNreUtilRecordType"),
+        "elencoErroriRicette": _ERRORI_RICETTE, "elencoComunicazioni": _COMUNICAZIONI}),
+    "LottoRicevutaNRE": ((), {k: _S for k in ("codRegione", "codRagLotto", "identificativoLotto", "codLotto",
+                                              "codEsito", "esito", "cfmedico")}),
+    "DichiarazioneSostituzioneMedicoRicevuta": (("codEsitoInserimento",), {
+        "codEsitoInserimento": _S, "dataInserimento": _S, "elencoErrori": ("o", "ElencoErroriType"),
+        "elencoComunicazioni": _COMUNICAZIONI}),
+}
+
+
+def verifica_risposta(d: Any, schema: str, percorso: str = "") -> None:
+    """Solleva RispostaNonConforme se `d` non rispetta lo schema dell'OpenAPI: oggetto, campi
+    obbligatori presenti, ogni campo dichiarato del suo tipo. Un `null` esplicito non è una stringa
+    (l'OpenAPI non dichiara nullable): vale come errore, non come assenza (revisione, B4)."""
+    dove = percorso or schema
+    if not isinstance(d, dict):
+        raise RispostaNonConforme(f"{dove}: atteso un oggetto, arrivato {type(d).__name__}")
+    obbligatori, campi = SCHEMI_RISPOSTE[schema]
+    for k in obbligatori:
+        if k not in d:
+            raise RispostaNonConforme(f"{dove}: manca {k!r} (required nell'OpenAPI, {schema})")
+    for k, v in d.items():
+        tipo = campi.get(k)
+        if tipo is None:
+            continue
+        qui = f"{dove}.{k}"
+        if tipo == _S:
+            if not isinstance(v, str):
+                raise RispostaNonConforme(f"{qui}: atteso una stringa, arrivato {type(v).__name__}")
+        elif tipo[0] == "o":
+            verifica_risposta(v, tipo[1], qui)
+        else:
+            if not isinstance(v, list):
+                raise RispostaNonConforme(f"{qui}: atteso un array, arrivato {type(v).__name__}")
+            for i, x in enumerate(v):
+                verifica_risposta(x, tipo[1], f"{qui}[{i}]")
+
+
 def _stringa(d: dict, chiave: str, *, obbligatoria: bool = False) -> str | None:
     v = d.get(chiave)
     if v is None:
@@ -209,6 +294,7 @@ def _note(d: dict) -> tuple[NotaPrestazione, ...]:
 
 
 def leggi_ricevuta_invio(d: dict) -> EsitoInvio:
+    verifica_risposta(d, "InvioPrescrittoRicevuta")
     pdf = _stringa(d, "pdfPromemoria")
     try:
         promemoria = base64.b64decode(pdf, validate=True) if pdf else None
@@ -227,6 +313,7 @@ _NON_TESTATA = {"elencoDettagliPrescrizioni", "elencoErroriRicette", "elencoComu
 
 
 def leggi_ricevuta_visualizza(d: dict) -> EsitoVisualizzazione:
+    verifica_risposta(d, "VisualizzaPrescrittoRicevuta")
     testata = {}
     for k in d:
         if k not in _NON_TESTATA:
@@ -245,6 +332,7 @@ def leggi_ricevuta_visualizza(d: dict) -> EsitoVisualizzazione:
 
 
 def leggi_ricevuta_annulla(d: dict) -> EsitoAnnullamento:
+    verifica_risposta(d, "AnnullaPrescrittoRicevuta")
     return EsitoAnnullamento(
         codice=_stringa(d, "codEsitoAnnullamento", obbligatoria=True) or "",
         messaggi=_messaggi(d), comunicazioni=_comunicazioni(d),
@@ -253,6 +341,7 @@ def leggi_ricevuta_annulla(d: dict) -> EsitoAnnullamento:
 
 
 def leggi_ricevuta_interroga_nre(d: dict) -> EsitoInterrogazioneNre:
+    verifica_risposta(d, "InterrogaNreUtilRicevuta")
     ricette = tuple(
         NreUtilizzato(nre=_stringa(r, "nre"), cf_medico=_stringa(r, "cfMedico"), tipo=_stringa(r, "tipoPrescrizione"),
                       data_compilazione=_stringa(r, "dataCompilazioneRicetta"), cf_assistito=_stringa(r, "cfAssistito"),
@@ -311,6 +400,7 @@ class EsitoLottoNRE(Esito):
 
 
 def leggi_ricevuta_lotto(d: dict) -> EsitoLottoNRE:
+    verifica_risposta(d, "LottoRicevutaNRE")
     codice = _stringa(d, "codEsito") or ""
     testo = _stringa(d, "esito")
     parti = [_stringa(d, k) for k in ("codRegione", "codRagLotto", "identificativoLotto", "codLotto")]
@@ -326,6 +416,7 @@ def leggi_ricevuta_lotto(d: dict) -> EsitoLottoNRE:
 
 
 def leggi_ricevuta_sostituzione(d: dict) -> Esito:
+    verifica_risposta(d, "DichiarazioneSostituzioneMedicoRicevuta")
     return Esito(codice=_stringa(d, "codEsitoInserimento", obbligatoria=True) or "",
                  messaggi=_messaggi(d, "elencoErrori", "errore"), comunicazioni=_comunicazioni(d))
 

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import contextlib
 import contextvars
+import http.client
 import socket
 import ssl
 import sys
@@ -400,9 +401,22 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
         _guardia_corrente.reset(token)
 
 
-def consegna(trasporto: "Trasporto", richiesta: Richiesta) -> Risposta:
-    """L'unico punto in cui i canali del kit (SAC, SIST, FVG, Piemonte, client OAuth2; domani il FSE)
-    consegnano una richiesta a un trasporto.
+def _url_locale(url: str) -> bool:
+    try:
+        return (urlparse(url).hostname or "").lower() in ("localhost", "127.0.0.1", "::1")
+    except ValueError:
+        return False
+
+
+def consegna(trasporto: "Trasporto", richiesta: Richiesta, *, solo_locale: bool = False) -> Risposta:
+    """L'unico punto in cui i canali del kit (SAC, SIST, FVG, Piemonte, Umbria, client OAuth2; domani il
+    FSE) consegnano una richiesta a un trasporto.
+
+    `solo_locale=True`: il canale non ha un'adesione (per esempio `CanaleUmbria` verso il server finto),
+    quindi per questa chiamata il trasporto perde TUTTI i suoi permessi (produzione, collaudi regionali,
+    host piemontesi dichiarati), anche se li dichiara. Un redirect seguito dal trasporto verso un
+    collaudo regionale si ferma come la produzione: l'adesione si controlla sull'URL iniziale, e senza
+    questo il flag del trasporto bastava per i salti successivi (revisione Umbria, B1).
 
     La guardia anti-produzione scatta qui, prima di `invia`, con i permessi dichiarati dal trasporto:
     sostituire `TrasportoHTTP` con un trasporto proprio non la spegne. `TrasportoHTTP` la ripete per
@@ -413,8 +427,10 @@ def consegna(trasporto: "Trasporto", richiesta: Richiesta) -> Risposta:
     si rivaluta anche su quello. Un trasporto che apre la rete fuori da Python (un processo esterno)
     esce da questo controllo: non è ammesso.
     """
-    permessi = permessi_del_trasporto(trasporto)
+    permessi = (False, False, frozenset()) if solo_locale else permessi_del_trasporto(trasporto)
     verifica_url_consentito(richiesta.url, *permessi)
+    if solo_locale and not _url_locale(richiesta.url):
+        raise AmbienteBloccato(f"{richiesta.url}: senza adesione il canale parla solo con localhost")
     with guardia_di_rete(permessi):
         risposta = trasporto.invia(richiesta)
     finale = getattr(risposta, "url_finale", None)
@@ -507,7 +523,10 @@ class TrasportoHTTP:
             except ErroreTrasporto as e:
                 errore = e
                 raise
-            except (urllib.error.URLError, TimeoutError, OSError) as e:
+            except (urllib.error.URLError, TimeoutError, OSError, http.client.HTTPException) as e:
+                # HTTPException: risposta troncata (IncompleteRead) o malformata DOPO che la richiesta è
+                # partita. È un errore di trasporto: il canale decide se l'esito è incerto (revisione
+                # Umbria, B3)
                 errore = ErroreTrasporto(f"Errore di rete verso {parsed.hostname}: {e}")
                 raise errore from e
             return risposta

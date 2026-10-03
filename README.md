@@ -36,6 +36,11 @@ I moduli regionali (Puglia, FVG, Piemonte, Umbria) sono verificati sulle specifi
 prova locali, **non collaudati** sui sistemi delle Regioni: per ognuno serve un'adesione. Il gateway
 FSE non ha ancora un canale (servono i certificati di Sogei).
 
+**Puglia, domanda aperta.** Le specifiche SIST si scaricano senza login e il documento non ha
+diciture, ma la sezione «Integratori» del portale, dove stanno, si dichiara riservata e legata a un
+accordo di riservatezza per le terze parti. Lo abbiamo visto il 03/10/2026, dopo aver scritto il
+modulo. Finché InnovaPuglia non risponde il modulo Puglia non cresce (`docs/BLOCCHI.md`).
+
 Fino al 03/10/2026 il progetto si chiamava *kit-mmg*: il pacchetto Python era `kit_mmg` e le
 variabili d'ambiente avevano il prefisso `KITMMG_`. Ora sono `varco` e `VARCO_*`; per la
 versione 0.1 le vecchie variabili valgono ancora, con un avviso di deprecazione

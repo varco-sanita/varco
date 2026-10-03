@@ -46,7 +46,7 @@ from typing import Any, Callable, Mapping, Protocol
 from urllib.parse import urlparse
 
 from ..ambienti import HOST_UMBRIA_TEST
-from ..errori import ConfigurazioneNonValida, ErroreTrasporto
+from ..errori import AmbienteBloccato, ConfigurazioneNonValida, ErroreTrasporto
 from .http import Richiesta, Trasporto, TrasportoHTTP, consegna
 from .sac import RispostaGrezza
 
@@ -365,11 +365,17 @@ class CanaleUmbria:
             },
         )
         try:
-            risposta = consegna(self.trasporto, richiesta)  # guardia anche con un trasporto proprio
-        except ErroreTrasporto as e:
-            if servizio is ServizioUmbria.INVIO and not isinstance(e, InvioIncertoUmbria):
-                raise InvioIncertoUmbria(f"invio senza risposta ({e}): esito sconosciuto", corpo.get("nre") or "",
-                                         cf_assistito, self._cf_medico) from e
+            # guardia anche con un trasporto proprio; senza adesione il trasporto perde i suoi permessi
+            # per tutta la chiamata, redirect compresi (revisione, B1)
+            risposta = consegna(self.trasporto, richiesta, solo_locale=self.adesione is None)
+        except (AmbienteBloccato, ConfigurazioneNonValida, InvioIncertoUmbria):
+            raise
+        except Exception as e:
+            # Dopo la consegna qualunque guasto (rete, lettura troncata, eccezione di un trasporto
+            # proprio) lascia l'invio senza esito: la richiesta può essere arrivata (revisione, B3)
+            if servizio is ServizioUmbria.INVIO:
+                raise InvioIncertoUmbria(f"invio senza risposta ({type(e).__name__}: {e}): esito sconosciuto",
+                                         corpo.get("nre") or "", cf_assistito, self._cf_medico) from e
             raise
         grezza = RispostaGrezza(richiesta.corpo, risposta.corpo, risposta.stato_http, risposta.durata_s)
         stato = risposta.stato_http
@@ -380,6 +386,9 @@ class CanaleUmbria:
         if not 200 <= stato < 300:
             raise ErroreServizioUmbria(stato, dati if isinstance(dati, dict) else None, risposta.corpo)
         if not isinstance(dati, dict):
+            if servizio is ServizioUmbria.INVIO:
+                raise InvioIncertoUmbria(f"HTTP {stato} senza un oggetto JSON: esito dell'invio sconosciuto",
+                                         corpo.get("nre") or "", cf_assistito, self._cf_medico, stato, risposta.corpo)
             raise ErroreTrasporto(f"SAR Umbria: risposta {stato} senza un oggetto JSON", stato, risposta.corpo)
         return RispostaUmbria(stato, dati, grezza)
 

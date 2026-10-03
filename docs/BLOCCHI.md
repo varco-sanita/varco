@@ -44,5 +44,28 @@ famiglia «testo che contiene strutture codificate»: ogni nuova codifica (escap
 è una variante. Un'alternativa più radicale, da decidere: nel meta scrivere del messaggio d'errore solo
 il tipo dell'eccezione e un'impronta, mai il testo.
 
+## Puglia: le specifiche SIST stanno in un'area che il portale dichiara riservata (03/10/2026)
+
+**Cosa abbiamo trovato.** Le *Specifiche di integrazione SIST* si scaricano senza login da
+<https://sist.sanita.puglia.it/en/specifiche-integrazione>, e il documento non porta diciture di
+riservatezza. Ma quella pagina sta nella sezione «Integratori», e la pagina della sezione
+(<https://sist.sanita.puglia.it/en/integratori>, letta il 03/10/2026) dice: «Tutta la documentazione
+pubblicata all'interno di questa pagina, ivi compreso il materiale software messo a disposizione per gli
+integratori di terze parti, è da considerarsi RISERVATO e vincolato "all'Accordo di riservatezza Terze
+Parti"». Quando abbiamo scritto il modulo (01/10/2026) non l'avevamo visto: `docs/TERZE_PARTI.md` dava
+«nessuna licenza dichiarata».
+
+**Perché è un blocco.** La regola del kit (`docs/TERZE_PARTI.md`, sez. 3) è che un documento che
+restringe i destinatari non entra nel kit. Il modulo Puglia (codec, CDA di prescrizione, server finto,
+casi `SIS-*`) è scritto su quelle specifiche, e non abbiamo firmato nessun accordo. Non è un dubbio che
+possiamo sciogliere da soli: dipende da InnovaPuglia.
+
+**Cosa abbiamo fatto.** Niente di nuovo sul modulo Puglia finché non c'è una risposta. La domanda è la
+prima della mail preparata per InnovaPuglia (helpdesk SIST), che parte solo col via del manutentore.
+
+**Cosa resta da decidere.** Se InnovaPuglia conferma che le specifiche sono pubbliche, si aggiorna
+`docs/TERZE_PARTI.md` con la risposta. Se serve l'accordo, il modulo Puglia va tolto dal repository
+(o sospeso) finché un accordo non permette un client open source.
+
 ---
 Licenza di questo documento: CC-BY-4.0.

@@ -25,7 +25,7 @@ from __future__ import annotations
 import datetime as _dt
 from dataclasses import dataclass
 
-from ..errori import ConfigurazioneNonValida, RicettaNonValida
+from ..errori import ErroreTrasporto, RicettaNonValida
 from ..trasporto.sac import RispostaGrezza
 from ..trasporto.umbria import CanaleUmbria, InvioIncertoUmbria, ServizioUmbria
 from . import json_umbria
@@ -78,12 +78,20 @@ class RicettaUmbria:
             raise RicettaNonValida([f"{operazione}: in Umbria serve il CF dell'assistito (claim person_id del JWT)"])
         return c
 
-    @staticmethod
-    def _leggi(funzione, dati: dict):
+    def _leggi(self, funzione, dati: dict, incerto: tuple[str, str | None] | None = None):
+        """Legge una risposta 2xx. Fuori dall'OpenAPI è un errore del servizio, non della configurazione
+        di chi integra: `ErroreTrasporto` con il corpo. Dopo un INVIO (`incerto` = NRE e CF assistito) non
+        si sa se la ricetta è stata accettata: `InvioIncertoUmbria`, con la procedura della wiki
+        (revisione, B4)."""
         try:
             return funzione(dati)
         except RispostaNonConforme as e:
-            raise ConfigurazioneNonValida(f"risposta del SAR Umbria fuori dall'OpenAPI: {e}") from e
+            grezza = self.ultimo.grezza.xml_risposta if self.ultimo is not None else None
+            messaggio = f"risposta del SAR Umbria fuori dall'OpenAPI: {e}"
+            if incerto is not None:
+                raise InvioIncertoUmbria(messaggio + ": esito dell'invio sconosciuto", incerto[0], incerto[1],
+                                         self.canale.cf_medico, None, grezza) from e
+            raise ErroreTrasporto(messaggio, None, grezza) from e
 
     # ------------------------------------------------------------------ contratto
 
@@ -97,7 +105,8 @@ class RicettaUmbria:
         self._verifica_medico(ricetta)
         corpo = json_umbria.richiesta_invio(ricetta)
         dati = self._chiama(ServizioUmbria.INVIO, corpo, ricetta.assistito.codice_fiscale)
-        return self._leggi(json_umbria.leggi_ricevuta_invio, dati)
+        return self._leggi(json_umbria.leggi_ricevuta_invio, dati,
+                           (corpo.get("nre") or "", ricetta.assistito.codice_fiscale))
 
     def visualizza(
         self, nre: str, cf_medico: str | None = None, *, cf_assistito: str | None = None

@@ -606,7 +606,9 @@ stesso NRE e reinviare con un NRE nuovo: il canale solleva `InvioIncertoUmbria` 
 
 **La guardia copre i domini umbri.** Ogni host di `umbria.it` e `puntozeroscarl.it` è produzione,
 salvo `api-salute-test.regione.umbria.it` con il flag del collaudo regionale e un'`AdesioneUmbria`
-dichiarata nel canale. Senza adesione il canale accetta solo `localhost`.
+dichiarata nel canale. Senza adesione il canale accetta solo `localhost`, e consegna con
+`consegna(..., solo_locale=True)`: per quella chiamata il trasporto perde i suoi permessi, redirect
+compresi.
 
 **Verifica senza la Regione.** `strumenti/umbria_server_finto.py` è un server HTTPS su 127.0.0.1 con
 mutua autenticazione: verifica i due JWT (firma, scadenze, `aud`, `iss` col CN del certificato, claim del servizio,

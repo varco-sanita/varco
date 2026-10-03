@@ -109,8 +109,9 @@ degli NRE usati: lo deve fare chi integra, in modo persistente.
 timeout), non essendo possibile stabilire se il SAC ha accettato la richiesta [...] è necessario
 procedere all'invio di una request di annullamento ricetta dematerializzata con lo stesso NRE ed ad un
 nuovo invio della ricetta con un diverso NRE» (wiki). Il kit solleva `InvioIncertoUmbria` (con NRE,
-CF dell'assistito e del medico) anche quando la risposta non arriva affatto (timeout, rete):
-`annulla_invio_incerto(errore)` fa l'annullamento, il nuovo NRE lo sceglie chi integra. L'NRE
+CF dell'assistito e del medico) anche quando la risposta non arriva affatto o non si legge: timeout,
+rete, risposta troncata, eccezione di un trasporto proprio, corpo che non è JSON o ricevuta fuori
+dall'OpenAPI. In tutti questi casi la richiesta può essere arrivata. `annulla_invio_incerto(errore)` fa l'annullamento, il nuovo NRE lo sceglie chi integra. L'NRE
 dell'invio incerto non si riusa.
 
 **Controlli locali propri dell'Umbria** (`json_umbria.problemi_umbria`, sempre attivi: senza, il
@@ -208,7 +209,12 @@ Scritte qui perché chi integra non perda tempo, e per chiederle a PuntoZero. Ne
     inesistente», 5005), né se un timeout del client vale come un 504 (il kit lo tratta così).
 16. **Errori RFC 7807.** C'è un solo esempio (`mw/validation-error`): l'elenco dei `type` e degli stati
     (401 per un token non valido?) non è documentato. Il server finto usa 400, 401, 404, 405, 415.
-17. **Certificati di test con la chiave privata** in un repository pubblico: per un ambiente di
+17. **Un 401 sul lotto, segnalato da un'altra software house.** Nel repository c'è una issue
+    pubblica del 17/03/2026 (`punto-zero/umbria-sar-support#2`, «Errore 401 Unauthorized su endpoint
+    `richiesta-lotto-nre`»): 401 sul lotto anche con la collection Postman ufficiale e i certificati
+    di test, senza risposta al 03/10/2026. Non sappiamo la causa; le ambiguità dei punti 1, 7 e 8
+    sono candidate.
+18. **Certificati di test con la chiave privata** in un repository pubblico: per un ambiente di
     test è una scelta legittima, ma vuol dire che chiunque può chiamare l'ambiente di test a nome del
     «produttore» d'esempio. Forse conviene dirlo esplicitamente nella wiki.
 
@@ -234,6 +240,10 @@ Scritte qui perché chi integra non perda tempo, e per chiederle a PuntoZero. Ne
   medico e mai usato, SmartCUP). Simula i 502/504 anche dopo aver accettato la ricetta.
 - **Gruppi di controllo**: per ogni controllo del server c'è un test che lo viola e uno che lo
   rispetta; due mutazioni (sul client e sul server) fanno fallire la suite.
+- **Lettura delle risposte**: ogni ricevuta si controlla contro lo schema della sua risposta,
+  trascritto da `components.schemas` (`json_umbria.SCHEMI_RISPOSTE`, confrontato con l'OpenAPI da un
+  test): campi obbligatori, tipi, `null` espliciti, oggetti e liste annidati. Una ricevuta fuori
+  schema è un `ErroreTrasporto` (dopo un invio, `InvioIncertoUmbria`), mai un esito «0000».
 - **Giro completo**: lotto, invio farmaceutica e specialistica con SmartCUP, visualizzazione, NRE
   utilizzati, annullamento, sostituto col suo canale, dichiarazione di sostituzione, invio incerto con
   annullamento e nuovo NRE.
@@ -241,10 +251,19 @@ Scritte qui perché chi integra non perda tempo, e per chiederle a PuntoZero. Ne
   `conformita/risposte/umbria/LEGGIMI.md`), eseguibili da chiunque:
   `python -m varco.conformita.esegui --famiglia umbria --openapi-umbria <sar-open-api-prescrittore.yaml>`.
 - **Registro**: con `RegistratoreFile` nessun CF, nome, indirizzo, NRE, codice di autenticazione,
-  telefono o email di SmartCUP, promemoria o JWT arriva su disco; `Authorization` e
+  telefono o email di SmartCUP, promemoria, JWT, componenti del lotto NRE (`codRagLotto`, `codLotto`,
+  `lotto`) o testo degli errori (`esito`, `tipoErrore`, `nota`; restano i codici numerici) arriva su
+  disco; `Authorization` e
   `FSE-JWT-Signature` sono mascherati.
 - **Guardia**: host di test e di produzione, varianti (maiuscole, punto finale, domini simili),
-  trasporto proprio senza flag: nessuna chiamata parte.
+  trasporto proprio senza flag: nessuna chiamata parte. Senza `AdesioneUmbria` il canale consegna con
+  `solo_locale=True`: il trasporto perde tutti i suoi permessi per la chiamata, quindi un redirect
+  seguito da un trasporto proprio verso il test umbro (o un altro collaudo regionale) si ferma anche
+  se il trasporto ha il flag del collaudo. Un redirect verso un host che non è né produzione né
+  collaudo regionale resta un limite del contratto del trasporto (`docs/MINACCE.md`, riga 5).
+- **Revisione esterna** (GPT-6 Astra, 03/10/2026, prima del merge): i quattro bug alti (redirect senza
+  adesione, registro, risposta troncata, ricevute fuori dall'OpenAPI) sono corretti con i test
+  `tests/unit/test_revisione_umbria.py`; i medi e il basso sono issue aperte del repository.
 
 ## 10. Cosa manca per il collaudo vero
 
