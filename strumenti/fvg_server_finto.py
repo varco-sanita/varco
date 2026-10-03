@@ -19,12 +19,15 @@ Cosa controlla davvero su ogni richiesta, come dice la specifica:
     cifratura di prova (par. 4.6) e dà un «Codice Fiscale/STP/ENI/altro» (p. 18 e XSD): un CF,
     un codice STP o ENI (3 lettere e 13 cifre), o un altro codice alfanumerico fino a 16
     caratteri; un codice STP vuole il tipo ricetta ST (p. 18: «coerente con ... Tipo Ricetta»);
-    un codice che comincia per STP/ENI senza le 13 cifre non passa come «altro» (giro 2, N3);
+    un codice che comincia per STP/ENI senza le 13 cifre non passa come «altro» (giro 2, N3),
+    ma un CF ordinario ben formato che comincia per STP/ENI (dal cognome) resta un CF (issue #6);
   - `codRegione` = "060" (p. 16), conservato e restituito dalla visualizzazione (giro 2, N5);
   - specialistica: `versioneCR` presente, con la patch (par. 3.1, p. 13), e `codCatalogoPrescr`
     in ogni riga (p. 21). Lo XSD li lascia facoltativi: il controllo è qui;
-  - farmaceutica: niente `codCatalogoPrescr`, `tipoAccesso`, `numeroNota`, riservati alla
-    specialistica (p. 21; giro 2, N2);
+  - farmaceutica: niente `codCatalogoPrescr`, `tipoAccesso`, `numeroNota`, `condErogabilita`,
+    `approprPrescrittiva`, `patologia`, riservati alla specialistica (p. 21; giro 2, N2; issue #8);
+  - specialistica: niente `nonSost`, `motivazNote`, `codMotivazione`, `notaProd`, riservati alla
+    farmaceutica (pp. 20-21; issue #8);
   - lista degli NRE: filtri NRE, lotto (`codLotto` dentro l'NRE, p. 15), CF assistito, tipo e
     periodo di compilazione (p. 29), estremi compresi.
 
@@ -61,6 +64,8 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 from xml.sax.saxutils import escape
+
+from varco.ricetta.codice_fiscale import e_codice_fiscale
 
 NS_SOAP = "http://schemas.xmlsoap.org/soap/envelope/"
 _V = "-v1.0"
@@ -374,11 +379,12 @@ class ServerFVG:
             cf = self._decifra_cf(f["codiceAss"])
             if not (_CF.fullmatch(cf) or _STP_ENI.fullmatch(cf) or _ALTRO.fullmatch(cf)):
                 return 200, ricevuta_invio("9999", errori=[("1001", "codice assistito non valido", "0", "E")])
-            if cf.startswith(("STP", "ENI")) and not _STP_ENI.fullmatch(cf):
+            stp_eni = cf.startswith(("STP", "ENI")) and not e_codice_fiscale(cf)  # issue #6: un CF «STP…» resta un CF
+            if stp_eni and not _STP_ENI.fullmatch(cf):
                 # p. 18: «Codice Fiscale/STP/ENI/altro». «altro» non deve coprire uno STP/ENI malformato
                 # (es. troncato al prefisso): revisione esterna giro 2, 4-sar-fvg N3
                 return 200, ricevuta_invio("9999", errori=[("1001", "codice STP/ENI malformato", "0", "E")])
-            if cf.startswith("STP") and f.get("tipoRic") != "ST":
+            if stp_eni and cf.startswith("STP") and f.get("tipoRic") != "ST":
                 return 200, ricevuta_invio("9999", errori=[("1001", "codice STP non coerente con il tipo ricetta", "0", "E")])
         elenco = next(c for c in el if _locale(c.tag) == "ElencoDettagliPrescrizioni")
         righe = [{_locale(c.tag): (c.text or "").strip() for c in d} for d in elenco]
@@ -387,9 +393,16 @@ class ServerFVG:
             # specialistiche», numeroNota «obbligatorio unicamente per le prescrizioni specialistiche
             # trattate dal DM 9 dic 2015». Lo XSD li ammette anche qui (revisione esterna giro 2, N2).
             for r in righe:
-                vietati = [t for t in ("codCatalogoPrescr", "tipoAccesso", "numeroNota") if r.get(t)]
+                vietati = [t for t in ("codCatalogoPrescr", "tipoAccesso", "numeroNota", "condErogabilita",
+                                       "approprPrescrittiva", "patologia") if r.get(t)]
                 if vietati:
                     return 500, fault(f"{', '.join(vietati)} su una ricetta farmaceutica: solo specialistica (p. 21)")
+        if f.get("tipoPrescrizione") == "P":
+            # pp. 20-21: nonSost, motivazNote, codMotivazione e notaProd valgono solo per la farmaceutica (issue #8)
+            for r in righe:
+                vietati = [t for t in ("nonSost", "motivazNote", "codMotivazione", "notaProd") if r.get(t)]
+                if vietati:
+                    return 500, fault(f"{', '.join(vietati)} su una ricetta specialistica: solo farmaceutica (pp. 20-21)")
         if f.get("tipoPrescrizione") == "P":
             versione = elenco.get(f"{{{NS_TIPI}}}versioneCR")
             if not versione or not _VERSIONE_CR.fullmatch(versione):

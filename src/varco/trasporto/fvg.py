@@ -208,8 +208,14 @@ class CanaleFVG:
         `url`: endpoint espliciti per servizio, per esempio quello della lista degli NRE utilizzati,
         che le specifiche non pubblicano. Valgono come gli altri: la guardia li controlla.
         """
-        self.cf_medico = cf_medico.upper()
+        self._cf_medico = cf_medico.upper()
         self.postazione = postazione
+        # una stringa («cns») sceglieva gli endpoint ma saltava i controlli fatti con `is ModalitaFVG.CNS`
+        # (issue #7): si normalizza all'enum, e un valore sconosciuto si rifiuta qui
+        try:
+            modalita = ModalitaFVG(modalita)
+        except ValueError:
+            raise ConfigurazioneNonValida(f"modalità FVG sconosciuta: {modalita!r} (ammesse: cns, federata)") from None
         self.modalita = modalita
         self.token = token
         self.trasporto = trasporto or TrasportoHTTP()
@@ -242,6 +248,7 @@ class CanaleFVG:
         self.adesione = adesione
         self.applicativo = applicativo
         self._carta_verificata = certificato_carta is not None
+        self._cf_carta: str | None = None
         self._user_agent = user_agent(applicativo, postazione)  # controlla subito il formato
         if modalita is ModalitaFVG.FEDERATA:
             if token is None:
@@ -250,6 +257,7 @@ class CanaleFVG:
             raise ConfigurazioneNonValida("i token valgono solo nella modalità federata")
         if certificato_carta is not None:
             cf_carta = cf_del_certificato(certificato_carta)
+            self._cf_carta = cf_carta
             if cf_carta != self.cf_medico:
                 # par. 2.2: inviare solo se il CF della carta nel lettore è quello del medico inviante
                 raise ConfigurazioneNonValida(
@@ -260,6 +268,17 @@ class CanaleFVG:
                 "modalità CNS: serve il certificato della carta (certificato_carta) per controllare che sia "
                 "del medico che invia (par. 2.2)"
             )
+
+    @property
+    def cf_medico(self) -> str:
+        """Il medico che invia. Sola lettura: il confronto con la carta (par. 2.2) si fa alla
+        costruzione e di nuovo a ogni chiamata; per un altro medico serve un altro canale (issue #7)."""
+        return self._cf_medico
+
+    @cf_medico.setter
+    def cf_medico(self, valore: str) -> None:
+        raise AttributeError("cf_medico è di sola lettura: per un altro medico (o il sostituto) crea un altro "
+                             "CanaleFVG, con la sua carta (par. 2.2)")
 
     @property
     def url(self) -> Mapping[ServizioFVG, str]:
@@ -279,7 +298,16 @@ class CanaleFVG:
     def _verifica_destinazione(self, u: str) -> None:
         """Le «due serrature» (docs/SAR_FVG.md) come invariante di OGNI chiamata, non solo del
         costruttore: verso la Regione servono l'AdesioneFVG, il suo applicativo e, in modalità CNS,
-        la carta del medico controllata (par. 2.2). Revisione esterna giro 2, 4-sar-fvg N1."""
+        la carta del medico controllata (par. 2.2). Revisione esterna giro 2, 4-sar-fvg N1.
+        Se c'è una carta, il suo CF si confronta con `cf_medico` a OGNI chiamata, anche verso localhost:
+        aggirando la proprietà (`vars(canale)`), la ricetta del sostituto partiva con la carta del
+        titolare (issue #7)."""
+        if self._carta_verificata and self._cf_carta != self._cf_medico:
+            raise ConfigurazioneNonValida(
+                f"la carta è di {self._cf_carta or 'un CF non leggibile'}, il medico che invia è {self._cf_medico} (par. 2.2)"
+            )
+        if self.modalita is not ModalitaFVG.CNS and self.modalita is not ModalitaFVG.FEDERATA:
+            raise ConfigurazioneNonValida(f"modalità FVG non valida: {self.modalita!r}")
         if _locale(u):
             return
         if self.adesione is None or self.applicativo is not self.adesione.applicativo:

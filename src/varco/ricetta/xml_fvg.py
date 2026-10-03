@@ -28,6 +28,7 @@ from typing import Callable
 
 from ..errori import RicettaNonValida
 from . import xml_sac
+from .codice_fiscale import e_codice_fiscale
 from .modello import CriteriNreUtilizzati, Messaggio, Ricetta, TipoPrescrizione
 
 _V = "-v1.0"
@@ -67,7 +68,26 @@ _ASSENTI_IN_FVG = ("numsedute",)
 # Campi di riga riservati alla specialistica (p. 21): (attributo di Riga, tag del tracciato)
 _SOLO_SPECIALISTICA = (("codice_catalogo", "codCatalogoPrescr"), ("tipo_accesso", "tipoAccesso"),
                        ("numero_nota", "numeroNota"))
+# Campi di riga riservati alla farmaceutica (pp. 20-21): nonSost «solo per prestazioni farmaceutiche»,
+# motivazNote «valevole solo per prescrizioni farmaceutiche», codMotivazione (va con nonSost), notaProd
+# «solo per prescrizioni farmaceutiche»; condErogabilita, approprPrescrittiva e patologia «unicamente per le
+# prescrizioni specialistiche» del DM 9 dic 2015 (issue #8: il controllo era solo in un verso).
+_SOLO_FARMACEUTICA = (("non_sostituibile", "nonSost"), ("note", "motivazNote"),
+                      ("codice_motivazione_non_sost", "codMotivazione"), ("nota_aifa", "notaProd"))
+_SOLO_SPECIALISTICA_DM2015 = (("condizione_erogabilita", "condErogabilita"), ("appropriatezza", "approprPrescrittiva"),
+                              ("patologia", "patologia"))
 _STP_ENI = re.compile(r"(STP|ENI)[0-9]{13}")
+
+
+def _valorizzato(v) -> bool:
+    return v is True or (isinstance(v, str) and bool(v.strip()))
+
+
+def e_codice_stp_eni(codice: str | None) -> bool:
+    """Vero se il codice va trattato come STP/ENI: comincia per STP o ENI e NON è un CF ordinario ben
+    formato (un cognome può dare «STP…», issue #6). Un CF valido resta un CF."""
+    c = (codice or "").upper()
+    return c.startswith(("STP", "ENI")) and not e_codice_fiscale(c)
 
 
 def problemi_fvg(ricetta: Ricetta) -> list[str]:
@@ -86,21 +106,25 @@ def problemi_fvg(ricetta: Ricetta) -> list[str]:
             # p. 21: codCatalogoPrescr e tipoAccesso «da utilizzarsi unicamente per prescrizioni
             # specialistiche», numeroNota «unicamente per le prescrizioni specialistiche trattate dal
             # DM 9 dic 2015» (revisione esterna giro 2, 4-sar-fvg N2: lo XSD non lo vede)
-            for campo, tag in _SOLO_SPECIALISTICA:
-                if (getattr(r, campo) or "").strip():
+            for campo, tag in _SOLO_SPECIALISTICA + _SOLO_SPECIALISTICA_DM2015:
+                if _valorizzato(getattr(r, campo)):
                     p.append(f"riga {i}: {tag} vale solo per la specialistica, non per la farmaceutica (p. 21)")
+        if ricetta.tipo is TipoPrescrizione.SPECIALISTICA:
+            for campo, tag in _SOLO_FARMACEUTICA:
+                if _valorizzato(getattr(r, campo)):
+                    p.append(f"riga {i}: {tag} vale solo per la farmaceutica, non per la specialistica (pp. 20-21)")
     if ricetta.prescrittore.codice_regione != "060":
         # p. 16: codRegione «Codice Regione del medico prescrittore "060"» (revisione esterna giro 2, N5)
         p.append(f"codRegione {ricetta.prescrittore.codice_regione!r}: nel SAR FVG è \"060\" (p. 16)")
     a = ricetta.assistito
     if a.codice_fiscale and len(a.codice_fiscale) > 16:
         p.append("codice assistito: al massimo 16 caratteri")
-    if (a.codice_fiscale or "").upper().startswith(("STP", "ENI")) and not _STP_ENI.fullmatch(a.codice_fiscale.upper()):
+    if e_codice_stp_eni(a.codice_fiscale) and not _STP_ENI.fullmatch(a.codice_fiscale.upper()):
         # p. 18 ammette «Codice Fiscale/STP/ENI/altro» ma non descrive la forma dello STP/ENI: qui è
         # quella che il server finto già controllava, prefisso + 13 cifre (16 caratteri come il CF).
         # Un codice troncato al prefisso passava come «altro» (revisione esterna giro 2, 4-sar-fvg N3).
         p.append(f"codice {a.codice_fiscale!r}: un codice STP/ENI è il prefisso seguito da 13 cifre")
-    if (a.codice_fiscale or "").upper().startswith("STP") and a.tipo_ricetta != "ST":
+    if e_codice_stp_eni(a.codice_fiscale) and a.codice_fiscale.upper().startswith("STP") and a.tipo_ricetta != "ST":
         # p. 18: «Il Codice assistito deve essere coerente con quanto indicato nel campo Tipo Ricetta»
         p.append("codice STP: serve il tipo ricetta ST (stranieri in temporaneo soggiorno, p. 18)")
     return p
