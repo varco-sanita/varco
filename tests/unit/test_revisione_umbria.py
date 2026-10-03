@@ -65,13 +65,15 @@ class _HandlerInMemoria(urllib.request.BaseHandler):
     """Al posto di HTTPSHandler: la prima richiesta riceve un 302 verso il test umbro, la seconda 200.
     Nessun socket: se la guardia non ferma il redirect, la richiesta arriva QUI con i JWT."""
 
+    codice = 302
+
     def __init__(self, verso: str):
         self.verso, self.visti = verso, []
 
     def https_open(self, req):
         self.visti.append((req.full_url, req.get_header("Authorization"), req.get_header("Fse-jwt-signature")))
         if len(self.visti) == 1:
-            return _RispostaFinta(req.full_url, 302, b"", {"Location": self.verso})
+            return _RispostaFinta(req.full_url, self.codice, b"", {"Location": self.verso})
         return _RispostaFinta(req.full_url, 200, json.dumps({"codEsito": "99", "esito": "x"}).encode())
 
 
@@ -316,3 +318,88 @@ def test_b4_schemi_delle_risposte_uguali_all_openapi_scaricata():
         risposta = percorsi["/v1/servizi-prescrittore/" + servizio.value]["post"]["responses"]["200"]["content"]
         rif = next(iter(risposta.values()))["schema"]["$ref"].rsplit("/", 1)[1]
         assert rif in json_umbria.SCHEMI_RISPOSTE, (servizio, rif)
+
+
+# ------------------------------------------------------------------ verifica mirata 1 (B1 e B2 PARZIALI)
+
+
+@pytest.mark.parametrize("verso", [
+    "https://example.org/sar",
+    "https://demservicetest.sanita.finanze.it/x",  # il test del MEF: pubblico, ma non è localhost
+])
+@pytest.mark.parametrize("codice", [301, 302, 303])
+def test_v1_b1_senza_adesione_nessun_host_fuori_da_localhost(materiale, verso, codice):
+    t = _TrasportoCheSegueRedirect(verso)
+    t.handler.codice = codice
+    s = RicettaUmbria(_canale_locale(materiale, t))
+    with pytest.raises(AmbienteBloccato):
+        s.richiedi_lotto_nre()
+    assert len(t.handler.visti) == 1, "i JWT sono usciti da localhost"
+
+
+class _TrasportoHTTPCheSegue:
+    """TrasportoHTTP vero (con la sua guardia interna) e un opener che segue i redirect, in memoria."""
+
+    def __new__(cls, materiale, verso):
+        t = TrasportoLocale(materiale, consenti_collaudo_regionale=True)
+        h = _HandlerInMemoria(verso)
+        o = urllib.request.OpenerDirector()
+        for x in (h, urllib.request.HTTPRedirectHandler(), urllib.request.HTTPErrorProcessor()):
+            o.add_handler(x)
+        t._opener, t.handler = o, h
+        return t
+
+
+@pytest.mark.parametrize("verso", [
+    URL_TEST,
+    f"https://{HOST_UMBRIA_TEST.upper()}./sar/v1/x",
+    "https://demtest.sanita.fvg.it/SARWs/x",
+    "https://example.org/sar",
+])
+def test_v1_b1_la_guardia_interna_di_trasportohttp_non_rimette_i_permessi(materiale, verso):
+    t = _TrasportoHTTPCheSegue(materiale, verso)
+    s = RicettaUmbria(_canale_locale(materiale, t))
+    with pytest.raises((AmbienteBloccato, ErroreTrasporto)):
+        s.richiedi_lotto_nre()
+    assert len(t.handler.visti) == 1, "il secondo salto è arrivato all'handler con i JWT"
+
+
+def test_v1_b1_guardie_annidate_valgono_i_permessi_piu_stretti():
+    from varco.trasporto.http import guardia_di_rete
+    with guardia_di_rete((False, False, frozenset(), True)):
+        with guardia_di_rete((True, True, frozenset({"x"}))) as g:
+            assert g.permessi == (False, False, frozenset(), True)
+
+
+def test_v1_b1_gruppo_di_controllo_con_adesione_il_flag_vale_ancora():
+    from varco.trasporto.http import Richiesta
+
+    class T:
+        consenti_collaudo_regionale = True
+        visto = None
+
+        def invia(self, r):
+            T.visto = r.url
+            return Risposta(200, b"{}", {}, 0.0)
+
+    consegna(T(), Richiesta(servizio="x", url=URL_TEST, corpo=b"{}"))
+    assert T.visto == URL_TEST
+
+
+@pytest.mark.parametrize("corpo", [
+    {"title": "Prenotazione per MARIO ROSSI, tel 3331234567, mario@example.org"},
+    {"esito": {"value": "MARIO ROSSI 3331234567"}},
+    {"lotto": {"value": "1000A1000001"}},
+    {"codLotto": {"value": "000001"}},
+    {"esito": "3331234567"},
+    {"esito": "06123456"},
+])
+def test_v1_b2_varianti_redatte(corpo):
+    fuori = Redattore().corpo(json.dumps(corpo).encode()).decode("utf-8")
+    for pezzo in ("MARIO ROSSI", "3331234567", "mario@example.org", "1000A1000001", "000001", "06123456"):
+        assert pezzo not in fuori, fuori
+
+
+def test_v1_b2_i_codici_corti_restano():
+    fuori = Redattore().corpo(json.dumps({"esito": "0000", "codEsito": "5005"}).encode()).decode("utf-8")
+    assert '"esito": "0000"' in fuori and '"codEsito": "5005"' in fuori

@@ -252,15 +252,17 @@ Scritte qui perché chi integra non perda tempo, e per chiederle a PuntoZero. Ne
   `python -m varco.conformita.esegui --famiglia umbria --openapi-umbria <sar-open-api-prescrittore.yaml>`.
 - **Registro**: con `RegistratoreFile` nessun CF, nome, indirizzo, NRE, codice di autenticazione,
   telefono o email di SmartCUP, promemoria, JWT, componenti del lotto NRE (`codRagLotto`, `codLotto`,
-  `lotto`) o testo degli errori (`esito`, `tipoErrore`, `nota`; restano i codici numerici) arriva su
-  disco; `Authorization` e
+  `identificativoLotto`, `lotto`) o testo degli errori (`esito`, `tipoErrore`, `nota`, `title` e
+  `detail` dei problemi RFC 7807, anche dentro un oggetto; restano solo i codici di al più quattro
+  cifre) arriva su disco; `Authorization` e
   `FSE-JWT-Signature` sono mascherati.
 - **Guardia**: host di test e di produzione, varianti (maiuscole, punto finale, domini simili),
   trasporto proprio senza flag: nessuna chiamata parte. Senza `AdesioneUmbria` il canale consegna con
-  `solo_locale=True`: il trasporto perde tutti i suoi permessi per la chiamata, quindi un redirect
-  seguito da un trasporto proprio verso il test umbro (o un altro collaudo regionale) si ferma anche
-  se il trasporto ha il flag del collaudo. Un redirect verso un host che non è né produzione né
-  collaudo regionale resta un limite del contratto del trasporto (`docs/MINACCE.md`, riga 5).
+  `solo_locale=True`: per tutta la chiamata la guardia ammette solo localhost e il loopback, e il
+  trasporto perde i suoi permessi. Un redirect seguito da un trasporto proprio (verso il test umbro,
+  un altro collaudo, il test del MEF o un host qualsiasi) si ferma prima che i JWT partano, anche se
+  il trasporto ha il flag del collaudo. Una guardia dentro un'altra (quella di `TrasportoHTTP` dentro
+  `consegna`) non allarga mai i permessi: valgono i più stretti.
 - **Revisione esterna** (GPT-6 Astra, 03/10/2026, prima del merge): i quattro bug alti (redirect senza
   adesione, registro, risposta troncata, ricevute fuori dall'OpenAPI) sono corretti con i test
   `tests/unit/test_revisione_umbria.py`; i medi e il basso sono issue aperte del repository.

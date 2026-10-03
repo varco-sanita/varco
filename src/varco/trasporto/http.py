@@ -187,11 +187,53 @@ def _gethostbyname_ex(host):
     return risultato
 
 
+def _url_locale(url: str) -> bool:
+    """localhost o un IP di loopback (127.0.0.0/8, ::1, anche nella forma IPv4-mapped)."""
+    try:
+        host = (urlparse(url).hostname or "").lower().rstrip(".")
+    except ValueError:
+        return False
+    if host == "localhost":
+        return True
+    ip = indirizzo_ip(host)
+    if ip is None:
+        return False
+    mappato = getattr(ip, "ipv4_mapped", None)
+    return (mappato or ip).is_loopback
+
+
+# Permessi di una guardia: (consenti_produzione, consenti_collaudo_regionale, collaudi_piemonte) e, come
+# quarto elemento facoltativo, `solo_locale`: la chiamata non può uscire da localhost (canale senza
+# adesione, revisione Umbria B1).
+Permessi = tuple
+
+
+def _normalizza(permessi) -> tuple[bool, bool, frozenset[str], bool]:
+    produzione, collaudo, piemonte = permessi[:3]
+    solo_locale = bool(permessi[3]) if len(permessi) > 3 else False
+    return produzione is True, collaudo is True, frozenset(piemonte or ()), solo_locale
+
+
+def _intersezione(esterni, interni) -> tuple[bool, bool, frozenset[str], bool]:
+    """Una guardia dentro un'altra (consegna -> TrasportoHTTP.invia) non allarga mai i permessi: valgono i
+    più stretti dei due. Prima la guardia interna di TrasportoHTTP rimetteva i permessi del trasporto e
+    un redirect seguito passava (revisione Umbria, verifica di B1)."""
+    a, b = _normalizza(esterni), _normalizza(interni)
+    return a[0] and b[0], a[1] and b[1], a[2] & b[2], a[3] or b[3]
+
+
+def _verifica(url: str, permessi) -> None:
+    produzione, collaudo, piemonte, solo_locale = _normalizza(permessi)
+    verifica_url_consentito(url, produzione, collaudo, piemonte)
+    if solo_locale and not _url_locale(url):
+        raise AmbienteBloccato(f"{url}: senza adesione la chiamata non esce da localhost (nemmeno con un redirect)")
+
+
 class _GuardiaDiRete:
     __slots__ = ("permessi", "violazioni")
 
-    def __init__(self, permessi: tuple[bool, bool, frozenset[str]]):
-        self.permessi = permessi
+    def __init__(self, permessi):
+        self.permessi = _normalizza(permessi)
         self.violazioni: list[AmbienteBloccato] = []
 
 
@@ -249,7 +291,7 @@ def _verifica_destinazione(evento: str, url: str, permessi) -> None:
     di suo (loopback, o produzione con il flag) OPPURE se uno dei nomi da cui il modulo socket l'ha
     risolto passa la guardia adesso. Un IP mai risolto davanti alla guardia resta un IP letterale."""
     try:
-        verifica_url_consentito(url, *permessi)
+        _verifica(url, permessi)
         return
     except AmbienteBloccato:
         if evento != "socket.connect":
@@ -260,7 +302,7 @@ def _verifica_destinazione(evento: str, url: str, permessi) -> None:
         nomi = _nomi_di(ip)
         for nome in sorted(nomi):
             try:
-                verifica_url_consentito(_url_di_un_host(nome) or "", *permessi)
+                _verifica(_url_di_un_host(nome) or "", permessi)
                 return
             except AmbienteBloccato:
                 continue
@@ -311,7 +353,9 @@ def _avvia_thread(self, *args, **kwargs):
 
 def _vietato_per_nome(evento: str, url: str, permessi) -> None:
     """Thread senza legame: si ferma un host vietato per nome, o un IP risolto da un nome vietato;
-    un IP che nessuno ha risolto davanti alla guardia non si attribuisce a nessuno (issue #2)."""
+    un IP che nessuno ha risolto davanti alla guardia non si attribuisce a nessuno (issue #2).
+    `solo_locale` qui non vale: un thread estraneo non appartiene alla chiamata senza adesione."""
+    permessi = permessi[:3]
     ip = urlparse(url).hostname or ""
     if indirizzo_ip(ip) is None:
         verifica_url_consentito(url, *permessi)
@@ -380,7 +424,8 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
     All'uscita, se un accesso è stato bloccato, solleva `AmbienteBloccato` anche se il codice del
     blocco ha ingoiato l'eccezione."""
     _installa_hook()
-    g = _GuardiaDiRete(permessi)
+    esterna = _guardia_del_thread()
+    g = _GuardiaDiRete(_intersezione(esterna.permessi, permessi) if esterna is not None else permessi)
     token = _guardia_corrente.set(g)
     with _lock_guardie:
         _guardie_attive[id(g)] = g
@@ -399,13 +444,6 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
         with _lock_guardie:
             _guardie_attive.pop(id(g), None)
         _guardia_corrente.reset(token)
-
-
-def _url_locale(url: str) -> bool:
-    try:
-        return (urlparse(url).hostname or "").lower() in ("localhost", "127.0.0.1", "::1")
-    except ValueError:
-        return False
 
 
 def consegna(trasporto: "Trasporto", richiesta: Richiesta, *, solo_locale: bool = False) -> Risposta:
@@ -427,15 +465,13 @@ def consegna(trasporto: "Trasporto", richiesta: Richiesta, *, solo_locale: bool 
     si rivaluta anche su quello. Un trasporto che apre la rete fuori da Python (un processo esterno)
     esce da questo controllo: non è ammesso.
     """
-    permessi = (False, False, frozenset()) if solo_locale else permessi_del_trasporto(trasporto)
-    verifica_url_consentito(richiesta.url, *permessi)
-    if solo_locale and not _url_locale(richiesta.url):
-        raise AmbienteBloccato(f"{richiesta.url}: senza adesione il canale parla solo con localhost")
+    permessi = (False, False, frozenset(), True) if solo_locale else permessi_del_trasporto(trasporto)
+    _verifica(richiesta.url, permessi)
     with guardia_di_rete(permessi):
         risposta = trasporto.invia(richiesta)
     finale = getattr(risposta, "url_finale", None)
     if finale is not None and finale != richiesta.url:
-        verifica_url_consentito(finale, *permessi)
+        _verifica(finale, permessi)
     return risposta
 
 

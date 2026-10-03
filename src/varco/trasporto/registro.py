@@ -315,13 +315,15 @@ _SUFFISSO_NS_SAC = ".xsd.dem.sanita.finanze.it"
 
 # Chiavi JSON con un valore SEMPLICE (stringa, numero) che si toglie nella modalità redatta, oltre a
 # TAG_REDATTI. Nel JSON non c'è un namespace che dica di quale servizio è un nome: queste valgono per
-# ogni JSON, e solo sui valori semplici (un contenitore con lo stesso nome, come `elencoNota.nota`, si
-# legge voce per voce). SAR Umbria (revisione, B2): il testo degli errori lo scrive il servizio e ci può
+# ogni JSON. Come per TAG_REDATTI la chiave classifica TUTTO il contenuto: `{"esito": {"value": …}}`
+# diventa un solo segnaposto (verifica della revisione, B2). Resta leggibile solo un codice di al più
+# quattro cifre (`"esito": "0000"` di altri servizi): un numero più lungo può essere un telefono. SAR Umbria (revisione, B2): il testo degli errori lo scrive il servizio e ci può
 # finire un nome; dal lotto (codRagLotto + identificativoLotto + codLotto) si ricavano gli NRE del medico.
 CHIAVI_JSON_REDATTE: dict[str, str] = {
     "esito": "testo_libero",
     "tipoErrore": "testo_libero",
     "nota": "testo_libero",
+    "title": "testo_libero",  # RFC 7807 (errori del SAR umbro): lo scrive il servizio, come `detail`
     "lotto": "lotto",
     "codLotto": "lotto",
     "codRagLotto": "lotto",
@@ -578,11 +580,12 @@ class Redattore:
                 return self.credenziale(intero) if credenziale else self.segnaposto(tipo, intero)
             if credenziale or tipo:
                 return self._valore(nome, str(x), redigi, "json", code_credenziale)
-            if redigi and not isinstance(x, (dict, list)):
-                tipo_json = _CHIAVI_JSON_REDATTE_MINUSCOLO.get(nome.lower())
+            tipo_json = _CHIAVI_JSON_REDATTE_MINUSCOLO.get(nome.lower()) if redigi else None
+            if tipo_json is not None:
+                if isinstance(x, (dict, list)):
+                    return self.segnaposto(tipo_json, json.dumps(x, ensure_ascii=False, sort_keys=True))
                 testo = str(x).strip()
-                # un codice numerico (`"esito": "0000"` di altri servizi) non è testo libero: resta
-                if tipo_json is not None and not (tipo_json == "testo_libero" and testo.isdigit() and len(testo) <= 8):
+                if not (tipo_json == "testo_libero" and testo.isdigit() and len(testo) <= 4):
                     return self.segnaposto(tipo_json, testo)
         if isinstance(x, dict):
             return {k: self._json(v, redigi, k, code_credenziale=code_credenziale) for k, v in x.items()}
