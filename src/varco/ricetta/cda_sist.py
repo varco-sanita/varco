@@ -77,6 +77,18 @@ INDICAZIONE = {"S": "Suggerita", "H": "Ricovero"}
 CLASSI_SASN = {"NA", "ND", "NE", "NX"}
 PRIORITA = {"U": "URGENTE", "B": "BREVE", "D": "DIFFERIBILE", "P": "PROGRAMMATA"}
 MOTIVI_NON_SOST = {"1", "2", "3", "4"}  # CDA2_Prescrizione, ObservationCodDettaglioMotivoNS_IT
+# displayName è «required» (CDA2_Prescrizione, p. 162). La specifica pugliese dà UNA sola descrizione:
+# "2" = «Obiettive difficoltà di assunzione» (p. 162 ed esempi CDA). Per 1, 3 e 4 non ne pubblica e le
+# linee guida di altre Regioni numerano diversamente (Sardegna, DGR 13/4 del 31/03/2015: 2 = complessità
+# della terapia): il kit NON inventa la corrispondenza, scrive una descrizione neutra col codice e il
+# riferimento normativo. Domanda aperta a InnovaPuglia (docs/SAR_PUGLIA.md, difetti delle specifiche).
+DESCRIZIONE_MOTIVI_NON_SOST = {
+    "1": "Motivo di non sostituibilità 1 (art. 15, comma 11-bis, DL 95/2012)",
+    "2": "Obiettive difficoltà di assunzione",
+    "3": "Motivo di non sostituibilità 3 (art. 15, comma 11-bis, DL 95/2012)",
+    "4": "Motivo di non sostituibilità 4 (art. 15, comma 11-bis, DL 95/2012)",
+}
+TIPI_ASSICURATI_ESTERI = ("UE", "EE", "NE", "NX")
 # Nota Tecnica IUP (Allegati Tecnici), par. 2.1: 13 simboli di un alfabeto di 31 (dieci cifre e
 # le lettere maiuscole italiane, con X al posto di O). L'NRE del MEF ha 15 caratteri.
 ALFABETO_IUP = "0123456789ABCDEFGHILMNXPQRSTUVZ"
@@ -122,6 +134,15 @@ def problemi_righe_cda(ricetta: Ricetta) -> list[str]:
             p.append(f"riga {i}: motivo di non sostituibilità ammesso 1-4 (CDA2_Prescrizione)")
     if ricetta.tipo_visita not in INCONTRO:
         p.append(f"tipo visita senza codice di incontro nel CDA: {ricetta.tipo_visita}")
+    a = ricetta.assistito
+    if a.tipo_ricetta in TIPI_ASSICURATI_ESTERI:
+        # CDA2_Prescrizione pp. 23-25: per gli assicurati da istituzioni estere i due id (tessera TEAM e
+        # identificativo personale, con la sigla della nazione) sono OBBLIGATORI (issue #3)
+        mancanti = [n for n, v in (("stato_estero", a.stato_estero), ("num_ident_tessera", a.num_ident_tessera),
+                                   ("num_ident_personale", a.num_ident_personale)) if not v]
+        if mancanti:
+            p.append(f"assicurato estero ({a.tipo_ricetta}): mancano {', '.join(mancanti)} "
+                     "(id1_Estero_IT e id2_Estero_IT obbligatori, CDA2_Prescrizione pp. 23-25)")
     return p
 
 
@@ -136,17 +157,20 @@ def _record_target(cd: ET.Element, ricetta: Ricetta, paziente) -> None:
     a = ricetta.assistito
     ruolo = _el(_el(cd, "recordTarget"), "patientRole")
     tipo = a.tipo_ricetta
-    if a.codice_fiscale and a.codice_fiscale.upper().startswith("STP"):
+    if tipo in TIPI_ASSICURATI_ESTERI:
+        # Assicurato da istituzioni estere: l'id principale sono la tessera TEAM e l'identificativo
+        # personale, SEMPRE entrambi (pp. 24-25), anche se il chiamante ha un CF: accanto all'id principale
+        # possono stare solo tessera sanitaria e SASN (p. 23), quindi il CF qui non va (issue #3).
+        # problemi_righe_cda() rifiuta prima di chkPrescrizione se uno dei due manca.
+        stato = a.stato_estero or ""
+        _el(ruolo, "id", root=OID_TESSERA_TEAM, extension=f"{stato}.{a.num_ident_tessera or ''}",
+            assigningAuthorityName="SSN-MIN SALUTE-5001")
+        _el(ruolo, "id", root=OID_IDENT_PERSONALE_ESTERO, extension=f"{stato}.{a.num_ident_personale or ''}",
+            assigningAuthorityName=a.istituzione_competente or "SSN-MIN SALUTE-500001")
+    elif a.codice_fiscale and a.codice_fiscale.upper().startswith("STP"):
         _el(ruolo, "id", root=OID_STP_PUGLIA, extension=a.codice_fiscale, assigningAuthorityName="Regione Puglia")
     elif a.codice_fiscale:
         _el(ruolo, "id", root=OID_CF, extension=a.codice_fiscale, assigningAuthorityName="MEF")
-    elif tipo in ("UE", "EE", "NE", "NX") and a.num_ident_tessera:
-        stato = a.stato_estero or ""
-        _el(ruolo, "id", root=OID_TESSERA_TEAM, extension=f"{stato}.{a.num_ident_tessera}",
-            assigningAuthorityName="SSN-MIN SALUTE-5001")
-        if a.num_ident_personale:
-            _el(ruolo, "id", root=OID_IDENT_PERSONALE_ESTERO, extension=f"{stato}.{a.num_ident_personale}",
-                assigningAuthorityName=a.istituzione_competente or "SSN-MIN SALUTE-500001")
     if a.num_tessera_sasn:
         _el(ruolo, "id", root=OID_TESSERA_SASN, extension=a.num_tessera_sasn, assigningAuthorityName="Ministero della Salute")
     residenza = getattr(paziente, "residenza", None)
@@ -237,7 +261,8 @@ def _riga_farmaco(sezione: ET.Element, r: Riga, i: int) -> None:
         _el(obs, "code", code="SUBST", codeSystem=OID_ACT_CLASS, codeSystemName="HL7 ActClass", displayName="Substitution")
         _el(obs, "value", xsi_type="CE", codeSystem=OID_SOSTITUZIONE_HL7, codeSystemName="HL7Substance Admin Substitution")
         motivo = _el(_el(obs, "entryRelationship", typeCode="RSON"), "observation", classCode="OBS", moodCode="EVN")
-        _el(motivo, "code", code=r.codice_motivazione_non_sost, codeSystem=OID_MOTIVO_NON_SOST)
+        _el(motivo, "code", code=r.codice_motivazione_non_sost, codeSystem=OID_MOTIVO_NON_SOST,
+            displayName=DESCRIZIONE_MOTIVI_NON_SOST[r.codice_motivazione_non_sost])  # required, p. 162 (issue #4)
     nota = nota_aifa_sist(r.nota_aifa)
     if nota:
         act = _el(_el(sa, "entryRelationship", typeCode="REFR"), "act", classCode="ACT", moodCode="EVN")
