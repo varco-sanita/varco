@@ -91,7 +91,8 @@ public class EseguiCasiFse {
                         && (e.equals("OK") || e.equals("SEMANTIC_WARNING")) == atteso.get("valido").asBoolean()) compatibile = true;
             if (!compatibile) ko.add("valido=" + atteso.get("valido") + " incompatibile con esito " + atteso.get("esito"));
         }
-        if (atteso.path("senza_errori").asBoolean(false) && atteso.has("errori_contengono"))
+        // come il Python (motore.incoerenze): conta una lista PIENA, non la sola presenza della chiave (issue #10)
+        if (atteso.path("senza_errori").asBoolean(false) && atteso.path("errori_contengono").size() > 0)
             ko.add("senza_errori ed errori_contengono insieme");
         String esito = oss.get("esito").asText();
         if (atteso.has("esito") && !esitoAmmesso(atteso.get("esito"), esito))

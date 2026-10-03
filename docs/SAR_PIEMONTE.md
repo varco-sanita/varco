@@ -433,6 +433,11 @@ Tutto senza rete verso la Regione e verso il CSI.
   - SAR con sessione scaduta e JWT ancora valido: «Id-Sessione scaduto»;
   - `redirect_uri` registrata con una query (`?tenant=301`): il ritorno aggiunge `&code=...`;
   - il runner dei casi `PIE-*` non confonde `false` con `0` e un campo assente con `null`.
+- Issue della 0.1.0 (`tests/unit/test_issue_piemonte_conformita.py`):
+  - scope concessi anche ∩ permessi del **gestionale**: un gestionale censito senza diritto di
+    prescrizione riceve `unauthorized_client` (SIRPED-TES-01-V02 p. 26, A2F-OAU2-TOK-N-03;
+    REL-STC-01 p. 27), issue #9;
+  - verify e revoke rifiutano (401) un JWT con `nbf` o `exp` NaN o infiniti, come il SAR, issue #11.
 
 **Guardia**
 - Host parametrizzati: produzione, collaudo, finti-simili (`attestazioni.regione.piemonte.it`,
