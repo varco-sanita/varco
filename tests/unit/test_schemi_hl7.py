@@ -102,3 +102,44 @@ def test_variabile_d_ambiente_su_una_copia_altrove(tmp_path, monkeypatch):
 
     e = v.ValidatoreLocale().valida(genera_xml(pss_completo()))
     assert e.valido, e.errori
+
+
+@pytest.mark.schemi_hl7
+def test_schematron_legge_un_file_chiuso_e_non_lascia_residui(monkeypatch):
+    """CI Windows 03/10/2026: Saxon non riapre un NamedTemporaryFile ancora aperto. Quando Saxon legge,
+    nessun handle di Python deve tenere aperto il file; dopo, il file non deve restare su disco."""
+    if not v.dipendenze_locali_presenti():
+        pytest.skip("servono lxml e saxonche")
+    if not v.schemi_locali_presenti():
+        pytest.skip("schemi HL7 non scaricati")
+    import gc
+    import io as _io
+    from pathlib import Path as _P
+
+    from varco.fse.cda_pss import genera_xml
+    from varco.fse.esempi import pss_completo
+
+    sch = v._schematron("schematron_PSS_v4.0.sch") if hasattr(v, "_schematron") else None
+    if sch is None:
+        pytest.skip("schematron PSS non trovato")
+    letti = []
+    originale = sch.proc.parse_xml
+
+    def spia(**kw):
+        nome = kw["xml_file_name"]
+        aperti = [o for o in gc.get_objects()
+                  if isinstance(o, _io.IOBase) and not o.closed and getattr(o, "name", None) == nome]
+        letti.append((nome, len(aperti)))
+        return originale(**kw)
+
+    class Proxy:  # il processore Saxon è un oggetto Cython: non si sostituisce un suo metodo
+        def __init__(self, vero):
+            self._vero = vero
+
+        def __getattr__(self, nome):
+            return spia if nome == "parse_xml" else getattr(self._vero, nome)
+
+    monkeypatch.setattr(sch, "proc", Proxy(sch.proc))
+    sch.svrl(genera_xml(pss_completo()))
+    assert letti and letti[0][1] == 0, f"file ancora aperto mentre Saxon lo legge: {letti}"
+    assert not _P(letti[0][0]).exists()
