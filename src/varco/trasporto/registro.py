@@ -76,6 +76,7 @@ from __future__ import annotations
 
 import base64
 import binascii
+import contextvars
 import datetime as _dt
 import hashlib
 import hmac
@@ -331,6 +332,25 @@ CHIAVI_JSON_REDATTE: dict[str, str] = {
 }
 _CHIAVI_JSON_REDATTE_MINUSCOLO = {k.lower(): v for k, v in CHIAVI_JSON_REDATTE.items()}
 
+# SAR Umbria: nei corpi JSON dei servizi `umbria.*` vale una ALLOWLIST, come per l'XML del SAC. Una
+# chiave che non è qui, o un valore che non ha la forma di un codice o di una data, si toglie: il
+# servizio può aggiungere campi (l'OpenAPI non vieta le proprietà in più) e ci può scrivere qualunque
+# cosa (verifica 2 della revisione esterna, B2). Sono i campi dell'OpenAPI che portano codici.
+CHIAVI_JSON_LEGGIBILI_UMBRIA: frozenset[str] = frozenset({
+    "codEsito", "codEsitoInserimento", "codEsitoVisualizzazione", "codEsitoAnnullamento",
+    "codEsitoInterrogaNreUtilizzati", "progPresc", "progrPresc", "codice", "status", "type",
+    "codRegione", "codASLAo", "codStruttura", "codSpecializzazione", "tipoRic", "tipoPrescrizione",
+    "ricettaInterna", "nonEsente", "reddito", "tipoVisita", "dispReg", "provAssistito", "aslAssistito",
+    "classePriorita", "oscuramDati", "indicazionePrescr", "statoProcesso", "dataInserimento",
+    "dataCompilazione", "dataCompilazioneRicetta", "dataCompilazioneRicettaDal", "dataCompilazioneRicettaAl",
+    "flagPromemoria", "codProdPrest", "codGruppoEquival", "nonSost", "codMotivazione", "notaProd", "quantita",
+    "codCatalogoPrescr", "tipoAccesso", "numeroNota", "condErogabilita", "approprPrescrittiva", "numsedute",
+    "tipoAmbulatorio", "provenienza", "dataInizioSostituzione", "dataFineSostituzione",
+})
+_FORMA_DI_CODICE = re.compile(r"[A-Za-z0-9._:/-]{0,16}|\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}(?::\d{2})?")
+_chiavi_json_leggibili: contextvars.ContextVar[frozenset[str] | None] = contextvars.ContextVar(
+    "varco_chiavi_json_leggibili", default=None)
+
 
 def _tipo_sac(tag) -> str | None:
     """Per un elemento del namespace SAC: il tipo di redazione, o None se è nella allowlist.
@@ -486,14 +506,23 @@ class Redattore:
         """Redige un testo intero (per esempio un XML serializzato): come `corpo`."""
         return self.corpo(t.encode("utf-8")).decode("utf-8")
 
-    def corpo(self, b: bytes, *, redigi: bool = True, code_json_credenziale: bool = False) -> bytes:
+    def corpo(self, b: bytes, *, redigi: bool = True, code_json_credenziale: bool = False,
+              chiavi_json_leggibili: frozenset[str] | None = None) -> bytes:
         """Il corpo da scrivere su disco. `redigi=False` (modalità in chiaro): toglie solo le credenziali,
         e se non ce ne sono restituisce i byte originali, identici.
 
         `code_json_credenziale`: la chiave JSON `code` è una credenziale (authorization code OAuth2).
         Di norma non lo è (è anche un codice d'errore in molti servizi); il registratore la accende per i
-        servizi `piemonte.oauth2.*` (issue #12)."""
-        esito = self._corpo(b, redigi, code_json_credenziale)
+        servizi `piemonte.oauth2.*` (issue #12).
+
+        `chiavi_json_leggibili`: nella modalità redatta, nel JSON restano leggibili SOLO queste chiavi, e
+        solo con valori che hanno la forma di un codice o di una data (allowlist; per i servizi
+        `umbria.*` il registratore passa `CHIAVI_JSON_LEGGIBILI_UMBRIA`)."""
+        token = _chiavi_json_leggibili.set(chiavi_json_leggibili if redigi else None)
+        try:
+            esito = self._corpo(b, redigi, code_json_credenziale)
+        finally:
+            _chiavi_json_leggibili.reset(token)
         return b if esito is None else esito
 
     def non_scritto(self, b: bytes, motivo: str) -> bytes:
@@ -587,6 +616,12 @@ class Redattore:
                 testo = str(x).strip()
                 if not (tipo_json == "testo_libero" and testo.isdigit() and len(testo) <= 4):
                     return self.segnaposto(tipo_json, testo)
+        leggibili = _chiavi_json_leggibili.get() if redigi else None
+        if (leggibili is not None and nome is not None and x is not None and not isinstance(x, (bool, dict, list))):
+            testo = str(x).strip()
+            # 9 cifre o più non sono un codice dell'OpenAPI: possono essere un telefono
+            if nome not in leggibili or not _FORMA_DI_CODICE.fullmatch(testo) or (testo.isdigit() and len(testo) >= 9):
+                return self.segnaposto("non_classificato", testo)
         if isinstance(x, dict):
             return {k: self._json(v, redigi, k, code_credenziale=code_credenziale) for k, v in x.items()}
         if isinstance(x, list):
@@ -1176,7 +1211,9 @@ class RegistratoreFile:
         r = self._redattore
         # in chiaro si tolgono SOLO le credenziali (password, pincode, token, Id-Sessione, JWT): sempre
         oauth2 = richiesta.servizio.startswith("piemonte.oauth2.")  # `code` JSON = authorization code (issue #12)
-        red = lambda b: r.corpo(b, redigi=not in_chiaro, code_json_credenziale=oauth2)  # noqa: E731
+        umbria = CHIAVI_JSON_LEGGIBILI_UMBRIA if richiesta.servizio.startswith("umbria.") else None
+        red = lambda b: r.corpo(b, redigi=not in_chiaro, code_json_credenziale=oauth2,  # noqa: E731
+                                chiavi_json_leggibili=umbria)
         # header ed errori: XML e JSON annidati si redigono come i corpi (giro 3, N2)
         red_t = lambda v: r.metadato(v, redigi=not in_chiaro)  # noqa: E731
 

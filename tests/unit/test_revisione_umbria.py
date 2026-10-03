@@ -403,3 +403,95 @@ def test_v1_b2_varianti_redatte(corpo):
 def test_v1_b2_i_codici_corti_restano():
     fuori = Redattore().corpo(json.dumps({"esito": "0000", "codEsito": "5005"}).encode()).decode("utf-8")
     assert '"esito": "0000"' in fuori and '"codEsito": "5005"' in fuori
+
+
+# ------------------------------------------------------------------ verifica mirata 2 (residui di B1 e B2)
+
+
+def test_v2_b1_thread_nato_in_una_guardia_annidata_resta_della_chiamata(materiale):
+    import threading
+
+    from varco.trasporto.http import guardia_di_rete
+
+    class Trasporto:
+        consenti_collaudo_regionale = True
+
+        def __init__(self):
+            self.handler = _HandlerInMemoria("https://example.org/sar")
+            self.opener = urllib.request.OpenerDirector()
+            for h in (self.handler, urllib.request.HTTPRedirectHandler(), urllib.request.HTTPErrorProcessor()):
+                self.opener.add_handler(h)
+
+        def invia(self, richiesta):
+            via, esito = threading.Event(), {}
+
+            def lavoro():
+                via.wait(5)
+                try:
+                    req = urllib.request.Request(richiesta.url, data=richiesta.corpo, headers=richiesta.intestazioni)
+                    with self.opener.open(req) as r:
+                        esito["r"] = Risposta(r.status, r.read(), {}, 0.0, url_finale=r.url)
+                except Exception as e:  # noqa: BLE001
+                    esito["e"] = e
+
+            with guardia_di_rete((False, True, frozenset())):
+                t = threading.Thread(target=lavoro)
+                t.start()
+            via.set()  # la guardia annidata è finita, quella di consegna no
+            t.join(5)
+            if "e" in esito:
+                raise esito["e"]
+            return esito["r"]
+
+    tr = Trasporto()
+    s = RicettaUmbria(_canale_locale(materiale, tr))
+    with pytest.raises(AmbienteBloccato):
+        s.richiedi_lotto_nre()
+    assert len(tr.handler.visti) == 1, "il thread ha portato i JWT fuori da localhost"
+
+
+@pytest.mark.parametrize("corpo", [
+    {"email": "mario@example.org", "numeroTelefono": "3331234567", "message": "MARIO ROSSI",
+     "prefissoLotto": "1000A1000001"},
+    {"codEsitoInserimento": "0000", "nre": "1000A1000001000", "email": "mario@example.org",
+     "numeroTelefono": "3331234567", "prefissoLotto": "1000A1000001"},
+    {"codEsitoInserimento": "9999", "elencoErroriRicette": {"erroreRicetta": [
+        {"codEsito": "MARIO ROSSI", "progPresc": "3331234567"}]}},
+])
+def test_v2_b2_allowlist_nel_json_umbro(corpo):
+    from varco.trasporto.registro import CHIAVI_JSON_LEGGIBILI_UMBRIA
+    fuori = Redattore().corpo(json.dumps(corpo).encode(), chiavi_json_leggibili=CHIAVI_JSON_LEGGIBILI_UMBRIA)
+    fuori = fuori.decode("utf-8")
+    for pezzo in ("mario@example.org", "3331234567", "MARIO ROSSI", "1000A1000001"):
+        assert pezzo not in fuori, fuori
+
+
+def test_v2_b2_allowlist_gruppo_di_controllo():
+    from varco.trasporto.registro import CHIAVI_JSON_LEGGIBILI_UMBRIA
+    corpo = {"codEsitoInserimento": "0000", "dataInserimento": "2026-10-03 11:00:01", "statoProcesso": "3",
+             "elencoErroriRicette": {"erroreRicetta": [{"codEsito": "5005", "progPresc": "1"}]}}
+    fuori = json.loads(Redattore().corpo(json.dumps(corpo).encode(), chiavi_json_leggibili=CHIAVI_JSON_LEGGIBILI_UMBRIA))
+    assert fuori == corpo
+    # in chiaro l'allowlist non vale: il corpo resta identico
+    b = json.dumps({"email": "mario@example.org"}).encode()
+    assert Redattore().corpo(b, redigi=False, chiavi_json_leggibili=CHIAVI_JSON_LEGGIBILI_UMBRIA) == b
+
+
+def test_v2_b2_registro_su_disco_con_campi_in_piu(materiale, tmp_path):
+    corpo = {"codEsitoInserimento": "0000", "nre": "100123456789000", "email": "mario@example.org",
+             "numeroTelefono": "3331234567", "prefissoLotto": "1000A1000001"}
+
+    class T:
+        def __init__(self):
+            self.registratore = RegistratoreFile(tmp_path)
+
+        def invia(self, r):
+            risposta = Risposta(200, json.dumps(corpo).encode(), {}, 0.0)
+            self.registratore(r, risposta, None)
+            return risposta
+
+    s = RicettaUmbria(_canale_locale(materiale, T()))
+    s.invia(_spec("100123456789000"))
+    testo = "".join(p.read_text(encoding="utf-8") for p in tmp_path.iterdir())
+    for pezzo in ("mario@example.org", "3331234567", "1000A1000001", ASSISTITO):
+        assert pezzo not in testo, pezzo

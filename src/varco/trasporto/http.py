@@ -230,11 +230,14 @@ def _verifica(url: str, permessi) -> None:
 
 
 class _GuardiaDiRete:
-    __slots__ = ("permessi", "violazioni")
+    __slots__ = ("permessi", "violazioni", "padre")
 
-    def __init__(self, permessi):
+    def __init__(self, permessi, padre: "_GuardiaDiRete | None" = None):
         self.permessi = _normalizza(permessi)
         self.violazioni: list[AmbienteBloccato] = []
+        # la guardia dentro cui è nata (consegna -> TrasportoHTTP.invia): un thread legato a questa
+        # resta della chiamata anche quando questa finisce prima di lui (verifica 2, B1)
+        self.padre = padre
 
 
 _guardia_corrente: contextvars.ContextVar[_GuardiaDiRete | None] = contextvars.ContextVar(
@@ -318,9 +321,9 @@ def _guardia_del_thread() -> _GuardiaDiRete | None:
         g = _thread_legati.get(threading.current_thread())
     except TypeError:
         return None
-    if g is not None and id(g) in _guardie_attive:
-        return g
-    return None
+    while g is not None and id(g) not in _guardie_attive:
+        g = g.padre  # la guardia annidata è finita: vale quella che la conteneva, se è ancora accesa
+    return g
 
 
 def _lega(t: object) -> None:
@@ -425,7 +428,7 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
     blocco ha ingoiato l'eccezione."""
     _installa_hook()
     esterna = _guardia_del_thread()
-    g = _GuardiaDiRete(_intersezione(esterna.permessi, permessi) if esterna is not None else permessi)
+    g = _GuardiaDiRete(_intersezione(esterna.permessi, permessi) if esterna is not None else permessi, esterna)
     token = _guardia_corrente.set(g)
     with _lock_guardie:
         _guardie_attive[id(g)] = g

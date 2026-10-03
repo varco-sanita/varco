@@ -253,8 +253,10 @@ Scritte qui perché chi integra non perda tempo, e per chiederle a PuntoZero. Ne
 - **Registro**: con `RegistratoreFile` nessun CF, nome, indirizzo, NRE, codice di autenticazione,
   telefono o email di SmartCUP, promemoria, JWT, componenti del lotto NRE (`codRagLotto`, `codLotto`,
   `identificativoLotto`, `lotto`) o testo degli errori (`esito`, `tipoErrore`, `nota`, `title` e
-  `detail` dei problemi RFC 7807, anche dentro un oggetto; restano solo i codici di al più quattro
-  cifre) arriva su disco; `Authorization` e
+  `detail` dei problemi RFC 7807, anche dentro un oggetto) arriva su disco. Per i servizi `umbria.*`
+  il JSON si redige con una allowlist (`CHIAVI_JSON_LEGGIBILI_UMBRIA`): restano leggibili solo i
+  campi dell'OpenAPI che portano codici, e solo con valori che hanno la forma di un codice o di una
+  data; un campo in più aggiunto dal servizio si toglie; `Authorization` e
   `FSE-JWT-Signature` sono mascherati.
 - **Guardia**: host di test e di produzione, varianti (maiuscole, punto finale, domini simili),
   trasporto proprio senza flag: nessuna chiamata parte. Senza `AdesioneUmbria` il canale consegna con
