@@ -94,7 +94,8 @@ In più, per tutte e due le modalità:
 Nel kit:
 - `varco/trasporto/fvg.py` (`CanaleFVG`):
   - mette `User-Agent`, SOAPAction e, nella modalità federata, i due token;
-  - controlla il CF della carta contro il medico che invia.
+  - controlla il CF della carta contro il medico che invia, alla costruzione e a ogni chiamata;
+    `cf_medico` è di sola lettura e la modalità si normalizza all'enum `ModalitaFVG` (issue #7).
 - La chiave della carta non passa dal canale: sta nel `ssl.SSLContext` del trasporto
   (`TrasportoHTTP(contesto_tls=...)`). Il canale riceve solo il certificato (DER), per il
   controllo del CF.
@@ -389,13 +390,18 @@ Tutto senza rete verso la Regione e verso Insiel.
   - CF dell'assistito decifrabile con la chiave del certificato di cifratura, e un «Codice
     Fiscale/STP/ENI/altro» (p. 18): CF, STP o ENI, o un altro codice fino a 16 caratteri; un STP
     vuole il tipo ricetta ST. Un codice che comincia per STP o ENI deve avere le 13 cifre: non
-    passa come «altro» (giro 2, N3; la forma 3 lettere + 13 cifre non sta nella specifica FVG);
+    passa come «altro» (giro 2, N3; la forma 3 lettere + 13 cifre non sta nella specifica FVG).
+    Un CF ordinario ben formato (struttura e carattere di controllo) che comincia per STP o ENI,
+    dal cognome, resta un CF (issue #6);
   - `codRegione` = "060" (p. 16), conservato e restituito dalla visualizzazione (giro 2, N5);
   - specialistica: `versioneCR` con la patch e `codCatalogoPrescr` in ogni riga (lo XSD non li
     impone, la specifica sì);
-  - farmaceutica: niente `codCatalogoPrescr`, `tipoAccesso`, `numeroNota`, che la p. 21 riserva
-    alla specialistica (giro 2, N2; lo XSD li ammette). Gli stessi controlli, e "060", li fa
-    anche il client (`problemi_fvg`);
+  - farmaceutica: niente `codCatalogoPrescr`, `tipoAccesso`, `numeroNota`, `condErogabilita`,
+    `approprPrescrittiva`, `patologia`, che la p. 21 riserva alla specialistica (giro 2, N2; lo XSD
+    li ammette);
+  - specialistica: niente `nonSost`, `motivazNote`, `codMotivazione`, `notaProd`, che le pp. 20-21
+    riservano alla farmaceutica (issue #8). Gli stessi controlli, e "060", li fa anche il client
+    (`problemi_fvg`);
   - lista degli NRE: tutti i filtri (NRE, lotto, CF assistito, tipo, periodo).
 - Restituisce `ElencoNota` con un `tipoAmbulatorio` di prova per le righe specialistiche con `numeroNota`.
 - Il giro completo:
