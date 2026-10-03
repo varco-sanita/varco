@@ -88,9 +88,9 @@ def permessi_del_trasporto(trasporto: object) -> tuple[bool, bool, frozenset[str
 # A quale chiamata appartiene un accesso (issue #2: un thread estraneo del gestionale faceva fallire
 # una risposta SAC già arrivata):
 #   - il thread di `invia` (contextvar) e i thread AVVIATI da lui o dai suoi thread durante la chiamata
-#     (un pool creato dal trasporto): l'evento di audit `_thread.start_new_thread` /
-#     `_thread.start_joinable_thread` lega il nuovo `threading.Thread` alla guardia del thread che lo
-#     avvia. Lì valgono i permessi della chiamata, e una violazione ricade sulla chiamata;
+#     (un pool creato dal trasporto): `threading.Thread.start` (e, dove c'è, l'evento di audit
+#     `_thread.start_new_thread` / `_thread.start_joinable_thread`) lega il nuovo thread alla guardia
+#     del thread che lo avvia. Lì valgono i permessi della chiamata, e una violazione ricade sulla chiamata;
 #   - un thread senza legame (un altro servizio del gestionale, un pool nato prima della chiamata):
 #     si ferma solo ciò che è vietato PER NOME secondo tutte le guardie attive (un host di produzione,
 #     o un IP che il modulo socket ha risolto da un nome vietato). Un IP letterale che nessuno ha
@@ -280,15 +280,32 @@ def _guardia_del_thread() -> _GuardiaDiRete | None:
     return None
 
 
-def _lega_thread(args: tuple) -> None:
-    """Avvio di un thread: se chi lo avvia appartiene a una chiamata, il nuovo thread le appartiene."""
+def _lega(t: object) -> None:
+    """Se chi avvia `t` appartiene a una chiamata, anche `t` le appartiene."""
     g = _guardia_del_thread()
-    if g is None or not args:
-        return
-    t = getattr(args[0], "__self__", None)  # threading.Thread._bootstrap, metodo legato al Thread
-    if isinstance(t, threading.Thread):
+    if g is not None and isinstance(t, threading.Thread):
         with _lock_guardie:
             _thread_legati[t] = g
+
+
+def _lega_thread(args: tuple) -> None:
+    """Evento di audit dell'avvio (Python 3.12+): args[0] è threading.Thread._bootstrap, legato al Thread."""
+    if args:
+        _lega(getattr(args[0], "__self__", None))
+
+
+_avvia_thread_originale = threading.Thread.start
+
+
+def _avvia_thread(self, *args, **kwargs):
+    """`threading.Thread.start` con il legame alla guardia: vale anche dove l'evento di audit dell'avvio
+    non esiste (Python 3.11, CI del 03/10/2026)."""
+    if _guardie_attive:
+        try:
+            _lega(self)
+        except Exception:  # noqa: BLE001 - legare non deve mai impedire l'avvio
+            pass
+    return _avvia_thread_originale(self, *args, **kwargs)
 
 
 def _vietato_per_nome(evento: str, url: str, permessi) -> None:
@@ -352,6 +369,7 @@ def _installa_hook() -> None:
             socket.getaddrinfo = _getaddrinfo
             socket.gethostbyname = _gethostbyname
             socket.gethostbyname_ex = _gethostbyname_ex
+            threading.Thread.start = _avvia_thread  # lega alla chiamata i thread avviati durante l'invio
             _hook_installato = True
 
 

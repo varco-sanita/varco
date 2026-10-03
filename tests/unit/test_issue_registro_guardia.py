@@ -153,3 +153,12 @@ def test_issue2_pool_esistente_legato_con_esegui_nella_guardia():
 
         with pytest.raises(AmbienteBloccato):
             consegna(PoolEsistente(), Richiesta("sac.prova", URL_TEST, b"<x/>"))
+
+
+def test_issue2_legame_dei_thread_anche_senza_l_evento_di_audit(monkeypatch):
+    """CI del 03/10/2026: Python 3.11 non ha l'evento di audit dell'avvio dei thread. Il legame deve
+    reggere anche senza (threading.Thread.start): stessa prova del gruppo di controllo sopra."""
+    from varco.trasporto import http as modulo_http
+
+    monkeypatch.setattr(modulo_http, "_EVENTI_AVVIO_THREAD", frozenset())
+    test_issue2_gruppo_di_controllo_thread_avviato_dal_trasporto_ricade_sulla_chiamata()
