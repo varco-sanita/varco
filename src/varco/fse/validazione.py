@@ -215,10 +215,13 @@ class _Schematron:
         self.validatore = xslt.compile_stylesheet(stylesheet_node=passo)
 
     def svrl(self, xml: bytes) -> bytes:
-        with tempfile.NamedTemporaryFile(suffix=".xml") as f:
-            f.write(xml)
-            f.flush()
-            nodo = self.proc.parse_xml(xml_file_name=f.name)
+        # Il file si CHIUDE prima che Saxon lo legga: su Windows un NamedTemporaryFile ancora aperto
+        # non si riapre («I/O error reported by XML parser»). I byte restano quelli ricevuti, così la
+        # dichiarazione di encoding del documento vale come per lxml.
+        with tempfile.TemporaryDirectory(prefix="varco-sch-") as cartella:
+            percorso = Path(cartella) / "documento.xml"
+            percorso.write_bytes(xml)
+            nodo = self.proc.parse_xml(xml_file_name=str(percorso))
             return self.validatore.transform_to_string(xdm_node=nodo).encode("utf-8")
 
 

@@ -80,11 +80,10 @@ jobs:
           go-version: "1.25"
           cache: false
       - name: Valida publiccode.yml
-        # -no-network finché github.com/varco-sanita/varco non è pubblicato:
-        # dopo la pubblicazione va tolto, così il parser controlla anche URL e logo.
+        # Con la rete: il repository è pubblico dal 03/10/2026, il parser controlla anche URL e logo.
         run: |
           go install github.com/italia/publiccode-parser-go/v5/publiccode-parser@v5.4.3
-          "$(go env GOPATH)/bin/publiccode-parser" -no-network publiccode.yml
+          "$(go env GOPATH)/bin/publiccode-parser" publiccode.yml
 
   audit:
     runs-on: ubuntu-latest

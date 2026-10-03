@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: EUPL-1.2
+# Nessuna conversione di fine riga, su nessuna piattaforma: prove/, conformita/ e i PDF firmati
+# devono restare byte per byte come sono stati generati (hash, firme, offset xref dei PDF).
+# Senza questa riga il checkout su Windows (core.autocrlf) corrompe i PDF di prove/.
+* -text
