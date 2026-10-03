@@ -456,7 +456,8 @@ Tutto senza rete verso la Regione e verso il CSI.
   - ogni UUID;
   - ogni JWT;
   - nei form e nel JSON OAuth2, `code`, `code_verifier`, `access_token`, `refresh_token` e
-    `id_token`, anche se non hanno la forma di un JWT.
+    `id_token`, anche se non hanno la forma di un JWT. La chiave JSON `code` conta come credenziale
+    solo nei servizi `piemonte.oauth2.*`: altrove è spesso un codice d'errore (issue #12).
 - Mascherati negli header: `X-idSessione` e `X-OAuth2-Authorization`. `X-Gestionale` resta in
   chiaro: è il codice del software, non un dato personale.
 
