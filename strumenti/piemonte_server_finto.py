@@ -703,6 +703,13 @@ class ServerPiemonte:
             concessi = tuple(x for x in scope if x in self.profili_di(self.utente_oauth2))
             if not concessi:
                 return ritorno(error="access_denied", error_description="L'utente non possiede le abilitazioni", state=state)
+            # SIRPED-TES-01-V02 p. 26, A2F-OAU2-TOK-N-03: un gestionale censito ma senza il diritto richiesto
+            # riceve «una segnalazione di errore». I permessi del token sono anche quelli del GESTIONALE, non
+            # solo dell'utente (issue #9); l'errore è quello del REL-STC-01 p. 27 per un client non abilitato.
+            concessi = tuple(x for x in concessi if x in self.gestionali[uno(q, "client_id")])
+            if not concessi:
+                return ritorno(error="unauthorized_client",
+                               error_description="Il gestionale non possiede i diritti richiesti", state=state)
             code = secrets.token_urlsafe(24)
             self.stato.codici[code] = {"client_id": uno(q, "client_id"), "redirect_uri": redirect, "scope": concessi,
                                         "challenge": uno(q, "code_challenge"), "scade": self.adesso() + 300, "usato": False,
@@ -750,8 +757,11 @@ class ServerPiemonte:
                                               "descrEsito": "Identificativo del gestionale non riconosciuto"}})
             if uno(q, "cfutente") != dati.get("sub"):
                 return 401, b"", "application/json"
-            nbf = dati.get("nbf", 0)
-            if not isinstance(nbf, (int, float)) or isinstance(nbf, bool) or self.adesso() < nbf:
+            exp, nbf = dati.get("exp"), dati.get("nbf", 0)
+            if not all(isinstance(x, (int, float)) and not isinstance(x, bool) and math.isfinite(x) for x in (exp, nbf)):
+                # NaN o infinito: i confronti sarebbero sempre falsi, né «futuro» né «scaduto» (issue #11)
+                return 401, b"", "application/json"
+            if self.adesso() < nbf:
                 return 401, b"", "application/json"  # token non ancora valido (p. 30): non riconosciuto
             sess = self._sessione_del_jwt(dati)
             if sess is None:
@@ -760,8 +770,7 @@ class ServerPiemonte:
                 stato = (1, "Revocato") if sess.revocato_alle is not None else (2, "Scaduto") if self.adesso() >= sess.fine else (0, "Valido")
                 return json_(200, {"infoToken": {"stato": stato[0], "descrizione": stato[1],
                                                  "dataInizioValidita": _ora_xml(sess.inizio), "dataFineValidita": _ora_xml(sess.fine)}})
-            exp = dati.get("exp")
-            if not isinstance(exp, (int, float)) or self.adesso() >= exp:
+            if not self._jwt_nel_tempo(dati):
                 return 401, b"", "application/json"  # p. 36: «il token jwt fornito è scaduto»
             if sess.revocato_alle is not None or self.adesso() >= sess.fine:
                 return 401, b"", "application/json"
