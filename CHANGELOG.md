@@ -7,7 +7,23 @@ può cambiare tra un rilascio e l'altro.
 ## [0.1.0] — 03/10/2026
 
 Prima versione, col nome **Varco**. Repository: <https://github.com/varco-sanita/varco>
-(al 03/10/2026 non ancora pubblicato).
+(pubblicato il 03/10/2026).
+
+### SAR della Regione Umbria (PuntoZero) (03/10/2026)
+
+- Quarto SAR regionale, il primo REST: `varco.ricetta.RicettaUmbria` (invio, visualizza, annulla, NRE utilizzati, richiesta del lotto NRE, dichiarazione di sostituzione, annullamento dopo un invio incerto), codec `varco.ricetta.json_umbria` sul JSON dell'OpenAPI pubblicata da PuntoZero, canale `varco.trasporto.CanaleUmbria` (mutua autenticazione TLS, JWT `Authorization` e `FSE-JWT-Signature` firmati RS256/384/512 con `x5c`, claim per servizio). Stesso modello dati e stesso contratto `ServizioRicetta`; consegna dalla stessa `trasporto.http.consegna`.
+- Guardia: ogni host di `umbria.it` e `puntozeroscarl.it` è produzione, salvo l'host di test della wiki con il flag del collaudo regionale e un'`AdesioneUmbria`. Nessuna chiamata ai sistemi umbri, nemmeno al test; i certificati di test pubblici non si scaricano.
+- `strumenti/umbria_server_finto.py`: server HTTPS locale con mTLS che verifica i due JWT e i corpi sugli schemi dell'OpenAPI; risposte sintetiche in `conformita/risposte/umbria/`.
+- Conformità: famiglia `umbria`, 28 casi (`UMB-001`..`UMB-014`, `UMB-101`..`UMB-114`); con l'OpenAPI scaricata (`--gruppi umbria`, sha256 nel manifesto) le richieste si validano anche contro quella (`--openapi-umbria`, `$VARCO_OPENAPI_UMBRIA`).
+- Documentazione: `docs/SAR_UMBRIA.md` (17 difetti delle specifiche in sez. 7), bozza `docs/PROPOSTA_UMBRIA.md`. Dipendenza di test in più: PyYAML.
+
+### Correzioni delle issue del giro 3 (03/10/2026)
+
+- CI verde su ubuntu, macOS e Windows (Python 3.11 e 3.12): file temporaneo di Saxon chiuso prima della lettura su Windows, `.gitattributes` senza conversione dei fine riga (#13).
+- Puglia: CDA degli assicurati esteri con identificativi TEAM e personale, `displayName` del motivo di non sostituibilità, WS-Security accettata solo nell'header (#3, #4, #5).
+- FVG: un CF ordinario che comincia per «STP» non è più scambiato per un codice STP; carta e medico controllati a ogni chiamata; campi solo farmaceutici rifiutati sulla specialistica (#6, #7, #8).
+- Piemonte e conformità: il server finto rispetta i permessi del gestionale e rifiuta `nbf`/`exp` non finiti; l'esecutore Java accetta `errori_contengono: []` come il Python (#9, #10, #11).
+- Registro e guardia: credenziali in dichiarazioni di namespace e commenti XML redatte, `code` redatto nel JSON OAuth2; i thread avviati durante una chiamata ereditano la guardia, quelli estranei non fanno più fallire una risposta già arrivata (#1, #2, #12).
 
 ### Nome: da kit-mmg a Varco (03/10/2026)
 

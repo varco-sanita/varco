@@ -13,7 +13,7 @@ SAC, nomi dei campi compresi. Cosa cambia sta qui, nel canale:
     certificato di AUTENTICAZIONE del software (sta nel `ssl.SSLContext` del trasporto,
     `TrasportoHTTP(contesto_tls=...)`), più due JWT firmati con il certificato di FIRMA:
       * `Authorization: Bearer <JWT>`: iss «auth:<CN del certificato di firma>», sub = CF dell'utente
-        nel formato CX di HL7 v2.5, aud = base URL del servizio, iat, exp, jti;
+        nel formato CX di HL7 v2.5, aud = schema e host del servizio (`audience`), iat, exp, jti;
       * `FSE-JWT-Signature: <JWT>`: iss «integrity:<CN>», gli stessi claim più quelli applicativi
         (subject_organization_id «100», subject_organization «Regione Umbria», locality, subject_role,
         person_id, patient_consent, purpose_of_use, action_id, subject_application_*), che cambiano

@@ -16,7 +16,7 @@
           │
   soap             (busta SOAP 1.1, riconoscimento dei Fault)
           │
-  TrasportoHTTP    (HTTPS, guardia produzione SAC, FSE, Regione Puglia, Regione FVG e Regione Piemonte, limite di frequenza, registrazione)
+  TrasportoHTTP    (HTTPS, guardia produzione SAC, FSE, Regione Puglia, Regione FVG, Regione Piemonte e Regione Umbria, limite di frequenza, registrazione)
 
   RicettaSIST ─── xml_sist (codec CVP) + cda_sist (CDA2 di prescrizione) + FirmatarioCAdES
           ▼                                   (stesso contratto ServizioRicetta, SAR della Puglia)
@@ -37,6 +37,12 @@
   CanalePiemonte   (MAIL: Basic RUPAR + X-idSessione + X-Gestionale | OAUTH2: solo X-OAuth2-Authorization)
           │        ServizioIdSessione (CreateAuth/CheckToken/RevokeAuth, XSD A2F) · ClientOAuth2Piemonte (PKCE, JWKS)
   soap + TrasportoHTTP  (gli stessi di sopra)
+
+  RicettaUmbria ── json_umbria (codec JSON dell'OpenAPI di PuntoZero)
+          ▼                                   (stesso contratto ServizioRicetta, SAR dell'Umbria; più lotto NRE e sostituzione)
+  CanaleUmbria     (REST, mTLS + due JWT firmati: Authorization e FSE-JWT-Signature, claim per servizio)
+          │
+  consegna + TrasportoHTTP  (niente SOAP: JSON sullo stesso trasporto, stessa guardia)
 
   fse/cda_pss      (codec: PSS ⇄ CDA2 HL7 Italia)  ──►  fse/validazione (Validatore: locale | ufficiale)
                                                    ──►  fse/pdf (PDF con cda.xml, iniezione, Firmatario PAdES)
@@ -577,6 +583,37 @@ Implementa servizi di prescrizione, Id-Sessione A2F e OAuth2 (authorize, token c
 verify, revoke), e controlla le richieste come dice la specifica. Le risposte di prova sono
 **sintetiche** (`conformita/risposte/piemonte/`): la specifica non ne pubblica.
 
+## SAR regionali: il SAR dell'Umbria (PuntoZero)
+
+Il quarto SAR del kit, e il primo REST. Dettagli, difetti delle specifiche e cosa manca per il
+collaudo: `docs/SAR_UMBRIA.md`. **Scritto e verificato sulle specifiche, NON collaudato sul sistema
+regionale.**
+
+**Il modello dati ha tenuto senza modifiche.** Il SAR umbro espone in JSON gli stessi servizi del
+SAC (invio, visualizza, annulla, NRE utilizzati) più la richiesta del lotto NRE e la dichiarazione di
+sostituzione. Cambia il codec: `json_umbria` scrive e legge il JSON dell'OpenAPI pubblicata da
+PuntoZero, con i nomi dei campi del tracciato del SAC. Lo SmartCUP va in `testata2`.
+
+**Due JWT per richiesta.** `Authorization` (Bearer) e `FSE-JWT-Signature`, firmati con il
+certificato di firma (RS256/384/512, `x5c`). I claim cambiano per servizio (`action_id`,
+`purpose_of_use`, `resource_hl7_type`) e stanno in una tabella sola (`CLAIM_PER_SERVIZIO`), copiata
+dalla wiki. Il CF del soggetto è nel formato HL7 CX. Il firmatario è un `Protocol`: una chiave in un
+PKCS#12 va bene per il test, una smart card si collega senza toccare il canale.
+
+**Il 502/504 dopo un invio è un esito incerto, non un errore.** La wiki dice di annullare con lo
+stesso NRE e reinviare con un NRE nuovo: il canale solleva `InvioIncertoUmbria` con NRE e CF, e
+`RicettaUmbria.annulla_invio_incerto` fa la prima metà. Il nuovo invio lo decide il gestionale.
+
+**La guardia copre i domini umbri.** Ogni host di `umbria.it` e `puntozeroscarl.it` è produzione,
+salvo `api-salute-test.regione.umbria.it` con il flag del collaudo regionale e un'`AdesioneUmbria`
+dichiarata nel canale. Senza adesione il canale accetta solo `localhost`.
+
+**Verifica senza la Regione.** `strumenti/umbria_server_finto.py` è un server HTTPS su 127.0.0.1 con
+mutua autenticazione: verifica i due JWT (firma, scadenze, `aud`, `iss` col CN del certificato, claim del servizio,
+stesso `sub`), e il corpo contro gli schemi trascritti dall'OpenAPI. Se l'OpenAPI ufficiale è
+scaricata (`strumenti/scarica_specifiche.py`, con sha256), la suite di conformità valida anche contro
+quella. Le risposte di prova sono **sintetiche** (`conformita/risposte/umbria/`).
+
 ## Limiti noti e passi successivi
 
 - SIST Puglia: **non collaudato** sul sistema regionale (serve l'adesione, vedi
@@ -591,6 +628,9 @@ verify, revoke), e controlla le richieste come dice la specifica. Le risposte di
   vedi `docs/SAR_PIEMONTE.md` §10-11). Non implementati: lotti NRE regionali, ricetta DPCM, presa in
   carico ed erogazione, la finestra del browser e la `redirect_uri` per l'OAuth2. Nessun URL è
   pubblicato: il canale vuole gli URL espliciti.
+- SAR Umbria: **non collaudato** sul sistema regionale (serve l'adesione con PuntoZero, vedi
+  `docs/SAR_UMBRIA.md` §10). Non implementati: ricette rosse DPCM (`dpcm-*`, schema della risposta
+  non pubblicato), erogazione, firma con smart card (solo PKCS#12 incluso).
 - Non implementati: richiesta lotti NRE, pre-autorizzazione del sostituto
   (`invioDichiarazioneSostituzioneMedico`, solo nelle regioni che la chiedono),
   `demServiceAnag`.

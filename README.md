@@ -13,8 +13,9 @@ Due moduli, sullo **stesso modello dati**:
 - **Ricetta dematerializzata**, dalla parte del medico prescrittore: invio al SAC
   (il sistema centrale del MEF), visualizzazione, annullamento, medico sostituto,
   lista degli NRE utilizzati. Per la Puglia, lo stesso attraverso il SIST regionale, per il
-  Friuli-Venezia Giulia attraverso il SAR di Insiel e per il Piemonte attraverso SIRPED (CSI
-  Piemonte): scritti e verificati sulle specifiche, **non collaudati** sui sistemi delle Regioni.
+  Friuli-Venezia Giulia attraverso il SAR di Insiel, per il Piemonte attraverso SIRPED (CSI
+  Piemonte) e per l'Umbria attraverso il SAR di PuntoZero: scritti e verificati sulle specifiche,
+  **non collaudati** sui sistemi delle Regioni.
 - **FSE 2.0, lato documento**: il Profilo Sanitario Sintetico (PSS) in CDA2 HL7
   Italia, generato dagli stessi oggetti della ricetta, validato con gli schemi, lo
   schematron e il **codice del validatore ufficiale** del gateway, messo in un PDF e
@@ -26,27 +27,14 @@ Nessun fine commerciale. **Non è un dispositivo medico** (sotto).
 
 ## Limiti noti
 
-Difetti trovati dalla revisione esterna (giro 3, 03/10/2026) e non ancora corretti. Nessuno è
-critico o alto; sono aperti come issue con l'etichetta `bug`:
-<https://github.com/varco-sanita/varco/issues?q=is%3Aissue+label%3Abug>.
+I 12 difetti trovati dalla revisione esterna del giro 3 (registro, guardia, Puglia, FVG, Piemonte,
+conformità) sono corretti, ognuno con un test che prima falliva (issue chiuse dalle PR #13-#17).
+I difetti aperti stanno nelle issue con l'etichetta `bug`:
+<https://github.com/varco-sanita/varco/issues?q=is%3Aissue+is%3Aopen+label%3Abug>.
 
-- **Registro:** credenziali dentro una dichiarazione di namespace XML o un commento restano nel log
-  (medio); un thread estraneo che apre un IP durante una chiamata può farla fallire anche con una
-  risposta valida (medio, guardia).
-- **Puglia (SIST):** CDA per assicurati esteri senza gli identificativi TEAM e personale obbligatori;
-  motivo di non sostituibilità senza `displayName`; WS-Security accettata nel Body dal verificatore e
-  dal server finto (medi).
-- **Friuli-Venezia Giulia:** un CF ordinario che comincia per «STP» è rifiutato; il controllo
-  carta/medico non regge un cambio di `cf_medico` dopo la costruzione del canale; manca il controllo
-  dei campi solo farmaceutici sulla specialistica (medi).
-- **Piemonte:** il server finto concede la prescrizione a un gestionale senza quel diritto (medio);
-  verify/revoke del server finto accettano `nbf`/`exp` NaN, e la documentazione promette la
-  redazione di `code` anche nel JSON (bassi).
-- **Conformità:** l'esecutore Java rifiuta `senza_errori: true` con `errori_contengono: []`, che il
-  Python accetta (medio).
-
-Restano inoltre da fare, per scelta: la CI non è mai stata eseguita su GitHub e il repository non è
-ancora pubblicato. I moduli regionali non sono collaudati sui sistemi delle Regioni.
+I moduli regionali (Puglia, FVG, Piemonte, Umbria) sono verificati sulle specifiche e su server di
+prova locali, **non collaudati** sui sistemi delle Regioni: per ognuno serve un'adesione. Il gateway
+FSE non ha ancora un canale (servono i certificati di Sogei).
 
 Fino al 03/10/2026 il progetto si chiamava *kit-mmg*: il pacchetto Python era `kit_mmg` e le
 variabili d'ambiente avevano il prefisso `KITMMG_`. Ora sono `varco` e `VARCO_*`; per la
@@ -186,6 +174,34 @@ specifiche pubbliche). Il modulo è verificato in tre modi:
 Non ci sono URL pubblicati, né di collaudo né di produzione: li dà il CSI con l'autocertificazione,
 che oggi è scritta per i gestionali già certificati. Le risposte di prova sono **sintetiche**. Tutto,
 compreso cosa vuol dire «certificata SIRPED», in [`docs/SAR_PIEMONTE.md`](docs/SAR_PIEMONTE.md).
+
+### Umbria (SAR di PuntoZero): scritto e verificato sulle specifiche, NON collaudato sul sistema regionale
+
+In Umbria il medico chiama il **SAR** della Regione, gestito da PuntoZero. Il SAR replica i servizi del
+SAC come **API REST** in JSON e si autentica come il gateway del FSE 2.0. `RicettaUmbria` rispetta lo
+stesso contratto di `RicettaSAC`, sullo stesso modello dati, **senza nessun campo nuovo**. Ecco come
+lavora:
+
+- mutua autenticazione TLS con il certificato del software, e due JWT firmati a ogni chiamata
+  (`Authorization` e `FSE-JWT-Signature`) con i claim di ogni servizio;
+- l'NRE lo mette il medico, da un lotto chiesto al SAR (`richiedi_lotto_nre`, `LottoNRE`); il CF
+  dell'assistito va in chiaro;
+- invio, visualizzazione, annullamento, lista degli NRE, dichiarazione di sostituzione;
+- dopo un 502, un 504 o un timeout sull'invio, `InvioIncertoUmbria`: si annulla con lo stesso NRE e si
+  rifà l'invio con un NRE diverso, come chiede la specifica.
+
+**Nessuna chiamata è mai partita verso i sistemi della Regione o di PuntoZero**, nemmeno verso
+l'ambiente di test, i cui certificati sono pubblici (solo il download delle specifiche da GitHub).
+Il modulo è verificato in quattro modi:
+
+- contro gli schemi dell'OpenAPI ufficiale;
+- con 28 casi di conformità;
+- con un server finto in locale, in HTTPS con mutua autenticazione, che verifica i due token e il
+  corpo come dicono la wiki e l'OpenAPI;
+- con un registro che non scrive dati personali né token.
+
+Le risposte di prova sono **sintetiche**. Per il collaudo serve un accordo con PuntoZero e la
+Regione. Tutto, con i punti delle specifiche da chiarire, in [`docs/SAR_UMBRIA.md`](docs/SAR_UMBRIA.md).
 
 ## Non è un dispositivo medico
 
@@ -360,6 +376,12 @@ ci sono tre cose:
 - l'host dichiarato per nome, `TrasportoHTTP(collaudi_piemonte={...})`;
 - un'`AdesionePiemonte` nel canale.
 
+**Regione Umbria (SAR di PuntoZero).** L'host di produzione (`api-salute.regione.umbria.it`) e ogni
+host `*.umbria.it` o `*.puntozeroscarl.it` contano come produzione. L'host di test
+(`api-salute-test.regione.umbria.it`) è un sistema della Regione: anche se i certificati di test sono
+pubblici, resta bloccato finché non ci sono il flag `consenti_collaudo_regionale=True` e
+un'`AdesioneUmbria` nel canale.
+
 Inoltre: al massimo una richiesta al secondo verso lo stesso host, solo HTTPS.
 
 ## Dati personali: il registratore è redatto
@@ -393,9 +415,11 @@ src/varco/
                  SIST Puglia: xml_sist (codec CVP), cda_sist (CDA2 di prescrizione), sist (RicettaSIST)
                  SAR FVG: xml_fvg (tracciato del SAC con namespace e attributi FVG), fvg (RicettaFVG)
                  SIRPED Piemonte: piemonte (RicettaPiemonte, sul codec del SAC)
+                 SAR Umbria: json_umbria (codec JSON dell'OpenAPI, LottoNRE), umbria (RicettaUmbria)
   fse/           PSS: modello (sopra quello della ricetta), codec CDA2, validazione, PDF e firma
   trasporto/     HTTPS + SOAP + canale SAC + canale SIST e WS-Security + canale FVG
-                 + canale Piemonte (piemonte, piemonte_a2f, piemonte_oauth2): separato dal modello
+                 + canale Piemonte (piemonte, piemonte_a2f, piemonte_oauth2)
+                 + canale Umbria (umbria: mTLS e due JWT firmati): separato dal modello
   cifratura.py   SanitelCF (RSA PKCS#1 v1.5)
   conformita/    esecutore Python dei casi
   schemi/        XSD ufficiali del kit MEF
@@ -405,6 +429,7 @@ strumenti/
   sist_server_finto.py        server SIST finto su 127.0.0.1, per le prove senza la Regione
   fvg_server_finto.py         server SAR FVG finto su 127.0.0.1 (HTTPS, mutua autenticazione); genera_prove_fvg.py
   piemonte_server_finto.py    SIRPED finto su 127.0.0.1 (servizi di prescrizione, Id-Sessione A2F, OAuth2)
+  umbria_server_finto.py      SAR Umbria finto su 127.0.0.1 (HTTPS, mutua autenticazione, verifica dei due JWT)
   scarica_specifiche.py       scarica e verifica il materiale di terzi (fonti_specifiche.json)
   validatore-ufficiale/       banco del validatore e del dispatcher UFFICIALI FSE (Java) + esecutore Java dei casi
 tests/unit, tests/integrazione (rete), tests/ufficiale (validatore ufficiale)
@@ -413,6 +438,7 @@ docs/ARCHITETTURA.md   scelte e motivazioni
 docs/SAR_PUGLIA.md     il SIST della Puglia: canale, differenze dal SAC, collaudo
 docs/SAR_FVG.md        il SAR del Friuli-Venezia Giulia: canale, differenze dal SAC e dal SIST, collaudo
 docs/SAR_PIEMONTE.md   SIRPED del Piemonte: canale, 2FA regionale, collaudo, «certificata SIRPED»
+docs/SAR_UMBRIA.md     il SAR dell'Umbria: REST, JWT, lotti NRE, invio incerto, difetti delle specifiche
 docs/BLOCCHI.md        dove il lavoro si è fermato e perché
 docs/MINACCE.md, docs/NON_DISPOSITIVO_MEDICO.md, docs/TERZE_PARTI.md
 specifiche/      (non nel repository) materiale di terzi: strumenti/scarica_specifiche.py
@@ -448,7 +474,11 @@ invece è incluso (XSD del SAC, scheletro ISO Schematron, certificato SanitelCF)
 - Regione Piemonte e CSI Piemonte: REL-STC-01 V04 del 02/03/2026 e YAML OAuth2, processo, piano dei
   test e attestati dell'autocertificazione 2026, RE-SRS-SAR V05, RE-TES-01 V02 (tutti «Uso:
   Esterno»), allegato tecnico dell'avviso AP26_003; per l'Id-Sessione via mail, il kit A2F del
-  Sistema TS.
+  Sistema TS;
+- Regione Umbria e PuntoZero: repository `punto-zero/umbria-sar-support` (wiki, OpenAPI del
+  prescrittore, collection Postman, allegati), a commit fissati. Il repository non ha una licenza:
+  vale l'art. 52, comma 2, del CAD ([`docs/SAR_UMBRIA.md`](docs/SAR_UMBRIA.md)). I certificati di
+  test pubblicati non si scaricano e non si usano.
 
 ## Licenze, sicurezza, contributi
 
