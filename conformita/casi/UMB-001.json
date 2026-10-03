@@ -1,0 +1,56 @@
+{
+  "id": "UMB-001",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, invio farmaceutica: pinCode vuoto, CF dell'assistito in chiaro, NRE del lotto, valori stringa, nessun null",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Prescrittori» (commit acdbb373), «Invio prescritto DEMA» (CF in chiaro, nre obbligatorio); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86), InvioPrescrittoRichiesta",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "invio",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "100",
+          "codice_asl": "201",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P"
+        },
+        "tipo": "F",
+        "data_compilazione": "2026-10-03 11:00:00",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "CJA",
+            "descrizione_gruppo_equivalenza": "GRUPPO DI PROVA"
+          }
+        ],
+        "nre": "1000A1000001000"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "cfMedico1": "PROVAX00X00X000Y",
+          "codRegione": "100",
+          "codASLAo": "201",
+          "nre": "1000A1000001000",
+          "codiceAss": "PNIMRA70A01H501P",
+          "tipoPrescrizione": "F",
+          "nonEsente": "1",
+          "dataCompilazione": "2026-10-03 11:00:00",
+          "tipoVisita": "A"
+        },
+        "tag_assenti": [
+          "cfMedico2",
+          "testata1",
+          "testata2",
+          "tipoRic",
+          "classePriorita",
+          "codEsenzione"
+        ]
+      }
+    }
+  ]
+}

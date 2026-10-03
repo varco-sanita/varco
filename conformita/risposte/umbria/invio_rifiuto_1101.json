@@ -1,0 +1,13 @@
+{
+  "codEsitoInserimento": "9999",
+  "elencoErroriRicette": {
+    "erroreRicetta": [
+      {
+        "codEsito": "1101",
+        "esito": "NRE non appartenente a un lotto del medico",
+        "progPresc": "0",
+        "tipoErrore": "E"
+      }
+    ]
+  }
+}

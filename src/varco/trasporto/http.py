@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import contextlib
 import contextvars
+import http.client
 import socket
 import ssl
 import sys
@@ -186,12 +187,57 @@ def _gethostbyname_ex(host):
     return risultato
 
 
-class _GuardiaDiRete:
-    __slots__ = ("permessi", "violazioni")
+def _url_locale(url: str) -> bool:
+    """localhost o un IP di loopback (127.0.0.0/8, ::1, anche nella forma IPv4-mapped)."""
+    try:
+        host = (urlparse(url).hostname or "").lower().rstrip(".")
+    except ValueError:
+        return False
+    if host == "localhost":
+        return True
+    ip = indirizzo_ip(host)
+    if ip is None:
+        return False
+    mappato = getattr(ip, "ipv4_mapped", None)
+    return (mappato or ip).is_loopback
 
-    def __init__(self, permessi: tuple[bool, bool, frozenset[str]]):
-        self.permessi = permessi
+
+# Permessi di una guardia: (consenti_produzione, consenti_collaudo_regionale, collaudi_piemonte) e, come
+# quarto elemento facoltativo, `solo_locale`: la chiamata non può uscire da localhost (canale senza
+# adesione, revisione Umbria B1).
+Permessi = tuple
+
+
+def _normalizza(permessi) -> tuple[bool, bool, frozenset[str], bool]:
+    produzione, collaudo, piemonte = permessi[:3]
+    solo_locale = bool(permessi[3]) if len(permessi) > 3 else False
+    return produzione is True, collaudo is True, frozenset(piemonte or ()), solo_locale
+
+
+def _intersezione(esterni, interni) -> tuple[bool, bool, frozenset[str], bool]:
+    """Una guardia dentro un'altra (consegna -> TrasportoHTTP.invia) non allarga mai i permessi: valgono i
+    più stretti dei due. Prima la guardia interna di TrasportoHTTP rimetteva i permessi del trasporto e
+    un redirect seguito passava (revisione Umbria, verifica di B1)."""
+    a, b = _normalizza(esterni), _normalizza(interni)
+    return a[0] and b[0], a[1] and b[1], a[2] & b[2], a[3] or b[3]
+
+
+def _verifica(url: str, permessi) -> None:
+    produzione, collaudo, piemonte, solo_locale = _normalizza(permessi)
+    verifica_url_consentito(url, produzione, collaudo, piemonte)
+    if solo_locale and not _url_locale(url):
+        raise AmbienteBloccato(f"{url}: senza adesione la chiamata non esce da localhost (nemmeno con un redirect)")
+
+
+class _GuardiaDiRete:
+    __slots__ = ("permessi", "violazioni", "padre")
+
+    def __init__(self, permessi, padre: "_GuardiaDiRete | None" = None):
+        self.permessi = _normalizza(permessi)
         self.violazioni: list[AmbienteBloccato] = []
+        # la guardia dentro cui è nata (consegna -> TrasportoHTTP.invia): un thread legato a questa
+        # resta della chiamata anche quando questa finisce prima di lui (verifica 2, B1)
+        self.padre = padre
 
 
 _guardia_corrente: contextvars.ContextVar[_GuardiaDiRete | None] = contextvars.ContextVar(
@@ -248,7 +294,7 @@ def _verifica_destinazione(evento: str, url: str, permessi) -> None:
     di suo (loopback, o produzione con il flag) OPPURE se uno dei nomi da cui il modulo socket l'ha
     risolto passa la guardia adesso. Un IP mai risolto davanti alla guardia resta un IP letterale."""
     try:
-        verifica_url_consentito(url, *permessi)
+        _verifica(url, permessi)
         return
     except AmbienteBloccato:
         if evento != "socket.connect":
@@ -259,7 +305,7 @@ def _verifica_destinazione(evento: str, url: str, permessi) -> None:
         nomi = _nomi_di(ip)
         for nome in sorted(nomi):
             try:
-                verifica_url_consentito(_url_di_un_host(nome) or "", *permessi)
+                _verifica(_url_di_un_host(nome) or "", permessi)
                 return
             except AmbienteBloccato:
                 continue
@@ -275,9 +321,9 @@ def _guardia_del_thread() -> _GuardiaDiRete | None:
         g = _thread_legati.get(threading.current_thread())
     except TypeError:
         return None
-    if g is not None and id(g) in _guardie_attive:
-        return g
-    return None
+    while g is not None and id(g) not in _guardie_attive:
+        g = g.padre  # la guardia annidata è finita: vale quella che la conteneva, se è ancora accesa
+    return g
 
 
 def _lega(t: object) -> None:
@@ -310,7 +356,9 @@ def _avvia_thread(self, *args, **kwargs):
 
 def _vietato_per_nome(evento: str, url: str, permessi) -> None:
     """Thread senza legame: si ferma un host vietato per nome, o un IP risolto da un nome vietato;
-    un IP che nessuno ha risolto davanti alla guardia non si attribuisce a nessuno (issue #2)."""
+    un IP che nessuno ha risolto davanti alla guardia non si attribuisce a nessuno (issue #2).
+    `solo_locale` qui non vale: un thread estraneo non appartiene alla chiamata senza adesione."""
+    permessi = permessi[:3]
     ip = urlparse(url).hostname or ""
     if indirizzo_ip(ip) is None:
         verifica_url_consentito(url, *permessi)
@@ -379,7 +427,8 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
     All'uscita, se un accesso è stato bloccato, solleva `AmbienteBloccato` anche se il codice del
     blocco ha ingoiato l'eccezione."""
     _installa_hook()
-    g = _GuardiaDiRete(permessi)
+    esterna = _guardia_del_thread()
+    g = _GuardiaDiRete(_intersezione(esterna.permessi, permessi) if esterna is not None else permessi, esterna)
     token = _guardia_corrente.set(g)
     with _lock_guardie:
         _guardie_attive[id(g)] = g
@@ -400,9 +449,15 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
         _guardia_corrente.reset(token)
 
 
-def consegna(trasporto: "Trasporto", richiesta: Richiesta) -> Risposta:
-    """L'unico punto in cui i canali del kit (SAC, SIST, FVG, Piemonte, client OAuth2; domani il FSE)
-    consegnano una richiesta a un trasporto.
+def consegna(trasporto: "Trasporto", richiesta: Richiesta, *, solo_locale: bool = False) -> Risposta:
+    """L'unico punto in cui i canali del kit (SAC, SIST, FVG, Piemonte, Umbria, client OAuth2; domani il
+    FSE) consegnano una richiesta a un trasporto.
+
+    `solo_locale=True`: il canale non ha un'adesione (per esempio `CanaleUmbria` verso il server finto),
+    quindi per questa chiamata il trasporto perde TUTTI i suoi permessi (produzione, collaudi regionali,
+    host piemontesi dichiarati), anche se li dichiara. Un redirect seguito dal trasporto verso un
+    collaudo regionale si ferma come la produzione: l'adesione si controlla sull'URL iniziale, e senza
+    questo il flag del trasporto bastava per i salti successivi (revisione Umbria, B1).
 
     La guardia anti-produzione scatta qui, prima di `invia`, con i permessi dichiarati dal trasporto:
     sostituire `TrasportoHTTP` con un trasporto proprio non la spegne. `TrasportoHTTP` la ripete per
@@ -413,13 +468,13 @@ def consegna(trasporto: "Trasporto", richiesta: Richiesta) -> Risposta:
     si rivaluta anche su quello. Un trasporto che apre la rete fuori da Python (un processo esterno)
     esce da questo controllo: non è ammesso.
     """
-    permessi = permessi_del_trasporto(trasporto)
-    verifica_url_consentito(richiesta.url, *permessi)
+    permessi = (False, False, frozenset(), True) if solo_locale else permessi_del_trasporto(trasporto)
+    _verifica(richiesta.url, permessi)
     with guardia_di_rete(permessi):
         risposta = trasporto.invia(richiesta)
     finale = getattr(risposta, "url_finale", None)
     if finale is not None and finale != richiesta.url:
-        verifica_url_consentito(finale, *permessi)
+        _verifica(finale, permessi)
     return risposta
 
 
@@ -507,7 +562,10 @@ class TrasportoHTTP:
             except ErroreTrasporto as e:
                 errore = e
                 raise
-            except (urllib.error.URLError, TimeoutError, OSError) as e:
+            except (urllib.error.URLError, TimeoutError, OSError, http.client.HTTPException) as e:
+                # HTTPException: risposta troncata (IncompleteRead) o malformata DOPO che la richiesta è
+                # partita. È un errore di trasporto: il canale decide se l'esito è incerto (revisione
+                # Umbria, B3)
                 errore = ErroreTrasporto(f"Errore di rete verso {parsed.hostname}: {e}")
                 raise errore from e
             return risposta

@@ -25,6 +25,10 @@ Famiglie:
            $VARCO_XSD_A2F o --xsd-a2f; senza, SALTATO), intestazioni HTTP delle due modalità di
            secondo fattore, PKCE, firma del JWT, lettura di risposte SINTETICHE
            (conformita/risposte/piemonte/LEGGIMI.md). Niente rete.
+  umbria   SAR Regione Umbria (PuntoZero): codifica JSON delle richieste (controlli locali, poi
+           confronto con lo schema dell'OpenAPI ufficiale, da fuori: $VARCO_OPENAPI_UMBRIA o
+           --openapi-umbria; senza, SALTATO) e lettura di risposte JSON SINTETICHE
+           (conformita/risposte/umbria/LEGGIMI.md). Niente rete.
 """
 
 from __future__ import annotations
@@ -60,7 +64,8 @@ OPERAZIONI_SIST_CODIFICA = {"codifica_sist_chk", "codifica_sist_ricerca", "codif
 OPERAZIONI_FVG = {"leggi_fvg", "codifica_fvg"}
 OPERAZIONI_PIEMONTE = {"codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte",
                        "leggi_piemonte_jwt"}
-FAMIGLIE = ("offline", "online", "fse", "sist", "fvg", "piemonte")
+OPERAZIONI_UMBRIA = {"codifica_umbria", "leggi_umbria"}
+FAMIGLIE = ("offline", "online", "fse", "sist", "fvg", "piemonte", "umbria")
 
 CREDENZIALI_INESISTENTI = Credenziali(UTENTE_INESISTENTE, "password-errata", "0000000000")
 
@@ -210,7 +215,8 @@ def tipo_atteso(op: str) -> str | None:
         return "attesoCodifica"
     if op in OPERAZIONI_PIEMONTE:
         return "attesoPiemonte"
-    if op in OPERAZIONI_ONLINE or op in OPERAZIONI_SIST_LEGGI or op == "leggi_fvg" or op in OPERAZIONI_OFFLINE:
+    if (op in OPERAZIONI_ONLINE or op in OPERAZIONI_SIST_LEGGI or op in ("leggi_fvg", "leggi_umbria")
+            or op in OPERAZIONI_OFFLINE):
         return "attesoSac"
     return None
 
@@ -391,6 +397,7 @@ class Motore:
         xsd_sist: Path | None = None,
         xsd_fvg: Path | None = None,
         xsd_a2f: Path | None = None,
+        openapi_umbria: Path | None = None,
     ):
         self.adattatore = adattatore
         self.credenziali = credenziali
@@ -408,6 +415,9 @@ class Motore:
         env_a2f = leggi("VARCO_XSD_A2F")
         self.xsd_a2f = Path(xsd_a2f) if xsd_a2f else (Path(env_a2f) if env_a2f else None)
         self._schema_a2f = None
+        env_umbria = leggi("VARCO_OPENAPI_UMBRIA")
+        self.openapi_umbria = Path(openapi_umbria) if openapi_umbria else (Path(env_umbria) if env_umbria else None)
+        self._openapi_umbria_doc = None
 
     # ------------------------------------------------------------------
     def esegui(self, caso: dict) -> EsitoCaso:
@@ -541,6 +551,10 @@ class Motore:
                 return self._passo_leggi_fvg(p)
             if op in OPERAZIONI_PIEMONTE:
                 return self._passo_piemonte(op, p)
+            if op == "codifica_umbria":
+                return self._passo_codifica_umbria(p)
+            if op == "leggi_umbria":
+                return self._passo_leggi_umbria(p)
             if op.startswith("codifica_"):
                 return self._passo_codifica(op, p)
             esito, fault = None, None
@@ -776,6 +790,102 @@ class Motore:
                                "XSD del SAR FVG non forniti (--xsd-fvg o $VARCO_XSD_FVG, cartella wsdl/sar): "
                                "gli schemi di Insiel non stanno nel repository")
 
+    # ------------------------------------------------------------------ SAR Umbria
+
+    SCHEMI_UMBRIA = {"invio": "InvioPrescrittoRichiesta", "visualizza": "VisualizzaPrescrittoRichiesta",
+                     "annulla": "AnnullaPrescrittoRichiesta", "interroga_nre": "InterrogaNreUtilRichiesta",
+                     "lotto": "LottoRichiestaNRE", "sostituzione": "DichiarazioneSostituzioneMedicoRichiesta"}
+
+    def _problemi_openapi_umbria(self, servizio: str, corpo: dict) -> list[str] | None:
+        """Errori contro lo schema dell'OpenAPI ufficiale (proprietà non dichiarate comprese); None se
+        l'OpenAPI, PyYAML o jsonschema non sono disponibili."""
+        if self.openapi_umbria is None or not self.openapi_umbria.exists():
+            return None
+        try:
+            import jsonschema
+            import yaml
+        except ImportError:
+            return None
+        if self._openapi_umbria_doc is None:
+            self._openapi_umbria_doc = yaml.safe_load(self.openapi_umbria.read_text(encoding="utf-8"))
+        comp = self._openapi_umbria_doc["components"]["schemas"]
+
+        def risolvi(x):
+            if isinstance(x, dict):
+                if "$ref" in x:
+                    return risolvi(comp[x["$ref"].rsplit("/", 1)[-1]])
+                out = {k: risolvi(v) for k, v in x.items() if k != "xml"}
+                if out.get("type") == "object":
+                    out["additionalProperties"] = False
+                return out
+            if isinstance(x, list):
+                return [risolvi(v) for v in x]
+            return x
+
+        validatore = jsonschema.Draft202012Validator(risolvi(comp[self.SCHEMI_UMBRIA[servizio]]))
+        return [f"{'/'.join(map(str, e.path)) or '(radice)'}: {e.message}" for e in validatore.iter_errors(corpo)]
+
+    def _passo_codifica_umbria(self, p: dict) -> EsitoPasso:
+        """Codifica JSON per il SAR Umbria SENZA mandarla: controlli locali, poi lo schema dell'OpenAPI."""
+        import datetime as _dt
+
+        from ..ricetta import json_umbria
+
+        op, servizio, atteso = "codifica_umbria", p["servizio"], p.get("atteso", {})
+        try:
+            if servizio == "invio":
+                ricetta = ricetta_da_dict(p["ricetta"])
+                problemi = ricetta.problemi() + json_umbria.problemi_umbria(ricetta)
+                if problemi:
+                    raise RicettaNonValida(problemi)
+                corpo = json_umbria.richiesta_invio(ricetta)
+            elif servizio in ("visualizza", "annulla"):
+                corpo = getattr(json_umbria, f"richiesta_{servizio}")(p["nre"], p["cf_medico"])
+            elif servizio == "interroga_nre":
+                criteri = criteri_da_dict(p["criteri"])
+                problemi = criteri.problemi(tipo_obbligatorio=False)
+                if problemi:
+                    raise RicettaNonValida(problemi)
+                corpo = json_umbria.richiesta_interroga_nre(criteri, p["cf_medico"])
+            elif servizio == "lotto":
+                corpo = json_umbria.richiesta_lotto(p["cf_medico"], p["identificativo_lotto"])
+            else:
+                corpo = json_umbria.richiesta_sostituzione(
+                    p["cf_titolare"], p["cf_sostituto"], p["codice_asl"], p["codice_specializzazione"],
+                    _dt.date.fromisoformat(p["dal"]), _dt.date.fromisoformat(p["al"]))
+        except ValueError as e:
+            return _esito_rifiuto(op, atteso, str(e))
+        except RicettaNonValida as e:
+            return _esito_rifiuto(op, atteso, str(e))
+        return _esito_codifica_json(op, atteso, corpo, self._problemi_openapi_umbria(servizio, corpo),
+                                    "OpenAPI del SAR Umbria non fornito (--openapi-umbria o $VARCO_OPENAPI_UMBRIA): "
+                                    "la specifica di PuntoZero non sta nel repository")
+
+    def _passo_leggi_umbria(self, p: dict) -> EsitoPasso:
+        """Lettura di una risposta JSON SINTETICA del SAR Umbria. Osservato come osservatoSac; per il lotto
+        in più ok, lotto (prefisso) e lotto_dimensione. Una risposta fuori dall'OpenAPI: rifiuto_locale."""
+        from ..ricetta import json_umbria
+
+        servizio = p["servizio"]
+        dati = json.loads(self.cartella.joinpath("risposte", p["risposta"]).read_text(encoding="utf-8"))
+        lettore = {"invio": json_umbria.leggi_ricevuta_invio, "visualizza": json_umbria.leggi_ricevuta_visualizza,
+                   "annulla": json_umbria.leggi_ricevuta_annulla, "interroga_nre": json_umbria.leggi_ricevuta_interroga_nre,
+                   "lotto": json_umbria.leggi_ricevuta_lotto, "sostituzione": json_umbria.leggi_ricevuta_sostituzione}[servizio]
+        try:
+            esito = lettore(dati)
+        except json_umbria.RispostaNonConforme as e:
+            oss = {"rifiuto_locale": str(e)}
+            ko = verifica(p.get("atteso", {}), oss)
+            return EsitoPasso("leggi_umbria", not ko, ko, oss)
+        oss = osserva_esito(esito)
+        if servizio == "lotto":
+            oss["ok"] = esito.ok
+            if esito.lotto is not None:
+                oss["lotto"] = esito.lotto.prefisso
+                oss["lotto_dimensione"] = esito.lotto.dimensione
+        ko = verifica(p.get("atteso", {}), oss)
+        return EsitoPasso("leggi_umbria", not ko, ko, oss)
+
     # ------------------------------------------------------------------ SIRPED (Regione Piemonte)
 
     def _xsd_a2f(self):
@@ -950,6 +1060,33 @@ def _esito_codifica(op: str, atteso: dict, el, problemi_xsd: list[str] | None, s
         ko += problemi_xsd
     elif not problemi_xsd:
         ko.append("atteso NON valido secondo lo XSD (xsd_valido: false), invece la richiesta è valida")
+    return EsitoPasso(op, not ko, ko, oss)
+
+
+def _esito_codifica_json(op: str, atteso: dict, corpo: dict, problemi_schema: list[str] | None, senza_schema: str) -> EsitoPasso:
+    """Come `_esito_codifica`, su una richiesta JSON: 'tag' sono le proprietà di primo livello (valori
+    stringa), 'xsd_valido' vale per lo schema dell'OpenAPI."""
+    if atteso.get("rifiuto_locale"):
+        return EsitoPasso(op, False, ["atteso un rifiuto locale, la richiesta è stata codificata"])
+    valori = {k: v for k, v in corpo.items() if isinstance(v, str)}
+    oss = {"tag": valori}
+    ko: list[str] = []
+    for tag, val in atteso.get("tag", {}).items():
+        if tag not in valori:
+            ko.append(f"{tag!r} assente, atteso {val!r}")
+        elif valori[tag] != val:
+            ko.append(f"{tag!r} = {valori[tag]!r} invece di {val!r}")
+    for tag in atteso.get("tag_assenti", []):
+        if tag in corpo:
+            ko.append(f"{tag!r} presente, doveva mancare")
+    if problemi_schema is None:
+        if ko:
+            return EsitoPasso(op, False, ko, oss)
+        return EsitoPasso(op, False, [], oss, saltato=senza_schema)
+    if atteso.get("xsd_valido", True):
+        ko += problemi_schema
+    elif not problemi_schema:
+        ko.append("atteso NON valido secondo lo schema (xsd_valido: false), invece la richiesta è valida")
     return EsitoPasso(op, not ko, ko, oss)
 
 

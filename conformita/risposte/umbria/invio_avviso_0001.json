@@ -1,0 +1,17 @@
+{
+  "nre": "1000A1000001001",
+  "codAutenticazione": "000000000000000000000000000002",
+  "dataInserimento": "2026-10-03 11:05:01",
+  "codEsitoInserimento": "0001",
+  "elencoErroriRicette": {
+    "erroreRicetta": [
+      {
+        "codEsito": "1024",
+        "esito": "avviso di prova",
+        "progPresc": "0",
+        "tipoErrore": "W"
+      }
+    ]
+  },
+  "pdfPromemoria": "JVBERi0xLjQKJSBwcm9tZW1vcmlhIFNJTlRFVElDTwolJUVPRgo="
+}

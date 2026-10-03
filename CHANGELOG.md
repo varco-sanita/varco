@@ -7,7 +7,30 @@ può cambiare tra un rilascio e l'altro.
 ## [0.1.0] — 03/10/2026
 
 Prima versione, col nome **Varco**. Repository: <https://github.com/varco-sanita/varco>
-(al 03/10/2026 non ancora pubblicato).
+(pubblicato il 03/10/2026).
+
+### SAR della Regione Umbria (PuntoZero) (03/10/2026)
+
+- Quarto SAR regionale, il primo REST: `varco.ricetta.RicettaUmbria` (invio, visualizza, annulla, NRE utilizzati, richiesta del lotto NRE, dichiarazione di sostituzione, annullamento dopo un invio incerto), codec `varco.ricetta.json_umbria` sul JSON dell'OpenAPI pubblicata da PuntoZero, canale `varco.trasporto.CanaleUmbria` (mutua autenticazione TLS, JWT `Authorization` e `FSE-JWT-Signature` firmati RS256/384/512 con `x5c`, claim per servizio). Stesso modello dati e stesso contratto `ServizioRicetta`; consegna dalla stessa `trasporto.http.consegna`.
+- Guardia: ogni host di `umbria.it` e `puntozeroscarl.it` è produzione, salvo l'host di test della wiki con il flag del collaudo regionale e un'`AdesioneUmbria`. Nessuna chiamata ai sistemi umbri, nemmeno al test; i certificati di test pubblici non si scaricano.
+- `strumenti/umbria_server_finto.py`: server HTTPS locale con mTLS che verifica i due JWT e i corpi sugli schemi dell'OpenAPI; risposte sintetiche in `conformita/risposte/umbria/`.
+- Conformità: famiglia `umbria`, 28 casi (`UMB-001`..`UMB-014`, `UMB-101`..`UMB-114`); con l'OpenAPI scaricata (`--gruppi umbria`, sha256 nel manifesto) le richieste si validano anche contro quella (`--openapi-umbria`, `$VARCO_OPENAPI_UMBRIA`).
+- Documentazione: `docs/SAR_UMBRIA.md` (18 punti delle specifiche in sez. 7), bozza `docs/PROPOSTA_UMBRIA.md`. Dipendenza di test in più: PyYAML.
+- Revisione esterna prima del merge (GPT-6 Astra, rapporto in `kit-mmg-review/2026-10-03-dopo-pubblicazione/revisione-umbria/`): quattro bug alti corretti, test `tests/unit/test_revisione_umbria.py`.
+  - B1: senza adesione `CanaleUmbria` consegna con `consegna(..., solo_locale=True)`: per tutta la chiamata la guardia ammette solo localhost e il trasporto perde i permessi, quindi nessun redirect porta i JWT fuori da localhost, nemmeno col flag del collaudo. Guardie annidate (`TrasportoHTTP` dentro `consegna`): valgono i permessi più stretti, la guardia interna non li rimette più (trovato dalla verifica mirata).
+  - B2: registro, nel JSON si tolgono le componenti del lotto NRE (`lotto`, `codLotto`, `codRagLotto`, `identificativoLotto`) e il testo di `esito`, `tipoErrore`, `nota`, `title`, anche dentro un oggetto; resta leggibile solo un codice di al più quattro cifre.
+  - Dopo la seconda verifica mirata (limite di due raggiunto, `docs/BLOCCHI.md`): un thread avviato dentro una guardia annidata resta della chiamata quando quella annidata finisce; nel JSON dei servizi `umbria.*` il registro usa una allowlist (`CHIAVI_JSON_LEGGIBILI_UMBRIA`). Corretti con test, non riverificati da un revisore esterno.
+  - B3: `TrasportoHTTP` tratta una risposta troncata o malformata (`http.client.HTTPException`) come errore di trasporto; dopo un invio qualunque guasto del trasporto è `InvioIncertoUmbria`.
+  - B4: le ricevute si controllano contro gli schemi delle risposte dell'OpenAPI (`json_umbria.SCHEMI_RISPOSTE`, confrontati con l'OpenAPI da un test); fuori schema è `ErroreTrasporto` (dopo un invio `InvioIncertoUmbria`), non più `ConfigurazioneNonValida` né un esito «0000».
+  - Medi e basso (server finto su `opzioni` e SmartCUP, `annulla` del contratto comune senza CF dell'assistito, tipi dei dati importati da JSON, durata frazionaria dei JWT): issue aperte.
+
+### Correzioni delle issue del giro 3 (03/10/2026)
+
+- CI verde su ubuntu, macOS e Windows (Python 3.11 e 3.12): file temporaneo di Saxon chiuso prima della lettura su Windows, `.gitattributes` senza conversione dei fine riga (#13).
+- Puglia: CDA degli assicurati esteri con identificativi TEAM e personale, `displayName` del motivo di non sostituibilità, WS-Security accettata solo nell'header (#3, #4, #5).
+- FVG: un CF ordinario che comincia per «STP» non è più scambiato per un codice STP; carta e medico controllati a ogni chiamata; campi solo farmaceutici rifiutati sulla specialistica (#6, #7, #8).
+- Piemonte e conformità: il server finto rispetta i permessi del gestionale e rifiuta `nbf`/`exp` non finiti; l'esecutore Java accetta `errori_contengono: []` come il Python (#9, #10, #11).
+- Registro e guardia: credenziali in dichiarazioni di namespace e commenti XML redatte, `code` redatto nel JSON OAuth2; i thread avviati durante una chiamata ereditano la guardia, quelli estranei non fanno più fallire una risposta già arrivata (#1, #2, #12).
 
 ### Nome: da kit-mmg a Varco (03/10/2026)
 

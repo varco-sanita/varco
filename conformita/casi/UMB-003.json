@@ -1,0 +1,35 @@
+{
+  "id": "UMB-003",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, invio senza NRE: rifiuto locale (in Umbria l'NRE lo mette il medico, da un lotto)",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Prescrittori» (commit acdbb373), «Invio prescritto DEMA»: «è obbligatorio compilare il campo nre»",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "invio",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "100",
+          "codice_asl": "201",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P"
+        },
+        "tipo": "F",
+        "data_compilazione": "2026-10-03 11:00:00",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "CJA",
+            "descrizione_gruppo_equivalenza": "GRUPPO DI PROVA"
+          }
+        ]
+      },
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

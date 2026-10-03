@@ -7,6 +7,7 @@
 - sist:     canale verso il SIST della Regione Puglia (WS-Security X.509, datiOperatore/datiApplicativo)
 - fvg:      canale verso il SAR della Regione FVG (mTLS con CRS/CNS o token federati, User-Agent, prodottoCme)
 - piemonte: canale verso SIRPED, SAR della Regione Piemonte (RUPAR + Id-Sessione via mail, oppure JWT OAuth2)
+- umbria:   canale verso il SAR della Regione Umbria (REST, mTLS + due JWT come il gateway FSE 2.0)
 - piemonte_a2f, piemonte_oauth2: Id-Sessione di SIRPED (CreateAuth/CheckToken/RevokeAuth; PKCE, token, JWKS)
 - wssecurity: firma X.509 del Timestamp nell'header SOAP
 - registro: registrazione su file di richieste/risposte
@@ -21,6 +22,8 @@ from .fvg import AdesioneFVG, ApplicativoFVG, CanaleFVG, ModalitaFVG, Postazione
 from .piemonte import AdesionePiemonte, CanalePiemonte, GestionalePiemonte, ModalitaPiemonte, ServizioPiemonte
 from .piemonte_a2f import ServizioIdSessione, UtenteA2F
 from .piemonte_oauth2 import ClientOAuth2Piemonte
+from .umbria import (AdesioneUmbria, ApplicativoUmbria, CanaleUmbria, FirmatarioJWT, FirmatarioJWTPKCS12,
+                     InvioIncertoUmbria, ServizioUmbria)
 
 __all__ = [
     "Richiesta",
@@ -53,4 +56,11 @@ __all__ = [
     "ServizioIdSessione",
     "UtenteA2F",
     "ClientOAuth2Piemonte",
+    "AdesioneUmbria",
+    "ApplicativoUmbria",
+    "CanaleUmbria",
+    "FirmatarioJWT",
+    "FirmatarioJWTPKCS12",
+    "InvioIncertoUmbria",
+    "ServizioUmbria",
 ]

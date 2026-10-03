@@ -1,0 +1,23 @@
+{
+  "id": "UMB-105",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: visualizzazione riuscita",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "visualizza",
+      "risposta": "umbria/visualizza_ok.json",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "stato_processo": "3",
+        "righe": 1,
+        "campi": {
+          "cfMedico1": "PROVAX00X00X000Y"
+        }
+      }
+    }
+  ]
+}

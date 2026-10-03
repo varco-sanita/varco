@@ -1,0 +1,22 @@
+{
+  "id": "UMB-109",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: NRE utilizzati",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "interroga_nre",
+      "risposta": "umbria/nre_utilizzati_ok.json",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_numero": 1,
+        "ricette_contengono": [
+          "1000A1000001000"
+        ]
+      }
+    }
+  ]
+}

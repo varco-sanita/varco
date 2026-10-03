@@ -25,6 +25,8 @@ from .servizio import RicettaSAC, ServizioRicetta
 from .sist import FirmatarioCAdES, FirmatarioCAdESPKCS12, RicettaSIST
 from .fvg import RicettaFVG, VerificaSostituto, richiede_downgrade_mir
 from .piemonte import RicettaPiemonte
+from .umbria import RicettaUmbria
+from .json_umbria import EsitoLottoNRE, LottoNRE
 
 __all__ = [
     "STATI_PROCESSO",
@@ -56,4 +58,7 @@ __all__ = [
     "VerificaSostituto",
     "richiede_downgrade_mir",
     "RicettaPiemonte",
+    "RicettaUmbria",
+    "EsitoLottoNRE",
+    "LottoNRE",
 ]

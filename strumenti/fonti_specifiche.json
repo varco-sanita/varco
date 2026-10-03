@@ -7,7 +7,8 @@
     "sist": "Regione Puglia, SIST di InnovaPuglia (SAR): specifiche di integrazione v4.03.27 del 16/09/2026 (docx, WSDL, XSD, javadoc, specifiche ed esempi dei CDA). Serve ai test del modulo SIST (XSD ufficiali, esempi). Gli esempi contengono nomi e codici fiscali: restano fuori dal repository.",
     "fvg": "Regione Friuli-Venezia Giulia, SAR di Insiel: specifiche Idof-dem-AT-01 dell'11/02/2026 (PDF, «Documento a libera circolazione», © Insiel tutti i diritti riservati) e WSDL/XSD dei servizi in collaudo (wsdl_prescritto.zip). Serve ai test del modulo FVG (XSD, esempi). NON comprende ISAD-FSE-SPT-02-2025 (FSE regionale): porta «Documento a circolazione limitata» e non si scarica (docs/TERZE_PARTI.md).",
     "piemonte": "Regione Piemonte, SIRPED (SAR gestito dal CSI Piemonte): specifiche dell'autenticazione forte REL-STC-01 V04 del 02/03/2026, YAML dei servizi Id-Sessione OAuth2, processo, richiesta, piano dei test e attestati dell'autocertificazione (gennaio-febbraio 2026), requisiti di integrazione per le cartelle MMG/PLS V05 (2018) e piano dei test V02 (2016), tutti «Uso: Esterno» e scaricabili senza login da servizi.regione.piemonte.it; allegato tecnico dell'avviso CSI AP26_003; kit A2F del Sistema TS (WSDL e XSD di CreateAuth/CheckToken/RevokeAuth, che REL-STC-01 par. 4.2 dichiara identici per SIRPED). Serve ai test del modulo Piemonte (XSD A2F) e alla documentazione. Il kit A2F contiene utenze e pincode di test del MEF: restano fuori dal repository.",
-    "cda-xsd": "Schemi XSD del CDA R2 (HL7) nella versione del gateway FSE 2.0 (ministero-salute/it-fse-catalogs, schema/POCD_MT000040UV02/, commit 141be7f0) e schematron del PSS v4.0 (stesso repository e commit, schematron/). Servono a ValidatoreLocale (validazione XSD e schematron del PSS) e sono nei gruppi di default dello script. Lo schematron traduce la guida PSS di HL7 Italia, «All Rights Reserved», senza licenza. Copyright Health Level Seven: 4 file hanno una licenza nell'intestazione (BSD per datatypes*, EPL-1.0 per POCD_MT000040UV02.xsd), gli altri no e la HL7 IP Policy non autorizza un non membro a ridistribuirli: si scaricano dalla fonte (docs/TERZE_PARTI.md)."
+    "cda-xsd": "Schemi XSD del CDA R2 (HL7) nella versione del gateway FSE 2.0 (ministero-salute/it-fse-catalogs, schema/POCD_MT000040UV02/, commit 141be7f0) e schematron del PSS v4.0 (stesso repository e commit, schematron/). Servono a ValidatoreLocale (validazione XSD e schematron del PSS) e sono nei gruppi di default dello script. Lo schematron traduce la guida PSS di HL7 Italia, «All Rights Reserved», senza licenza. Copyright Health Level Seven: 4 file hanno una licenza nell'intestazione (BSD per datatypes*, EPL-1.0 per POCD_MT000040UV02.xsd), gli altri no e la HL7 IP Policy non autorizza un non membro a ridistribuirli: si scaricano dalla fonte (docs/TERZE_PARTI.md).",
+    "umbria": "Regione Umbria, SAR di PuntoZero S.c.a r.l. (in house della Regione, a totale capitale pubblico): repository github.com/punto-zero/umbria-sar-support al commit 3cd93d86 (OpenAPI 3.1 dei servizi prescrittore ed erogatore, collection Postman, allegati) e la sua wiki al commit acdbb373 (autenticazione, JWT, Base URL, servizi del prescrittore). Il repository non dichiara una licenza: PuntoZero è soggetto dell'art. 2 c. 2 lett. c del CAD, quindi vale l'art. 52 c. 2 (dati di tipo aperto); il kit comunque non li ridistribuisce. NON si scaricano i certificati di test (certificati/*.jks, *.pfx: chiavi private pubblicate per l'ambiente di test): il kit non li usa, i test generano i propri. Serve ai test del modulo Umbria (confronto con l'OpenAPI) e alla documentazione."
   },
   "file": [
     {
@@ -274,6 +275,55 @@
       "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schematron/schematron_PSS_v4.0.sch",
       "sha256": "ef4f3711771e33f89fea0301d32e9875fb155a372916d480fdcc3db937ed1acb",
       "nota": "Schematron del Profilo Sanitario Sintetico v4.0, lo stesso che il gateway FSE 2.0 carica nel suo database. Traduce la guida PSS di HL7 Italia («Copyright 2024 by HL7 Italia. All Rights Reserved»), senza licenza: non si ridistribuisce (docs/TERZE_PARTI.md)."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/openapi/sar-open-api-prescrittore.yaml",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/openapi/sar-open-api-prescrittore.yaml",
+      "sha256": "a54decfdae6d7fbf37a566f935566af6167e9fa66adff197caef4934e57df634",
+      "nota": "OpenAPI 3.1 dei servizi del prescrittore: il contratto JSON che il kit segue."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/openapi/sar-open-api-erogatore.yaml",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/openapi/sar-open-api-erogatore.yaml",
+      "sha256": "a9030eb9c5c5f2718d156babfd2ada2be44545bd1fe18f2be96688b9e8768ce9",
+      "nota": "OpenAPI dei servizi dell'erogatore: solo documentazione (il kit è lato prescrittore)."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/openapi/sar-open-api-erogatore-differita.yaml",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/openapi/sar-open-api-erogatore-differita.yaml",
+      "sha256": "3d4e2c86dac33dc7e3e18e83c143af41e78e55695064bf8eb6250fa07b7b47ca",
+      "nota": "OpenAPI dell'erogazione differita: solo documentazione."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/postman-collections/SAR API Prescrittore.postman_collection.json",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/postman-collections/SAR%20API%20Prescrittore.postman_collection.json",
+      "sha256": "e2673b74765c2337f7be9707bf3350a5beee22c719e02af1d62d1c1e29655f15",
+      "nota": "Collection Postman del prescrittore: costruzione dell'NRE dal lotto (script). Contiene token JWT di esempio e i dati del paziente di test della Regione: non entra nel repository."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/allegati/Indicazione tempo controllo.pdf",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/allegati/Indicazione%20tempo%20controllo.pdf",
+      "sha256": "aca1c0ce50a84482e1c18a1c3983b7d629b46d362ba1ccf9afd2ef3aeff3576d",
+      "nota": "dispReg per le prestazioni di controllo (mesi MM, giorni GG): gli esempi sono immagini."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/allegati/tabelle_rao.pdf",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/allegati/tabelle_rao.pdf",
+      "sha256": "aeba40c67a76a543242006bd9cd6f17d319fc6bc2ec49b9365e06bf2d37c8600",
+      "nota": "Tabelle RAO: solo documentazione."
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/schede-di-appropriatezza/Tracciamento_Uscite_Alert_V5.2.pdf",
+      "url": "https://raw.githubusercontent.com/punto-zero/umbria-sar-support/3cd93d86b921458466e5285c92d2dbae7e097c12/schede-di-appropriatezza/Tracciamento_Uscite_Alert_V5.2.pdf",
+      "sha256": "c01e051aae25b58de5fc4cfa0313ed984dbb4504d92bd299d13e45aa0041cdc0",
+      "nota": "Schede di appropriatezza (campo prescrizione2): solo immagini, nessun testo estraibile."
     }
   ],
   "git": [
@@ -318,6 +368,12 @@
       "destinazione": "fse/it-fse-gtw-test-container",
       "repository": "https://github.com/ministero-salute/it-fse-gtw-test-container.git",
       "commit": "d9e763a3774650b287affa1b13e7e8965b5494d0"
+    },
+    {
+      "gruppo": "umbria",
+      "destinazione": "umbria/wiki",
+      "repository": "https://github.com/punto-zero/umbria-sar-support.wiki.git",
+      "commit": "acdbb37398429b10218372007a60bf7aca7a9ea6"
     }
   ]
 }

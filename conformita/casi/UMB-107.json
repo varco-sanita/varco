@@ -1,0 +1,19 @@
+{
+  "id": "UMB-107",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: annullamento riuscito",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "annulla",
+      "risposta": "umbria/annulla_ok.json",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre": "1000A1000001000"
+      }
+    }
+  ]
+}

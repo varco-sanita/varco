@@ -1,0 +1,14 @@
+{
+  "codEsitoVisualizzazione": "9999",
+  "nre": "1000A1000001999",
+  "elencoErroriRicette": {
+    "erroreRicetta": [
+      {
+        "codEsito": "5005",
+        "esito": "NRE inesistente",
+        "progPresc": "0",
+        "tipoErrore": "E"
+      }
+    ]
+  }
+}

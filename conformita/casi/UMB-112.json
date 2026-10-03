@@ -1,0 +1,18 @@
+{
+  "id": "UMB-112",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: lotto rifiutato (codEsito diverso da 00 e 01)",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "lotto",
+      "risposta": "umbria/lotto_rifiuto.json",
+      "atteso": {
+        "campi": {
+          "ok": false
+        }
+      }
+    }
+  ]
+}

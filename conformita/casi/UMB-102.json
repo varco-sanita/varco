@@ -1,0 +1,22 @@
+{
+  "id": "UMB-102",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: invio con avviso (0001, tipoErrore W)",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "invio",
+      "risposta": "umbria/invio_avviso_0001.json",
+      "atteso": {
+        "codice": [
+          "0001"
+        ],
+        "avvisi_codici": [
+          "1024"
+        ],
+        "nessun_bloccante": true
+      }
+    }
+  ]
+}

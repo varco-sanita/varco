@@ -1,0 +1,19 @@
+{
+  "id": "UMB-106",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: visualizzazione di un NRE inesistente",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "visualizza",
+      "risposta": "umbria/visualizza_5005.json",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "5005"
+      }
+    }
+  ]
+}

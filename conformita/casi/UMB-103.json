@@ -1,0 +1,20 @@
+{
+  "id": "UMB-103",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: errore applicativo: HTTP 200 con l'elenco degli errori, come il SAC",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "invio",
+      "risposta": "umbria/invio_rifiuto_1101.json",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1101",
+        "errore_bloccante": true
+      }
+    }
+  ]
+}

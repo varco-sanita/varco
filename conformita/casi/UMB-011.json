@@ -1,0 +1,35 @@
+{
+  "id": "UMB-011",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, NRE utilizzati per periodo: date «aaaa-mm-gg hh:mm:ss», tipo facoltativo",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Prescrittori» (commit acdbb373), «Visualizza NRE utilizzati» (esempio JSON); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86), InterrogaNreUtilRichiesta",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "interroga_nre",
+      "criteri": {
+        "codice_regione": "100",
+        "tipo": "P",
+        "dal": "2026-10-01 00:00:00",
+        "al": "2026-10-31 23:59:59"
+      },
+      "cf_medico": "PROVAX00X00X000Y",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "codRegione": "100",
+          "cfMedico": "PROVAX00X00X000Y",
+          "tipoPrescr": "P",
+          "dataCompilazioneRicettaDal": "2026-10-01 00:00:00",
+          "dataCompilazioneRicettaAl": "2026-10-31 23:59:59"
+        },
+        "tag_assenti": [
+          "nre",
+          "codLotto",
+          "cfAssistito"
+        ]
+      }
+    }
+  ]
+}
