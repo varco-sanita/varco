@@ -48,7 +48,7 @@ versione 0.1 le vecchie variabili valgono ancora, con un avviso di deprecazione
 - Friuli-Venezia Giulia, Piemonte, Umbria: moduli scritti e verificati sulle specifiche, **non
   collaudati** sui sistemi regionali (sezioni sotto).
 - Puglia: modulo sospeso il 03/10/2026 — le specifiche SIST risultano riservate ai sottoscrittori di un
-  accordo; abbiamo chiesto a InnovaPuglia se possono essere usate per un progetto aperto. Dettagli in
+  accordo; chiederemo a InnovaPuglia se possono essere usate per un progetto aperto. Dettagli in
   [`docs/BLOCCHI.md`](docs/BLOCCHI.md) e nel [`CHANGELOG`](CHANGELOG.md) (0.1.1).
 
 ## Perché esiste
