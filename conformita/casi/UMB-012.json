@@ -1,0 +1,26 @@
+{
+  "id": "UMB-012",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, richiesta lotto da 1000 NRE: i nomi delle proprietà sono quelli dell'OpenAPI",
+  "riferimento": "OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86), LottoRichiestaNRE (codRegione, identificativoLotto, cfmedico); la wiki e la collection Postman scrivono CodRegione, IdentificativoLotto, CFMedico (docs/SAR_UMBRIA.md, sez. 7)",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "lotto",
+      "cf_medico": "PROVAX00X00X000Y",
+      "identificativo_lotto": "1",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "codRegione": "100",
+          "identificativoLotto": "1",
+          "cfmedico": "PROVAX00X00X000Y"
+        },
+        "tag_assenti": [
+          "CodRegione",
+          "CFMedico"
+        ]
+      }
+    }
+  ]
+}

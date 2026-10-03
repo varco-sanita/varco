@@ -104,11 +104,12 @@ def test_i_file_citati_dai_casi_esistono():
 def test_famiglie_e_numero_casi():
     casi = carica_casi("tutte")
     famiglie = {c["famiglia"] for c in casi}
-    assert famiglie == {"offline", "online", "fse", "sist", "fvg", "piemonte"}
+    assert famiglie == {"offline", "online", "fse", "sist", "fvg", "piemonte", "umbria"}
     assert len(carica_casi("fse")) >= 10 and len(carica_casi("online")) >= 15 and len(carica_casi("offline")) >= 20
     assert len(carica_casi("sist")) >= 23
     assert len(carica_casi("fvg")) >= 29
     assert len(carica_casi("piemonte")) >= 44
+    assert len(carica_casi("umbria")) >= 28
 
 
 # ------------------------------------------------------------------ esecutore Python: famiglia fse

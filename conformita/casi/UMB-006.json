@@ -1,0 +1,37 @@
+{
+  "id": "UMB-006",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, invio assistito STP: rifiuto locale (person_id del JWT definito solo per il CF)",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Home», claim person_id (CF nel tipo CX); per STP/ENI la specifica non dice cosa mettere",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "invio",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "100",
+          "codice_asl": "201",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "STP1000000000001",
+          "tipo_ricetta": "ST"
+        },
+        "tipo": "F",
+        "data_compilazione": "2026-10-03 11:00:00",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "CJA",
+            "descrizione_gruppo_equivalenza": "GRUPPO DI PROVA"
+          }
+        ],
+        "nre": "1000A1000001000"
+      },
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

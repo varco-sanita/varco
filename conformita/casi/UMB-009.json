@@ -1,0 +1,22 @@
+{
+  "id": "UMB-009",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, visualizza: pinCode vuoto, NRE, CF del medico",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Prescrittori» (commit acdbb373), «Visualizza prescritto DEMA»; OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86), VisualizzaPrescrittoRichiesta",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "visualizza",
+      "nre": "1000A1000001000",
+      "cf_medico": "PROVAX00X00X000Y",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "nre": "1000A1000001000",
+          "cfMedico": "PROVAX00X00X000Y"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "UMB-014",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, sostituzione con periodo rovesciato: rifiuto locale",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Prescrittori» (commit acdbb373), «Sostituzione medico»",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "sostituzione",
+      "cf_titolare": "PROVAX00X00X000Y",
+      "cf_sostituto": "PROVAX00X00X000Z",
+      "codice_asl": "201",
+      "codice_specializzazione": "F",
+      "dal": "2026-11-30",
+      "al": "2026-11-01",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

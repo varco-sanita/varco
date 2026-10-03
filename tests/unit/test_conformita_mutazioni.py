@@ -35,6 +35,7 @@ SPEC = CONF.parent / "specifiche"
 XSD_SIST = SPEC / "sist" / "specifiche SIST 4.02.27" / "wsdl-pddasl" / "CVPService.xsd"
 XSD_FVG = SPEC / "fvg" / "wsdl" / "sar"
 XSD_A2F = SPEC / "piemonte" / "a2f" / "Kit per lo sviluppo - A2F SistemaTS - ver. 20250902" / "wsdl"
+OPENAPI_UMBRIA = SPEC / "umbria" / "openapi" / "sar-open-api-prescrittore.yaml"
 
 INESISTENTE = "ERRORE-INESISTENTE-MUTANTE"
 CREDENZIALI_SPECCHIO = Credenziali("specchio", "nessuna-rete", "0000000000", "PROVAX00X00X000Y")
@@ -227,7 +228,8 @@ def _motore() -> Motore:
                   validatore_fse=ValidatoreLocale() if dipendenze_locali_presenti() else None,
                   xsd_sist=XSD_SIST if XSD_SIST.exists() else None,
                   xsd_fvg=XSD_FVG if XSD_FVG.exists() else None,
-                  xsd_a2f=XSD_A2F if XSD_A2F.exists() else None)
+                  xsd_a2f=XSD_A2F if XSD_A2F.exists() else None,
+                  openapi_umbria=OPENAPI_UMBRIA if OPENAPI_UMBRIA.exists() else None)
 
 
 def controlla_mutanti(famiglia: str, motore: Motore) -> tuple[list[str], int, set[str]]:

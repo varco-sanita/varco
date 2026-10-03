@@ -18,7 +18,7 @@ import pytest
 
 RADICE = Path(__file__).resolve().parents[2]
 SRC = RADICE / "src" / "varco"
-PERMESSI = {"varco", "cryptography", "lxml", "saxonche", "pyhanko", "pypdf", "jsonschema", "referencing"}
+PERMESSI = {"varco", "cryptography", "lxml", "saxonche", "pyhanko", "pypdf", "jsonschema", "referencing", "yaml"}
 REPO_AGPL = ["it-fse-gtw-validator", "it-fse-gtw-dispatcher"]
 
 

@@ -1,0 +1,16 @@
+{
+  "id": "UMB-113",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: lotto «riuscito» senza codRagLotto e codLotto: il lettore lo rifiuta",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "lotto",
+      "risposta": "umbria/lotto_incompleto.json",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

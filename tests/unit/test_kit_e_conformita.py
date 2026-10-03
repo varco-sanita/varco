@@ -33,7 +33,7 @@ def test_casi_hanno_campi_obbligatori():
     casi = carica_casi("tutte")
     assert len({c["id"] for c in casi}) == len(casi) >= 20
     for c in casi:
-        assert c["famiglia"] in ("offline", "online", "fse", "sist", "fvg", "piemonte") and c["titolo"] and c["riferimento"] and c["passi"]
+        assert c["famiglia"] in ("offline", "online", "fse", "sist", "fvg", "piemonte", "umbria") and c["titolo"] and c["riferimento"] and c["passi"]
         for p in c["passi"]:
             assert "atteso" in p, c["id"]
 

@@ -1,0 +1,23 @@
+{
+  "nre": "1000A1000001000",
+  "cfMedico1": "PROVAX00X00X000Y",
+  "codRegione": "100",
+  "codASLAo": "201",
+  "codSpecializzazione": "F",
+  "tipoPrescrizione": "F",
+  "dataCompilazione": "2026-10-03 11:00:00",
+  "tipoVisita": "A",
+  "elencoDettagliPrescrizioni": {
+    "dettaglioPrescrizione": [
+      {
+        "codGruppoEquival": "CJA",
+        "descrGruppoEquival": "GRUPPO DI PROVA",
+        "quantita": "1"
+      }
+    ]
+  },
+  "statoProcesso": "3",
+  "codAutenticazione": "000000000000000000000000000001",
+  "dataInserimento": "2026-10-03 11:00:01",
+  "codEsitoVisualizzazione": "0000"
+}

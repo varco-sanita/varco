@@ -7,8 +7,8 @@
   "required": ["id", "famiglia", "titolo", "riferimento", "passi"],
   "additionalProperties": false,
   "properties": {
-    "id": {"type": "string", "pattern": "^(OFF|SAC|FSE|SIS|FVG|PIE)-[0-9]{3}$", "description": "Identificativo stabile. OFF offline, SAC online contro il SAC di test, FSE documenti FSE 2.0. SIS SIST Regione Puglia (codifica e risposte sintetiche, nessuna rete). FVG SAR Regione Friuli-Venezia Giulia (codifica e risposte sintetiche, nessuna rete). PIE SIRPED Regione Piemonte (codifica, intestazioni, PKCE, JWT e risposte sintetiche, nessuna rete)."},
-    "famiglia": {"enum": ["offline", "online", "fse", "sist", "fvg", "piemonte"], "description": "offline: nessuna rete (risposte reali registrate, codifica delle richieste). online: chiamate all'ambiente di TEST del MEF con le utenze pubbliche del kit. fse: documenti CDA2 e loro validazione, nessuna rete. sist: SIST della Regione Puglia, nessuna rete: codifica delle richieste CVP (contro CVPService.xsd, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e del CDA2 di prescrizione (contro lo schema CDA), lettura di risposte SINTETICHE scritte sullo schema (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST è disponibile. fvg: SAR della Regione Friuli-Venezia Giulia (Insiel), nessuna rete: codifica delle richieste contro gli XSD di wsdl_prescritto.zip (che l'esecutore riceve da fuori: senza, il passo è SALTATO), lettura di risposte SINTETICHE scritte su quegli XSD (conformita/risposte/fvg/LEGGIMI.md): nessuna risposta reale del SAR FVG è disponibile. piemonte: SIRPED, SAR della Regione Piemonte (CSI Piemonte), nessuna rete: codifica delle richieste di prescrizione (tracciato e XSD del MEF, inclusi nel kit) e di CreateAuth/CheckToken/RevokeAuth (XSD del kit A2F del Sistema TS, che l'esecutore riceve da fuori: senza, il passo è SALTATO), intestazioni HTTP delle due modalità di secondo fattore, PKCE (RFC 7636), firma del JWT, lettura di risposte SINTETICHE (conformita/risposte/piemonte/LEGGIMI.md): nessuna risposta reale di SIRPED è disponibile."},
+    "id": {"type": "string", "pattern": "^(OFF|SAC|FSE|SIS|FVG|PIE|UMB)-[0-9]{3}$", "description": "Identificativo stabile. OFF offline, SAC online contro il SAC di test, FSE documenti FSE 2.0. SIS SIST Regione Puglia (codifica e risposte sintetiche, nessuna rete). FVG SAR Regione Friuli-Venezia Giulia (codifica e risposte sintetiche, nessuna rete). PIE SIRPED Regione Piemonte (codifica, intestazioni, PKCE, JWT e risposte sintetiche, nessuna rete). UMB SAR Regione Umbria (codifica JSON e risposte sintetiche, nessuna rete)."},
+    "famiglia": {"enum": ["offline", "online", "fse", "sist", "fvg", "piemonte", "umbria"], "description": "offline: nessuna rete (risposte reali registrate, codifica delle richieste). online: chiamate all'ambiente di TEST del MEF con le utenze pubbliche del kit. fse: documenti CDA2 e loro validazione, nessuna rete. sist: SIST della Regione Puglia, nessuna rete: codifica delle richieste CVP (contro CVPService.xsd, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e del CDA2 di prescrizione (contro lo schema CDA), lettura di risposte SINTETICHE scritte sullo schema (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST è disponibile. fvg: SAR della Regione Friuli-Venezia Giulia (Insiel), nessuna rete: codifica delle richieste contro gli XSD di wsdl_prescritto.zip (che l'esecutore riceve da fuori: senza, il passo è SALTATO), lettura di risposte SINTETICHE scritte su quegli XSD (conformita/risposte/fvg/LEGGIMI.md): nessuna risposta reale del SAR FVG è disponibile. piemonte: SIRPED, SAR della Regione Piemonte (CSI Piemonte), nessuna rete: codifica delle richieste di prescrizione (tracciato e XSD del MEF, inclusi nel kit) e di CreateAuth/CheckToken/RevokeAuth (XSD del kit A2F del Sistema TS, che l'esecutore riceve da fuori: senza, il passo è SALTATO), intestazioni HTTP delle due modalità di secondo fattore, PKCE (RFC 7636), firma del JWT, lettura di risposte SINTETICHE (conformita/risposte/piemonte/LEGGIMI.md): nessuna risposta reale di SIRPED è disponibile. umbria: SAR della Regione Umbria (PuntoZero), nessuna rete: codifica JSON delle richieste (controlli locali, poi lo schema dell'OpenAPI ufficiale sar-open-api-prescrittore.yaml, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e lettura di risposte JSON SINTETICHE scritte sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md): nessuna risposta reale del SAR Umbria è disponibile."},
     "titolo": {"type": "string", "minLength": 1},
     "riferimento": {"type": "string", "minLength": 1, "description": "Da dove viene la regola: specifica, paragrafo, file ufficiale, o la prova reale che l'ha mostrata."},
     "passi": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/passo"}},
@@ -19,7 +19,7 @@
       "type": "object",
       "required": ["operazione"],
       "properties": {
-        "operazione": {"enum": ["invia", "visualizza", "annulla", "interroga_nre", "leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre", "codifica_invio", "codifica_interroga_nre", "valida_documento", "genera_pss", "leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata", "leggi_sist_ricerca", "codifica_sist_chk", "codifica_sist_ricerca", "codifica_sist_cda", "leggi_fvg", "codifica_fvg", "codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte", "leggi_piemonte_jwt"]}
+        "operazione": {"enum": ["invia", "visualizza", "annulla", "interroga_nre", "leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre", "codifica_invio", "codifica_interroga_nre", "valida_documento", "genera_pss", "leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata", "leggi_sist_ricerca", "codifica_sist_chk", "codifica_sist_ricerca", "codifica_sist_cda", "leggi_fvg", "codifica_fvg", "codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte", "leggi_piemonte_jwt", "codifica_umbria", "leggi_umbria"]}
       },
       "allOf": [
         {"if": {"properties": {"operazione": {"const": "invia"}}}, "then": {"$ref": "#/$defs/opInvia"}},
@@ -36,6 +36,8 @@
         {"if": {"properties": {"operazione": {"const": "codifica_sist_cda"}}}, "then": {"$ref": "#/$defs/opCodificaSistCda"}},
         {"if": {"properties": {"operazione": {"const": "leggi_fvg"}}}, "then": {"$ref": "#/$defs/opLeggiFvg"}},
         {"if": {"properties": {"operazione": {"const": "codifica_fvg"}}}, "then": {"$ref": "#/$defs/opCodificaFvg"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_umbria"}}}, "then": {"$ref": "#/$defs/opCodificaUmbria"}},
+        {"if": {"properties": {"operazione": {"const": "leggi_umbria"}}}, "then": {"$ref": "#/$defs/opLeggiUmbria"}},
         {"if": {"properties": {"operazione": {"const": "codifica_piemonte"}}}, "then": {"$ref": "#/$defs/opCodificaPiemonte"}},
         {"if": {"properties": {"operazione": {"const": "leggi_piemonte_a2f"}}}, "then": {"$ref": "#/$defs/opLeggiPiemonteA2f"}},
         {"if": {"properties": {"operazione": {"const": "intestazioni_piemonte"}}}, "then": {"$ref": "#/$defs/opIntestazioniPiemonte"}},
@@ -201,7 +203,7 @@
         "tag": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Valore testuale dei figli diretti dell'elemento radice (nome locale del tag)."},
         "tag_assenti": {"type": "array", "items": {"type": "string"}, "description": "Figli diretti che non devono esserci."},
         "attributi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_sist_* e codifica_fvg: 'percorso@attributo' -> valore atteso (es. 'templateId@extension'). L'attributo si cerca per nome locale ('@prodottoCme' trova tip:prodottoCme)."},
-        "rifiuto_locale": {"const": true, "description": "Solo codifica_sist_*, codifica_fvg e codifica_piemonte: l'implementazione deve rifiutare PRIMA di codificare (controlli locali)."},
+        "rifiuto_locale": {"const": true, "description": "Solo codifica_sist_*, codifica_fvg, codifica_piemonte e codifica_umbria: l'implementazione deve rifiutare PRIMA di codificare (controlli locali)."},
         "testi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_piemonte: 'nome/nome/...' (nomi locali, a partire dalla radice) -> testo del primo elemento corrispondente (es. 'identificativo/tipo', 'infoAggiuntive/opzione/valore')."}
       }
     },
@@ -412,6 +414,56 @@
         "jwks": {"type": "string", "pattern": "^piemonte/[A-Za-z0-9_.-]+\\.json$"},
         "atteso": {"$ref": "#/$defs/attesoPiemonte"}
       }
+    },
+    "opCodificaUmbria": {
+      "description": "Codifica una richiesta JSON del SAR Umbria SENZA mandarla (pinCode vuoto, CF dell'assistito in chiaro, NRE del lotto) e la confronta con lo schema dell'OpenAPI ufficiale (components.schemas, proprietà non dichiarate vietate), che l'esecutore riceve da fuori: senza, il passo è SALTATO. Per invio e interroga_nre applica prima i controlli locali (rifiuto_locale). 'tag': proprietà di primo livello con valore stringa; 'xsd_valido' vale per lo schema dell'OpenAPI.",
+      "type": "object",
+      "required": ["servizio", "atteso"],
+      "properties": {
+        "operazione": true,
+        "servizio": {"enum": ["invio", "visualizza", "annulla", "interroga_nre", "lotto", "sostituzione"]},
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}], "description": "Solo invio."},
+        "nre": {"type": "string", "description": "Solo visualizza e annulla."},
+        "cf_medico": {"type": "string", "description": "visualizza, annulla, interroga_nre, lotto."},
+        "criteri": {"$ref": "#/$defs/criteriNre", "description": "Solo interroga_nre."},
+        "identificativo_lotto": {"enum": ["0", "1"], "description": "Solo lotto: 0 = 100 NRE, 1 = 1000 NRE."},
+        "cf_titolare": {"type": "string", "description": "Solo sostituzione."},
+        "cf_sostituto": {"type": "string", "description": "Solo sostituzione."},
+        "codice_asl": {"type": "string", "description": "Solo sostituzione."},
+        "codice_specializzazione": {"type": "string", "description": "Solo sostituzione."},
+        "dal": {"type": "string", "format": "date", "description": "Solo sostituzione (aaaa-mm-gg)."},
+        "al": {"type": "string", "format": "date", "description": "Solo sostituzione (aaaa-mm-gg)."},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "allOf": [
+        {"if": {"properties": {"servizio": {"const": "invio"}}}, "then": {"required": ["ricetta"]}},
+        {
+          "if": {"properties": {"servizio": {"enum": ["visualizza", "annulla"]}}},
+          "then": {"required": ["nre", "cf_medico"]}
+        },
+        {"if": {"properties": {"servizio": {"const": "interroga_nre"}}}, "then": {"required": ["criteri", "cf_medico"]}},
+        {
+          "if": {"properties": {"servizio": {"const": "lotto"}}},
+          "then": {"required": ["cf_medico", "identificativo_lotto"]}
+        },
+        {
+          "if": {"properties": {"servizio": {"const": "sostituzione"}}},
+          "then": {"required": ["cf_titolare", "cf_sostituto", "codice_asl", "codice_specializzazione", "dal", "al"]}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "opLeggiUmbria": {
+      "description": "Legge una risposta JSON del SAR Umbria (conformita/risposte/umbria/, SINTETICA, scritta sull'OpenAPI) con il lettore dell'implementazione per il servizio indicato. Osservato: come osservatoSac; per il lotto in più ok (codEsito 00 o 01 e lotto completo), lotto (prefisso NRE) e lotto_dimensione (100 o 1000). Una risposta fuori dall'OpenAPI (campo obbligatorio assente, valore non stringa) va rifiutata: rifiuto_locale.",
+      "type": "object",
+      "required": ["servizio", "risposta", "atteso"],
+      "properties": {
+        "operazione": true,
+        "servizio": {"enum": ["invio", "visualizza", "annulla", "interroga_nre", "lotto", "sostituzione"]},
+        "risposta": {"type": "string", "pattern": "^umbria/[A-Za-z0-9_.-]+\\.json$"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
     }
   }
 }

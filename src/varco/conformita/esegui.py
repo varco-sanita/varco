@@ -22,6 +22,9 @@ Esempi:
     # intestazioni, PKCE, JWT, risposte SINTETICHE di CreateAuth/CheckToken/RevokeAuth
     python -m varco.conformita.esegui --famiglia piemonte --xsd-a2f "percorso/Kit per lo sviluppo - A2F SistemaTS - ver. 20250902/wsdl"
 
+    # SAR Regione Umbria (PuntoZero), nessuna rete: codifica JSON contro l'OpenAPI ufficiale (da fuori), risposte SINTETICHE
+    python -m varco.conformita.esegui --famiglia umbria --openapi-umbria percorso/sar-open-api-prescrittore.yaml
+
     # collaudo di un'altra implementazione: --adattatore vale SOLO con --famiglia online e
     # --adattatore-fse SOLO con --famiglia fse. Le altre famiglie eseguono i codec di questo kit:
     # con un adattatore la riga di comando si rifiuta, invece di dare verdi che non lo riguardano.
@@ -69,8 +72,8 @@ def contesto_offline() -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="varco-conformita", description="Suite di conformità del kit (ricetta SAC, documenti FSE, SIST Puglia, SAR FVG, SIRPED Piemonte)")
-    ap.add_argument("--famiglia", choices=["offline", "online", "fse", "sist", "fvg", "piemonte", "tutte"], default="offline")
+    ap = argparse.ArgumentParser(prog="varco-conformita", description="Suite di conformità del kit (ricetta SAC, documenti FSE, SIST Puglia, SAR FVG, SIRPED Piemonte, SAR Umbria)")
+    ap.add_argument("--famiglia", choices=["offline", "online", "fse", "sist", "fvg", "piemonte", "umbria", "tutte"], default="offline")
     ap.add_argument("--casi", help="cartella della suite (default: conformita/ del progetto o $VARCO_CONFORMITA)")
     ap.add_argument("--kit", help="cartella del kit MEF (default: $VARCO_KIT_MEF), serve per i casi online")
     ap.add_argument("--solo", nargs="+", help="esegue solo questi id (un id sconosciuto è un errore)")
@@ -85,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
                     "senza, la parte XSD dei casi di codifica FVG è SALTATO")
     ap.add_argument("--xsd-a2f", help="cartella wsdl del kit A2F del Sistema TS (default: $VARCO_XSD_A2F); "
                     "senza, la parte XSD dei casi di codifica CreateAuth/CheckToken/RevokeAuth (Piemonte) è SALTATO")
+    ap.add_argument("--openapi-umbria", help="sar-open-api-prescrittore.yaml del SAR Umbria (default: $VARCO_OPENAPI_UMBRIA); "
+                    "senza, la parte di schema dei casi di codifica Umbria è SALTATO")
     ap.add_argument("--base-url", help="URL base alternativo (default: ambiente di TEST MEF)")
     ap.add_argument(
         "--registra",
@@ -162,7 +167,8 @@ def main(argv: list[str] | None = None) -> int:
                     validatore_fse=validatore, generatore_pss=generatore, cartella=cartella,
                     xsd_sist=Path(args.xsd_sist) if args.xsd_sist else None,
                     xsd_fvg=Path(args.xsd_fvg) if args.xsd_fvg else None,
-                    xsd_a2f=Path(args.xsd_a2f) if args.xsd_a2f else None)
+                    xsd_a2f=Path(args.xsd_a2f) if args.xsd_a2f else None,
+                    openapi_umbria=Path(args.openapi_umbria) if args.openapi_umbria else None)
     risultati = []
     for caso in casi:
         r = motore.esegui(caso)

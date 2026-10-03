@@ -1,0 +1,16 @@
+{
+  "id": "UMB-104",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: risposta fuori dall'OpenAPI (codEsitoInserimento numero): il lettore la rifiuta",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "invio",
+      "risposta": "umbria/invio_quantita_numero.json",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

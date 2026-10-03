@@ -1,0 +1,15 @@
+{
+  "codEsitoInterrogaNreUtilizzati": "0000",
+  "elencoNreUtilRecord": {
+    "nreUtilRecord": [
+      {
+        "nre": "1000A1000001000",
+        "cfMedico": "PROVAX00X00X000Y",
+        "tipoPrescrizione": "F",
+        "dataCompilazioneRicetta": "2026-10-03 11:00:00",
+        "provenienza": "0",
+        "lotto": "1000A1000001"
+      }
+    ]
+  }
+}

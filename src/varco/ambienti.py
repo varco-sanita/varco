@@ -72,6 +72,17 @@ DOMINI_PIEMONTE = ("piemonte.it", "csi.it", "csipiemonte.it", "salutepiemonte.it
                    "ruparpiemonte.it")
 
 
+# SAR della Regione Umbria (PuntoZero S.c.a r.l., in house della Regione). Specifiche pubbliche su
+# github.com/punto-zero/umbria-sar-support (wiki, «Base URL»): API REST con mTLS e due JWT, come il
+# gateway FSE 2.0. Pubblicati un host di TEST e uno di PRODUZIONE. Regola del kit, prudente:
+#   - ogni host *.umbria.it o *.puntozeroscarl.it conta come PRODUZIONE, tranne l'host di test;
+#   - l'host di test è un sistema REALE della Regione (i certificati di test sono pubblici, ma usarli
+#     non è un'adesione): come gli altri collaudi regionali vuole il flag del collaudo e un'AdesioneUmbria.
+HOST_UMBRIA_TEST = "api-salute-test.regione.umbria.it"
+HOST_UMBRIA_PRODUZIONE = "api-salute.regione.umbria.it"
+DOMINI_UMBRIA = ("umbria.it", "puntozeroscarl.it")
+
+
 # --- host come lo vedrà la rete ---------------------------------------------------------
 #
 # La guardia confronta nomi; chi apre il socket può vedere un nome diverso da quello scritto.
@@ -207,6 +218,20 @@ def e_regione_piemonte(url: str) -> bool:
     return any(_regione_piemonte(h) for h in host_normalizzati(url))
 
 
+def _regione_umbria(host: str) -> bool:
+    return _nel_dominio(host, DOMINI_UMBRIA)
+
+
+def e_regione_umbria(url: str) -> bool:
+    """True per qualunque host *.umbria.it o *.puntozeroscarl.it (SAR, FSE regionale, portali)."""
+    return any(_regione_umbria(h) for h in host_normalizzati(url))
+
+
+def e_collaudo_umbria(url: str) -> bool:
+    """True solo per l'host di test del SAR Umbria pubblicato da PuntoZero: è un ambiente REALE della Regione."""
+    return any(h == HOST_UMBRIA_TEST for h in host_normalizzati(url))
+
+
 _ETICHETTA_COLLAUDO = re.compile(r"^(?:tst|test|collaudo)(?:-|\d|$)|-(?:tst|test|collaudo)$")
 
 
@@ -227,8 +252,8 @@ def _collaudo_piemonte(host: str) -> bool:
 
 
 def e_collaudo_regionale(url: str) -> bool:
-    """Collaudo di un SAR regionale (SIST Puglia, SAR FVG, SIRPED Piemonte): ambienti REALI delle Regioni."""
-    return e_collaudo_sist(url) or e_collaudo_fvg(url) or e_collaudo_piemonte(url)
+    """Collaudo di un SAR regionale (SIST Puglia, SAR FVG, SIRPED Piemonte, SAR Umbria): ambienti REALI delle Regioni."""
+    return e_collaudo_sist(url) or e_collaudo_fvg(url) or e_collaudo_piemonte(url) or e_collaudo_umbria(url)
 
 
 class Ambiente(str, Enum):
@@ -243,7 +268,8 @@ BASE_URL = {
 
 
 def e_produzione(url: str) -> bool:
-    """True se l'URL punta a un host di produzione (Sogei/MEF, gateway FSE, Regione Puglia, Regione FVG, Regione Piemonte).
+    """True se l'URL punta a un host di produzione (Sogei/MEF, gateway FSE, Regione Puglia, Regione FVG, Regione Piemonte,
+    Regione Umbria).
 
     Regola prudente: qualunque host *.sanita.finanze.it che non contenga "test"
     nel nome è trattato come produzione; lo stesso per *.fse.salute.gov.it (gateway
@@ -251,7 +277,8 @@ def e_produzione(url: str) -> bool:
     sia il collaudo SIST (che però ha una sua guardia: vedi `verifica_url_consentito`), e per
     *.fvg.it e *.insiel.it che non siano i collaudi del SAR FVG (stessa guardia del SIST), e per gli
     host della Regione Piemonte e del CSI (*.piemonte.it, *.csi.it, ...) che non abbiano un nome da
-    collaudo (guardia propria: flag del collaudo più host dichiarato).
+    collaudo (guardia propria: flag del collaudo più host dichiarato), e per *.umbria.it e
+    *.puntozeroscarl.it che non siano l'host di test del SAR Umbria (che ha la guardia del SIST).
     """
     return any(_produzione(h) for h in host_normalizzati(url))
 
@@ -271,6 +298,10 @@ def _produzione(host: str) -> bool:
         # prudenza: gli host di produzione del SAR FVG non sono pubblicati, quindi ogni host della
         # Regione FVG o di Insiel che non sia uno dei collaudi elencati conta come produzione
         return host not in HOST_FVG_COLLAUDO
+    if _regione_umbria(host):
+        # prudenza: ogni host della Regione Umbria o di PuntoZero che non sia l'host di test del SAR
+        # conta come produzione (api-salute.regione.umbria.it compreso)
+        return host != HOST_UMBRIA_TEST
     if _regione_piemonte(host):
         # prudenza: SIRPED non pubblica nessun host; conta come produzione ogni host della Regione
         # Piemonte o del CSI che non abbia un nome da collaudo (che però ha una sua guardia)
@@ -307,6 +338,12 @@ def verifica_url_consentito(
             f"Chiamata verso il collaudo del SAR della Regione Friuli-Venezia Giulia bloccata ({url}). "
             "Serve un accreditamento concesso da Insiel (codice ProdottoCME, certificati di collaudo) "
             "e consenti_collaudo_regionale=True esplicito."
+        )
+    if e_collaudo_umbria(url) and consenti_collaudo_regionale is not True:
+        raise AmbienteBloccato(
+            f"Chiamata verso l'ambiente di test del SAR della Regione Umbria bloccata ({url}). "
+            "È un sistema della Regione: servono un'adesione concordata con PuntoZero / Regione Umbria "
+            "(AdesioneUmbria) e consenti_collaudo_regionale=True esplicito."
         )
     piemontesi = {h for h in host_normalizzati(url) if _collaudo_piemonte(h)}
     if piemontesi:

@@ -1,0 +1,47 @@
+{
+  "id": "UMB-002",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, invio specialistica con SmartCUP in testata2 (formato della wiki, «;» finale)",
+  "riferimento": "punto-zero/umbria-sar-support, wiki «Prescrittori» (commit acdbb373), «SmartCUP»: SMARTCUP=SI;TEL=...;EMAIL=...;NOTECUP=...; al massimo 256 caratteri, solo specialistica",
+  "passi": [
+    {
+      "operazione": "codifica_umbria",
+      "servizio": "invio",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "100",
+          "codice_asl": "201",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P"
+        },
+        "tipo": "P",
+        "data_compilazione": "2026-10-03 11:00:00",
+        "classe_priorita": "P",
+        "codice_diagnosi": "4254",
+        "descrizione_diagnosi": "CONTROLLO",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice": "89.7",
+            "descrizione": "VISITA DI PROVA",
+            "codice_catalogo": "897",
+            "tipo_accesso": "0"
+          }
+        ],
+        "nre": "1000A1000001001",
+        "testata2": "SMARTCUP=SI;TEL=3330000000;EMAIL=prova@example.org;NOTECUP=PROVA;"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "tipoPrescrizione": "P",
+          "testata2": "SMARTCUP=SI;TEL=3330000000;EMAIL=prova@example.org;NOTECUP=PROVA;",
+          "classePriorita": "P"
+        }
+      }
+    }
+  ]
+}

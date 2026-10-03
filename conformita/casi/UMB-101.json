@@ -1,0 +1,24 @@
+{
+  "id": "UMB-101",
+  "famiglia": "umbria",
+  "titolo": "SAR Umbria, lettura: invio riuscito: NRE, codice di autenticazione, promemoria PDF (base64)",
+  "riferimento": "Risposta SINTETICA scritta sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md); OpenAPI sar-open-api-prescrittore.yaml (punto-zero/umbria-sar-support, commit 3cd93d86)",
+  "passi": [
+    {
+      "operazione": "leggi_umbria",
+      "servizio": "invio",
+      "risposta": "umbria/invio_ok.json",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre": "1000A1000001000",
+        "nre_formato": true,
+        "presenti": [
+          "codice_autenticazione"
+        ],
+        "pdf_promemoria": true
+      }
+    }
+  ]
+}

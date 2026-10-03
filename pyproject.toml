@@ -20,7 +20,7 @@ validazione = ["lxml>=4.9"]
 fse = ["lxml>=4.9", "saxonche>=12"]
 # PDF con CDA allegato a un PDF esistente, e firma PAdES
 firma = ["pyHanko>=0.20"]
-test = ["pytest>=7", "lxml>=4.9", "saxonche>=12", "pyHanko>=0.20", "pypdf>=4", "jsonschema>=4.18"]
+test = ["pytest>=7", "lxml>=4.9", "saxonche>=12", "pyHanko>=0.20", "pypdf>=4", "jsonschema>=4.18", "PyYAML>=6"]
 
 [project.scripts]
 varco-conformita = "varco.conformita.esegui:main"
