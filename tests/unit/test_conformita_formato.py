@@ -104,9 +104,8 @@ def test_i_file_citati_dai_casi_esistono():
 def test_famiglie_e_numero_casi():
     casi = carica_casi("tutte")
     famiglie = {c["famiglia"] for c in casi}
-    assert famiglie == {"offline", "online", "fse", "sist", "fvg", "piemonte", "umbria"}
+    assert famiglie == {"offline", "online", "fse", "fvg", "piemonte", "umbria"}
     assert len(carica_casi("fse")) >= 10 and len(carica_casi("online")) >= 15 and len(carica_casi("offline")) >= 20
-    assert len(carica_casi("sist")) >= 23
     assert len(carica_casi("fvg")) >= 29
     assert len(carica_casi("piemonte")) >= 44
     assert len(carica_casi("umbria")) >= 28
@@ -189,65 +188,6 @@ def test_caso_online_col_sostituto_senza_credenziali_saltato():
     m = Motore(adattatore=lambda c, v: Finto(), credenziali=object(), contesto=contesto_offline())
     r = m.esegui(caso)
     assert r.stato == "SALTATO" and "sostituto" in r.motivo
-
-
-# ------------------------------------------------------------------ esecutore Python: famiglia sist (SIST Puglia)
-
-XSD_SIST = CONF.parent / "specifiche" / "sist" / "specifiche SIST 4.02.27" / "wsdl-pddasl" / "CVPService.xsd"
-
-
-@pytest.mark.parametrize(
-    "guasto",
-    [
-        lambda c: c["passi"][0].update(risposta="chk_ok.xml"),  # le risposte SIST stanno in risposte/sist/
-        lambda c: c["passi"][0]["atteso"].update(tag={"x": "y"}),  # aspettativa di codifica su una lettura
-        lambda c: c.update(id="SIST-001"),
-    ],
-)
-def test_lo_schema_boccia_casi_sist_guasti(guasto):
-    caso = json.loads((CONF / "casi" / "SIS-001.json").read_text(encoding="utf-8"))
-    guasto(caso)
-    assert list(_validatore("caso").iter_errors(caso))
-
-
-@pytest.mark.schemi_hl7
-def test_suite_sist_senza_xsd_salta_e_non_boccia(capsys, monkeypatch):
-    """Senza CVPService.xsd la parte XSD è SALTATO (lo schema della Regione non sta nel repository)."""
-    pytest.importorskip("lxml")
-    monkeypatch.delenv("VARCO_XSD_SIST", raising=False)
-    assert esegui_suite(["--famiglia", "sist"]) == 0
-    out = capsys.readouterr().out
-    assert "falliti 0" in out and "errori 0" in out
-    assert "SALTATO   SIS-101" in out and "SUPERATO  SIS-106" in out and "SUPERATO  SIS-001" in out
-
-
-@pytest.mark.skipif(not XSD_SIST.exists(), reason="specifiche SIST non scaricate (strumenti/scarica_specifiche.py --gruppi sist)")
-@pytest.mark.schemi_hl7
-def test_suite_sist_con_xsd_tutto_verde(capsys):
-    assert esegui_suite(["--famiglia", "sist", "--xsd-sist", str(XSD_SIST)]) == 0
-    out = capsys.readouterr().out
-    assert f"superati {len(carica_casi('sist'))}" in out and "saltati 0" in out
-
-
-@pytest.mark.parametrize(
-    "caso_id,cambia",
-    [
-        ("SIS-001", lambda p: p["atteso"].update(nre="1600A0000000002")),
-        ("SIS-004", lambda p: p["atteso"].update(campi={"solo_ricetta_rossa": False})),
-        ("SIS-007", lambda p: p.update(risposta="sist/annulla_ok.xml")),  # atteso un Fault, arriva un esito
-        ("SIS-104", lambda p: p.update(codici_regionali={"PROVAX00X00X000Y": "000001"}, ricetta={**p["ricetta"], "assistito": {**p["ricetta"]["assistito"], "codice_regione": "160"}})),
-        ("SIS-106", lambda p: p["atteso"]["attributi"].update({"code@code": "29305-0"})),
-        ("SIS-108", lambda p: p.update(maggior_tutela=False)),
-    ],
-)
-@pytest.mark.schemi_hl7
-def test_il_motore_sist_boccia_aspettative_sbagliate(caso_id, cambia):
-    """Gruppo di controllo: ogni caso SIST, con un dettaglio cambiato, deve risultare FALLITO."""
-    pytest.importorskip("lxml")
-    caso = json.loads((CONF / "casi" / f"{caso_id}.json").read_text(encoding="utf-8"))
-    passo = caso["passi"][-1] if caso_id == "SIS-007" else caso["passi"][0]
-    cambia(passo)
-    assert Motore(xsd_sist=XSD_SIST if XSD_SIST.exists() else None).esegui(caso).stato == "FALLITO"
 
 
 # ------------------------------------------------------------------ esecutore Python: famiglia fvg (SAR Friuli-Venezia Giulia)

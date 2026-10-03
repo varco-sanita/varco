@@ -1,3 +1,0 @@
-Scritto e verificato sulle specifiche, NON collaudato sul sistema regionale.
-
-Scambi con il server FINTO del kit, non con il SIST. File redatti (registratore di default): CF, NRE, codici, CDA e firme sostituiti da segnaposto.

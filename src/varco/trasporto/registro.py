@@ -218,7 +218,7 @@ TAG_REDATTI: dict[str, str] = {
     "prescrizione2": "testo_libero",
     "descrProdPrest": "testo_libero",
     "descrGruppoEquival": "testo_libero",  # Riga.descrizione_gruppo_equivalenza: testo dal gestionale
-    # testi liberi scritti dal servizio (Comunicazione del SAC, del SIST): ci può finire un nome
+    # testi liberi scritti dal servizio (Comunicazione del SAC e dei SAR): ci può finire un nome
     "messaggio": "testo_libero",
     # SOAP Fault (1.1 e 1.2): testo e dettaglio li scrive il servizio, ci può finire un nome o una
     # diagnosi (giro 3, N3). Il faultcode resta leggibile; SOAP 1.2 Reason/Text lo prende «text».
@@ -240,7 +240,9 @@ TAG_REDATTI: dict[str, str] = {
     "telecom": "contatto",
     "text": "testo_libero",  # testo narrativo delle sezioni CDA
     "originalText": "testo_libero",
-    # SIST Regione Puglia (CVPService.xsd): anagrafica, identificativi, medici, CDA in chiaro
+    # Nomi di campo di anagrafica, identificativi, medici e CDA in chiaro usati dai tracciati regionali.
+    # Restano anche senza il modulo che li ha introdotti (Puglia, sospeso il 03/10/2026): redigere
+    # un campo in più non costa niente, toglierlo sì.
     "cognome": "nome",
     "nome": "nome",
     "dataNascita": "data_nascita",
@@ -262,7 +264,7 @@ TAG_REDATTI: dict[str, str] = {
     "cdaInstance": "cda",
     "annotazione": "testo_libero",
     "dispReg": "testo_libero",
-    "nota": "testo_libero",  # SIST: Riga.note e Riga.note_prestazione (xml_sist._prestazione)
+    "nota": "testo_libero",
     "residenza": "indirizzo",
     "sesso": "sesso",
     # SAR Regione FVG (Insiel): VerificaPosizioneMedicoSostituto

@@ -5,7 +5,7 @@ la società in house della Regione. Il SAR «replica i servizi del SAC» come **
 XML), con lo stesso payload del SAC, e si autentica come il gateway del **FSE 2.0**: mutua
 autenticazione TLS e due JWT firmati.
 
-Il modulo di Varco segue lo stesso metodo di quelli per Puglia, Friuli-Venezia Giulia e Piemonte:
+Il modulo di Varco segue lo stesso metodo di quelli per Friuli-Venezia Giulia e Piemonte:
 stesso contratto (`ServizioRicetta`), stesso modello dati, trasporto separato, guardia, registro
 redatto, server finto severo quanto la specifica, casi di conformità.
 
@@ -124,14 +124,14 @@ servizio non si può nemmeno chiamare):
 
 ## 4. Differenze dal SAC e dagli altri SAR
 
-| | SAC | SIST (Puglia) | SAR FVG | SIRPED (Piemonte) | SAR Umbria |
-|---|---|---|---|---|---|
-| Protocollo | SOAP | SOAP | SOAP | SOAP | **REST JSON** |
-| Autenticazione | Basic + 2FA | WS-Security con la CNS | mTLS con la carta | RUPAR + Id-Sessione o JWT OAuth2 | **mTLS del software + 2 JWT firmati** |
-| Chi è l'utente | credenziali del medico | CNS | carta | utente RUPAR / token | **claim `sub`** |
-| CF dell'assistito | cifrato | in chiaro + CDA | cifrato | cifrato | **in chiaro** |
-| NRE | lo dà il SAC | lo dà il SAC (chk) | lo dà il SAC | lo dà il SAC | **lo mette il medico, da un lotto** |
-| Dopo un timeout | - | ripeti la registrazione | - | - | **annulla con lo stesso NRE, rinvia con un altro** |
+| | SAC | SAR FVG | SIRPED (Piemonte) | SAR Umbria |
+|---|---|---|---|---|
+| Protocollo | SOAP | SOAP | SOAP | **REST JSON** |
+| Autenticazione | Basic + 2FA | mTLS con la carta | RUPAR + Id-Sessione o JWT OAuth2 | **mTLS del software + 2 JWT firmati** |
+| Chi è l'utente | credenziali del medico | carta | utente RUPAR / token | **claim `sub`** |
+| CF dell'assistito | cifrato | cifrato | cifrato | **in chiaro** |
+| NRE | lo dà il SAC | lo dà il SAC | lo dà il SAC | **lo mette il medico, da un lotto** |
+| Dopo un timeout | - | - | - | **annulla con lo stesso NRE, rinvia con un altro** |
 
 ## 5. Il modello dati ha tenuto, senza modifiche
 

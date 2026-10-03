@@ -491,7 +491,7 @@ def test_registro_reda_corpo_e_intestazioni_fvg(tmp_path):
     assert TITOLARE not in t and SOSTITUTO not in t
 
 
-def test_user_agent_di_sac_e_sist_non_cambia():
+def test_user_agent_del_sac_non_cambia():
     assert Redattore().user_agent("varco/0.1 (+EUPL-1.2)") == "varco/0.1 (+EUPL-1.2)"
 
 

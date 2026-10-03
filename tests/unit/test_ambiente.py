@@ -25,8 +25,8 @@ def test_vecchia_variabile_vale_con_avviso(radice):
 def test_vince_la_nuova_e_niente_avviso():
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        env = {"VARCO_XSD_SIST": "nuovo", "KITMMG_XSD_SIST": "vecchio"}
-        assert leggi("VARCO_XSD_SIST", ambiente=env) == "nuovo"
+        env = {"VARCO_XSD_FVG": "nuovo", "KITMMG_XSD_FVG": "vecchio"}
+        assert leggi("VARCO_XSD_FVG", ambiente=env) == "nuovo"
 
 
 def test_avviso_visibile_senza_opzioni():

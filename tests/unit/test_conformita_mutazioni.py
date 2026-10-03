@@ -32,7 +32,6 @@ from varco.fse.validazione import ValidatoreLocale, cartella_validatore_ufficial
 
 CONF = cartella_conformita()
 SPEC = CONF.parent / "specifiche"
-XSD_SIST = SPEC / "sist" / "specifiche SIST 4.02.27" / "wsdl-pddasl" / "CVPService.xsd"
 XSD_FVG = SPEC / "fvg" / "wsdl" / "sar"
 XSD_A2F = SPEC / "piemonte" / "a2f" / "Kit per lo sviluppo - A2F SistemaTS - ver. 20250902" / "wsdl"
 OPENAPI_UMBRIA = SPEC / "umbria" / "openapi" / "sar-open-api-prescrittore.yaml"
@@ -226,7 +225,6 @@ class Specchio:
 def _motore() -> Motore:
     return Motore(contesto=contesto_offline(),
                   validatore_fse=ValidatoreLocale() if dipendenze_locali_presenti() else None,
-                  xsd_sist=XSD_SIST if XSD_SIST.exists() else None,
                   xsd_fvg=XSD_FVG if XSD_FVG.exists() else None,
                   xsd_a2f=XSD_A2F if XSD_A2F.exists() else None,
                   openapi_umbria=OPENAPI_UMBRIA if OPENAPI_UMBRIA.exists() else None)

@@ -28,8 +28,8 @@ prima. Il modulo copre:
 - i controlli locali propri del FVG: televisita col codice di catalogo, catalogo obbligatorio per
   la specialistica, niente numero di sedute.
 
-Il programma del medico lo usa con la stessa interfaccia del canale nazionale (SAC) e del SIST
-pugliese. Per chi sviluppa in Friuli-Venezia Giulia il lavoro di integrazione diventa più corto e
+Il programma del medico lo usa con la stessa interfaccia del canale nazionale (SAC) e degli
+altri SAR che copriamo (Piemonte, Umbria). Per chi sviluppa in Friuli-Venezia Giulia il lavoro di integrazione diventa più corto e
 più uniforme.
 
 ## Cosa è già verificato

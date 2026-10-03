@@ -60,12 +60,20 @@ restringe i destinatari non entra nel kit. Il modulo Puglia (codec, CDA di presc
 casi `SIS-*`) è scritto su quelle specifiche, e non abbiamo firmato nessun accordo. Non è un dubbio che
 possiamo sciogliere da soli: dipende da InnovaPuglia.
 
-**Cosa abbiamo fatto.** Niente di nuovo sul modulo Puglia finché non c'è una risposta. La domanda è la
-prima della mail preparata per InnovaPuglia (helpdesk SIST), che parte solo col via del manutentore.
+**Cosa abbiamo fatto.** Il 03/10/2026 abbiamo **sospeso il modulo Puglia** (versione 0.1.1, PR
+«Puglia sospesa»): tolti dal repository il canale SIST e la WS-Security, il codec CVP, il CDA di
+prescrizione, il server finto, i casi `SIS-*`, le risposte sintetiche, le prove contro il server finto,
+`docs/SAR_PUGLIA.md`, `docs/PROPOSTA_PUGLIA.md` e la voce `sist` del manifesto. Resta la guardia: ogni
+host `*.puglia.it` conta come produzione, senza eccezioni di collaudo. La cronologia di git non è stata
+riscritta: il codice è nostro e le specifiche SIST non sono mai entrate nel repository (controllato
+sul 03/10/2026: nessun file sotto `specifiche/` in nessun commit, nessun file delle specifiche, per
+nome o per contenuto, tra gli oggetti del repository). La copia del modulo è conservata fuori dal
+repository, per riprenderlo se arriva il permesso.
 
-**Cosa resta da decidere.** Se InnovaPuglia conferma che le specifiche sono pubbliche, si aggiorna
-`docs/TERZE_PARTI.md` con la risposta. Se serve l'accordo, il modulo Puglia va tolto dal repository
-(o sospeso) finché un accordo non permette un client open source.
+**Cosa resta da fare.** La domanda è la prima della mail preparata per InnovaPuglia (helpdesk SIST),
+che parte solo col via del manutentore: il materiale si può usare per un progetto aperto e gratuito?
+Se no, cosa serve? Se la risposta è sì, il modulo torna e `docs/TERZE_PARTI.md` cita la risposta. Se
+serve l'accordo, il modulo resta fuori finché un accordo non permette un client open source.
 
 ## Umbria: due residui della revisione esterna corretti ma non riverificati (03/10/2026)
 

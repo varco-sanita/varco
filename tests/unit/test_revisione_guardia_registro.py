@@ -69,7 +69,7 @@ def _prova_trasporto_http(url: str, **flag):
 @pytest.mark.parametrize("url", [
     "https://demservice.sanita.finanze.%69t/x",
     "https://modipa.fse.salute.gov.%69t/x",
-    "https://pdd-virtasl.rmmg.rsr.rupar.puglia.%69t/x",
+    "https://servizi.sanita.puglia.%69t/x",
     "https://dem.sanita.fvg.%69t/x",
     "https://servizio.csi.%69t/x",
     # varianti della stessa idea: punto codificato, doppia codifica, lettere a larghezza piena (IDNA)
@@ -85,12 +85,29 @@ def test_percent_encoding_non_aggira_la_guardia(url):
 
 
 @pytest.mark.parametrize("url", [
-    "https://pddasl-preprod.sanita.regione.rsr.rupar.puglia.%69t/x",  # collaudo SIST codificato
     "https://demtest.sanita.fvg.%69t/x",  # collaudo FVG codificato
 ])
 def test_collaudi_regionali_codificati_vogliono_il_flag(url):
     with pytest.raises(AmbienteBloccato):
         _prova_trasporto_http(url)
+
+
+# Modulo Puglia sospeso il 03/10/2026: la guardia sugli host pugliesi resta, e senza un collaudo
+# riconosciuto ogni host *.puglia.it è produzione, anche col flag del collaudo regionale.
+@pytest.mark.parametrize("url", [
+    "https://servizi.sanita.puglia.it/x",
+    "https://collaudo.sanita.puglia.it/x",
+    "https://test.rupar.puglia.it/x",
+    "https://PUGLIA.IT./x",
+    "https://servizi.sanita.puglia.%69t/x",
+])
+def test_puglia_sempre_produzione_anche_col_flag_del_collaudo(url):
+    assert e_produzione(url)
+    with pytest.raises(AmbienteBloccato):
+        _prova_trasporto_http(url, consenti_collaudo_regionale=True)
+    # gruppo di controllo: col flag della produzione la guardia lascia passare fino al socket
+    with pytest.raises(Arresto):
+        _prova_trasporto_http(url, consenti_produzione=True)
 
 
 def test_host_normalizzato_come_lo_vede_urllib():
@@ -353,9 +370,9 @@ def test_in_chiaro_form_oauth2_mascherato(registro):
 @pytest.mark.parametrize("tag", [
     "prescrizione1", "prescrizione2",  # SAC/FVG/Piemonte: Riga.prescrizione1/2
     "descrProdPrest",  # Riga.descrizione: testo libero quando manca il codice
-    "nota",  # SIST: Riga.note e Riga.note_prestazione
+    "nota",  # Riga.note e Riga.note_prestazione nei tracciati regionali
     "statoEstero",  # Assistito.stato_estero
-    "residenza", "sesso",  # SIST, anagrafica
+    "residenza", "sesso",  # anagrafica nei tracciati regionali
     "city", "postalCode", "county", "name", "text", "originalText",  # CDA
 ])
 def test_campi_liberi_redatti(registro, tag):

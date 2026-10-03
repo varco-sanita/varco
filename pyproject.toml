@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "varco"
-version = "0.1.0"
+version = "0.1.1"
 description = "Kit aperto per i medici di medicina generale: ricetta dematerializzata via SAC (Sistema TS) e documenti FSE 2.0"
 readme = "README.md"
 license = "EUPL-1.2"

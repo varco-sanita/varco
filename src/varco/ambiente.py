@@ -21,7 +21,7 @@ PREFISSO_DEPRECATO = "KITMMG_"
 # Le sole variabili che esistevano col vecchio nome: nessun alias per quelle nate con Varco.
 NOMI_CON_ALIAS = frozenset({
     "UTENTE", "PASSWORD", "PINCODE", "CF_MEDICO",  # credenziali
-    "KIT_MEF", "CONFORMITA", "XSD_SIST", "XSD_FVG", "XSD_A2F", "VALIDATORE_UFFICIALE",
+    "KIT_MEF", "CONFORMITA", "XSD_FVG", "XSD_A2F", "VALIDATORE_UFFICIALE",
     "INTEGRAZIONE",  # solo test
 })
 

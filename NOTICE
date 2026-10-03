@@ -24,10 +24,10 @@ copyright. Elenco completo, fonti e motivi: docs/TERZE_PARTI.md.
 - conformita/risposte/, prove/
   Risposte dell'ambiente di TEST del Sistema TS (MEF), ottenute con le sole
   identità pubbliche di test del kit di sviluppo.
-  Fanno eccezione conformita/risposte/sist/, conformita/risposte/fvg/,
-  conformita/risposte/piemonte/, prove/*-sist-server-finto/ e
-  prove/*-fvg-server-finto/: risposte SINTETICHE scritte da questo progetto,
-  nessuna viene dal SIST, dal SAR FVG o da SIRPED.
+  Fanno eccezione conformita/risposte/fvg/, conformita/risposte/piemonte/,
+  conformita/risposte/umbria/ e prove/*-fvg-server-finto/: risposte SINTETICHE
+  scritte da questo progetto, nessuna viene dal SAR FVG, da SIRPED o dal SAR
+  dell'Umbria.
 
 Gli schemi HL7 del CDA R2 (11 XSD, Copyright Health Level Seven) e lo
 schematron del Profilo Sanitario Sintetico v4.0 (dalla guida di HL7 Italia,
@@ -37,8 +37,9 @@ dal Ministero della Salute (ministero-salute/it-fse-catalogs, commit fissato)
 con strumenti/scarica_specifiche.py --gruppi cda-xsd. Chi li scarica li usa
 alle condizioni di HL7 (docs/TERZE_PARTI.md).
 
-Le Specifiche di integrazione SIST della Regione Puglia (InnovaPuglia) NON sono
-incluse: si scaricano a parte (strumenti/scarica_specifiche.py --gruppi sist).
+Il modulo della Regione Puglia (SIST, InnovaPuglia) è sospeso dal 03/10/2026:
+né le sue specifiche né codice scritto su di esse sono in questa versione
+(CHANGELOG.md, 0.1.1).
 
 Le specifiche del SAR della Regione Friuli-Venezia Giulia (Insiel, documento
 Idof-dem-AT-01 e wsdl_prescritto.zip) NON sono incluse: si scaricano a parte

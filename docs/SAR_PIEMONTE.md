@@ -183,17 +183,17 @@ produzione (sez. 7, punto 22). Il kit lo fa sempre, così l'errore si vede già 
 
 ## 4. Differenze dal SAC e dagli altri SAR
 
-| | SAC (MEF) | SIST (Puglia) | SAR FVG (Insiel) | SIRPED (Piemonte) |
-|---|---|---|---|---|
-| Autenticazione | Basic TS + pincode + 2FA del MEF | WS-Security con la CNS | mTLS con CRS/CNS, o token federati | Basic **RUPAR** + pincode + Id-Sessione via mail, **oppure** solo JWT OAuth2 |
-| 2FA | `Authorization2F` (A2F del MEF) | la CNS | la carta | `X-idSessione` (A2F con XSD del MEF, servizio regionale) o `X-OAuth2-Authorization` |
-| Software | — | `datiApplicativo` | `User-Agent` + `prodottoCme` | `X-Gestionale` e `APP` = codice gestionale (dato dalla Regione) + azienda |
-| Pincode | cifrato SanitelCF | assente | vuoto | cifrato col certificato **regionale**; vuoto in OAuth2 |
-| CF dell'assistito | cifrato SanitelCF | in chiaro nel TLS | cifrato | cifrato col certificato regionale |
-| Tracciato | XSD del MEF | CVP + CDA2 | SAC con namespace FVG | **XSD del MEF**, stessi namespace |
-| Lotti NRE | facoltativi | — | MIR | lotti regionali da 1000 NRE (RE-SRS-SAR, par. 3.2, 4.2) |
-| Collaudo | pubblicato | pubblicato | pubblicato | **non pubblicato** |
-| Produzione | pubblicata | pubblicata | non pubblicata | non pubblicata |
+| | SAC (MEF) | SAR FVG (Insiel) | SIRPED (Piemonte) |
+|---|---|---|---|
+| Autenticazione | Basic TS + pincode + 2FA del MEF | mTLS con CRS/CNS, o token federati | Basic **RUPAR** + pincode + Id-Sessione via mail, **oppure** solo JWT OAuth2 |
+| 2FA | `Authorization2F` (A2F del MEF) | la carta | `X-idSessione` (A2F con XSD del MEF, servizio regionale) o `X-OAuth2-Authorization` |
+| Software | — | `User-Agent` + `prodottoCme` | `X-Gestionale` e `APP` = codice gestionale (dato dalla Regione) + azienda |
+| Pincode | cifrato SanitelCF | vuoto | cifrato col certificato **regionale**; vuoto in OAuth2 |
+| CF dell'assistito | cifrato SanitelCF | cifrato | cifrato col certificato regionale |
+| Tracciato | XSD del MEF | SAC con namespace FVG | **XSD del MEF**, stessi namespace |
+| Lotti NRE | facoltativi | MIR | lotti regionali da 1000 NRE (RE-SRS-SAR, par. 3.2, 4.2) |
+| Collaudo | pubblicato | pubblicato | **non pubblicato** |
+| Produzione | pubblicata | non pubblicata | non pubblicata |
 
 ## 5. Il modello dati ha tenuto, senza modifiche
 
@@ -231,7 +231,7 @@ Quindi: **senza la procedura non c'è nemmeno l'indirizzo dell'ambiente di test.
 ambiente aperto come quello del MEF.
 
 Nel kit il collaudo è chiuso da tre serrature (`varco/ambienti.py`):
-1. `TrasportoHTTP(consenti_collaudo_regionale=True)`, lo stesso flag di SIST e FVG;
+1. `TrasportoHTTP(consenti_collaudo_regionale=True)`, lo stesso flag del FVG e dell'Umbria;
 2. `TrasportoHTTP(collaudi_piemonte={"<host>"})`: l'host di collaudo **dichiarato per nome**. Visto
    che nessun host è pubblicato, il nome da solo non basta;
 3. un'`AdesionePiemonte` (riferimento della richiesta di autocertificazione e codice gestionale) nel

@@ -450,7 +450,7 @@ def guardia_di_rete(permessi: tuple[bool, bool, frozenset[str]]):
 
 
 def consegna(trasporto: "Trasporto", richiesta: Richiesta, *, solo_locale: bool = False) -> Risposta:
-    """L'unico punto in cui i canali del kit (SAC, SIST, FVG, Piemonte, Umbria, client OAuth2; domani il
+    """L'unico punto in cui i canali del kit (SAC, FVG, Piemonte, Umbria, client OAuth2; domani il
     FSE) consegnano una richiesta a un trasporto.
 
     `solo_locale=True`: il canale non ha un'adesione (per esempio `CanaleUmbria` verso il server finto),
@@ -498,7 +498,7 @@ class LimitatoreFrequenza:
 
 
 class _RedirectVietato(urllib.request.HTTPRedirectHandler):
-    """I servizi SOAP del SAC (e del SIST) non fanno redirect: seguirne uno aggirerebbe la guardia
+    """I servizi SOAP del SAC non fanno redirect: seguirne uno aggirerebbe la guardia
     sull'URL (un 302 verso la produzione). Il redirect diventa un errore."""
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):

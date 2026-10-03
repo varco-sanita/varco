@@ -70,8 +70,8 @@ class Assistito:
     indirizzo: str | None = None
     provincia: str | None = None
     asl: str | None = None
-    # Regione dell'ASL di residenza (3 cifre, es. "160" Puglia). Il SAC non la chiede; serve ai SAR
-    # che vogliono il codice NAZIONALE dell'ASL (regione + ASL, es. "160114" nel SIST pugliese).
+    # Regione dell'ASL di residenza (3 cifre, es. "130" Abruzzo). Il SAC non la chiede; serve ai SAR
+    # che vogliono il codice NAZIONALE dell'ASL (regione + ASL).
     codice_regione: str | None = None
     oscura_dati: bool = False
     tipo_ricetta: str | None = None  # EE, UE, NA, ND, NE, NX, ST (assistiti particolari)
@@ -217,12 +217,11 @@ class Messaggio:
 
         La specifica (par. 4.2.1) dice E/W, ma l'ambiente di test risponde
         "Bloccante" (verificato il 30/09/2026): si accettano entrambe le forme.
-        Il SIST pugliese usa C (Critical, bloccante) e W (Warning): javadoc cvp.vo.Anomalia.
         """
         t = (self.tipo or "").strip().lower()
         if not t:
             return None
-        if t in ("e", "c", "critical", "bloccante", "errore") or t.startswith("blocc"):
+        if t in ("e", "bloccante", "errore") or t.startswith("blocc"):
             return "E"
         if t in ("w", "warning", "avviso", "non bloccante") or "non blocc" in t or t.startswith("avvis"):
             return "W"
@@ -367,58 +366,6 @@ class NreUtilizzato:
 @dataclass(frozen=True)
 class EsitoInterrogazioneNre(Esito):
     ricette: tuple[NreUtilizzato, ...] = ()
-
-
-# ------------------------------------------------- esiti dei canali regionali (SAR)
-
-
-@dataclass(frozen=True)
-class EsitoInvioSAR(EsitoInvio):
-    """Invio attraverso un SAR (oggi: SIST della Regione Puglia).
-
-    Nel SIST l'invio sono DUE chiamate: il controllo (chkPrescrizione), che passa i dati al SAC
-    e restituisce NRE e codice di autenticazione, e la registrazione del CDA firmato
-    (setRegistraPrescrizione). Dopo il controllo la ricetta ESISTE già al SAC: se la
-    registrazione non riesce, va ripetuta (specifica SIST, Appendice A, "setRegistraPrescrizione*"),
-    non va rifatto l'invio. Il CDA firmato resta qui per ripeterla.
-
-    Il SIST non restituisce il PDF del promemoria: lo stampa il programma del medico.
-    """
-
-    registrato: bool | None = None  # None: registrazione non tentata (controllo non riuscito)
-    errore_registrazione: str | None = None
-    cda: bytes | None = field(default=None, repr=False)  # CDA in chiaro (contiene dati personali)
-    cda_firmato: bytes | None = field(default=None, repr=False)  # busta p7m (CAdES)
-    # Ciò che serve a ripetere la registrazione SENZA che il chiamante lo ripassi (revisione
-    # esterna 02/10/2026): la volontà di oscuramento dell'assistito e il Piano Care Puglia vanno
-    # in setRegistraPrescrizione, la ricetta e la maggior tutela servono a rifare CDA e firma se
-    # la firma non era riuscita.
-    oscurato: bool = False
-    id_pcp: str | None = None
-    maggior_tutela: bool = False
-    ricetta: Ricetta | None = field(default=None, repr=False)
-    # Il `Paziente` (modulo FSE) letto e controllato prima di chkPrescrizione: il CDA si scrive con
-    # QUESTO, anche quando si rifà al recupero (revisione esterna giro 2, 3-sar-puglia N1).
-    paziente: object | None = field(default=None, repr=False)
-
-    @property
-    def solo_ricetta_rossa(self) -> bool:
-        """IUP/NRE senza codice di autenticazione: il SAC non era disponibile e la ricetta va
-        stampata su ricetta rossa (flusso DPCM 26/03/2008), non sul promemoria."""
-        return self.ok and bool(self.nre) and not self.codice_autenticazione
-
-    @property
-    def da_ripetere(self) -> bool:
-        """La ricetta c'è (controllo riuscito) ma il CDA non è registrato: ripetere la registrazione
-        (`RicettaSIST.ripeti_registrazione`), anche quando a mancare è la firma."""
-        return self.ok and self.registrato is False
-
-
-@dataclass(frozen=True)
-class EsitoVisualizzazioneSAR(EsitoVisualizzazione):
-    cda: str | None = field(default=None, repr=False)  # CDA della prescrizione in chiaro, se il SAR ce l'ha
-    oscurato: bool | None = None  # oscuramento nel fascicolo
-    stato_sar: str | None = None  # stato della prescrizione nel SAR (SIST: 0 annullata, 1 prescritta, ...)
 
 
 STATI_PROCESSO = {
