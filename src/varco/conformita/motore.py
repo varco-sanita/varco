@@ -12,10 +12,6 @@ Famiglie:
   offline  risposte reali registrate e codifica delle richieste (niente rete)
   online   scenari contro il SAC di test (rete, utenze pubbliche del kit MEF)
   fse      documenti CDA2 e loro esito di validazione (niente rete)
-  sist     SIST Regione Puglia: codifica delle richieste CVP e del CDA2 di prescrizione,
-           lettura di risposte SINTETICHE (conformita/risposte/sist/LEGGIMI.md). Niente rete.
-           La parte XSD della codifica CVP richiede CVPService.xsd ($VARCO_XSD_SIST o
-           --xsd-sist): lo schema è della Regione e non sta nel repository; senza, SALTATO.
   fvg      SAR Regione Friuli-Venezia Giulia (Insiel): codifica delle richieste e lettura di
            risposte SINTETICHE (conformita/risposte/fvg/LEGGIMI.md). Niente rete. La parte XSD
            richiede la cartella `wsdl/sar` di wsdl_prescritto.zip ($VARCO_XSD_FVG o --xsd-fvg):
@@ -58,14 +54,11 @@ OPERAZIONI_ONLINE = {"invia", "visualizza", "annulla", "interroga_nre"}
 OPERAZIONI_OFFLINE = {"leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre",
                       "codifica_invio", "codifica_interroga_nre"}
 OPERAZIONI_FSE = {"valida_documento", "genera_pss"}
-OPERAZIONI_SIST_LEGGI = {"leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata",
-                         "leggi_sist_ricerca"}
-OPERAZIONI_SIST_CODIFICA = {"codifica_sist_chk", "codifica_sist_ricerca", "codifica_sist_cda"}
 OPERAZIONI_FVG = {"leggi_fvg", "codifica_fvg"}
 OPERAZIONI_PIEMONTE = {"codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte",
                        "leggi_piemonte_jwt"}
 OPERAZIONI_UMBRIA = {"codifica_umbria", "leggi_umbria"}
-FAMIGLIE = ("offline", "online", "fse", "sist", "fvg", "piemonte", "umbria")
+FAMIGLIE = ("offline", "online", "fse", "fvg", "piemonte", "umbria")
 
 CREDENZIALI_INESISTENTI = Credenziali(UTENTE_INESISTENTE, "password-errata", "0000000000")
 
@@ -158,14 +151,9 @@ def osserva_esito(esito: Any) -> dict[str, Any]:
         ],
         "comunicazioni": [c.codice for c in esito.comunicazioni],
     }
-    for campo in ("nre", "codice_autenticazione", "data_inserimento", "stato_processo", "cognome_medico", "nome_medico",
-                  "stato_sar", "oscurato"):
+    for campo in ("nre", "codice_autenticazione", "data_inserimento", "stato_processo", "cognome_medico", "nome_medico"):
         if getattr(esito, campo, None) is not None:
             oss[campo] = getattr(esito, campo)
-    if hasattr(esito, "solo_ricetta_rossa"):  # esiti SAR (SIST)
-        oss["solo_ricetta_rossa"] = esito.solo_ricetta_rossa
-    if getattr(esito, "cda", None):
-        oss["cda"] = True
     if hasattr(esito, "righe"):
         oss["righe"] = len(esito.righe)
     if hasattr(esito, "testata") and esito.testata:
@@ -215,7 +203,7 @@ def tipo_atteso(op: str) -> str | None:
         return "attesoCodifica"
     if op in OPERAZIONI_PIEMONTE:
         return "attesoPiemonte"
-    if (op in OPERAZIONI_ONLINE or op in OPERAZIONI_SIST_LEGGI or op in ("leggi_fvg", "leggi_umbria")
+    if (op in OPERAZIONI_ONLINE or op in ("leggi_fvg", "leggi_umbria")
             or op in OPERAZIONI_OFFLINE):
         return "attesoSac"
     return None
@@ -256,8 +244,8 @@ def incoerenze(op: str, atteso: dict[str, Any]) -> list[str]:
         if doppi:
             ko.append(f"tag sia attesi sia assenti: {doppi}")
         # Lo schema li ammette solo lì: altrove un esecutore indipendente li ignorerebbe (verde finto).
-        if "attributi" in atteso and not (op.startswith("codifica_sist_") or op == "codifica_fvg"):
-            ko.append(f"aspettativa 'attributi' in {op}: lo schema la prevede solo per codifica_sist_* e codifica_fvg")
+        if "attributi" in atteso and op != "codifica_fvg":
+            ko.append(f"aspettativa 'attributi' in {op}: lo schema la prevede solo per codifica_fvg")
         if "testi" in atteso and op != "codifica_piemonte":
             ko.append(f"aspettativa 'testi' in {op}: lo schema la prevede solo per codifica_piemonte")
     if tipo == "attesoFse":
@@ -394,7 +382,6 @@ class Motore:
         validatore_fse=None,
         generatore_pss: GeneratorePSS | None = None,
         cartella: Path | None = None,
-        xsd_sist: Path | None = None,
         xsd_fvg: Path | None = None,
         xsd_a2f: Path | None = None,
         openapi_umbria: Path | None = None,
@@ -406,9 +393,6 @@ class Motore:
         self.validatore_fse = validatore_fse
         self.generatore_pss = generatore_pss
         self.cartella = cartella or cartella_conformita()
-        env = leggi("VARCO_XSD_SIST")
-        self.xsd_sist = Path(xsd_sist) if xsd_sist else (Path(env) if env else None)
-        self._schema_sist = None
         env_fvg = leggi("VARCO_XSD_FVG")
         self.xsd_fvg = Path(xsd_fvg) if xsd_fvg else (Path(env_fvg) if env_fvg else None)
         self._schemi_fvg: dict[str, Any] = {}
@@ -543,8 +527,6 @@ class Motore:
             p = _sostituisci({k: v for k, v in passo.items() if k != "salva"}, ctx)
             if op in OPERAZIONI_FSE:
                 return self._passo_fse(op, p)
-            if op in OPERAZIONI_SIST_CODIFICA:
-                return self._passo_codifica_sist(op, p)
             if op == "codifica_fvg":
                 return self._passo_codifica_fvg(p)
             if op == "leggi_fvg":
@@ -589,8 +571,6 @@ class Motore:
                     esito = lettore(el)
                 except ErroreSOAP as e:
                     fault = e
-            elif op in OPERAZIONI_SIST_LEGGI:
-                esito, fault = self._leggi_sist(op, p)
             else:
                 raise ValueError(f"operazione sconosciuta: {op}")
         except _Salta as s:
@@ -612,87 +592,6 @@ class Motore:
             el = xml_sac.richiesta_interroga_nre(criteri_da_dict(p["criteri"]), p.get("cf_medico", "PROVAX00X00X000Y"),
                                                  "0000000000", lambda s: "CIFRATO==")
         return _esito_codifica(op, p.get("atteso", {}), el, errori_xsd(el))
-
-    # ------------------------------------------------------------------ SIST (Regione Puglia)
-
-    def _leggi_sist(self, op: str, p: dict):
-        from ..ricetta import xml_sist
-        from ..ricetta.modello import Esito
-
-        xml = self.cartella.joinpath("risposte", p["risposta"]).read_bytes()
-        try:
-            el = sbusta(xml, 200)
-        except ErroreSOAP as e:
-            return None, e
-        if op == "leggi_sist_chk":
-            return xml_sist.leggi_chk(el), None
-        if op == "leggi_sist_registra":
-            # setRegistraPrescrizione risponde solo esito TRUE/FALSE: lo si riporta al codice esito
-            return Esito(codice="0000" if xml_sist.leggi_registra(el) else "9999"), None
-        if op == "leggi_sist_annulla":
-            return xml_sist.leggi_annulla(el), None
-        if op == "leggi_sist_identificata":
-            return xml_sist.leggi_identificata(el), None
-        return xml_sist.leggi_ricerca(el), None
-
-    def _xsd_sist(self):
-        if self.xsd_sist is None:
-            return None
-        if self._schema_sist is None:
-            from lxml import etree
-
-            self._schema_sist = etree.XMLSchema(etree.parse(str(self.xsd_sist)))
-        return self._schema_sist
-
-    def _passo_codifica_sist(self, op: str, p: dict) -> EsitoPasso:
-        """Codifica SIST senza mandare niente: richiesta CVP (chkPrescrizione, getPrescrizioniIdentificate)
-        contro CVPService.xsd, oppure CDA2 di prescrizione contro lo schema CDA del kit."""
-        from ..ricetta import cda_sist, xml_sist
-        from ..trasporto.sist import DatiChiamata, OperatoreSIST
-
-        atteso = p.get("atteso", {})
-        codici = p.get("codici_regionali", {})
-
-        def codice(cf: str) -> str:
-            return codici[cf]  # KeyError: lo segnala problemi_sist
-
-        operatore = OperatoreSIST(p.get("operatore", "PROVAX00X00X000Y"), "160114")
-        dati = DatiChiamata(operatore, "VARCO", "varco", "0.1", "A" * 20, "2026-10-01T11:00:00+0200", "DIGEST==")
-        try:
-            if op == "codifica_sist_ricerca":
-                el = xml_sist.richiesta_ricerca(dati, criteri_da_dict(p["criteri"]), codice(operatore.codice_fiscale))
-            else:
-                ricetta = ricetta_da_dict(p["ricetta"])
-                # Come RicettaSIST: ciò che impedisce di scrivere il CDA (es. motivo di non
-                # sostituibilità fuori da 1-4) si controlla PRIMA di chkPrescrizione.
-                problemi = (cda_sist.problemi_righe_cda(ricetta) + ricetta.problemi()
-                            + xml_sist.problemi_sist(ricetta, codice))
-                if problemi:
-                    raise RicettaNonValida(problemi)
-                if op == "codifica_sist_chk":
-                    el = xml_sist.richiesta_chk(ricetta, dati, codice)
-                else:
-                    sost = ricetta.prescrittore.codice_fiscale_sostituto
-                    el = cda_sist.genera(
-                        ricetta, p["nre"], p.get("codice_autenticazione"),
-                        codice_regionale_prescrittore=codice(sost or ricetta.prescrittore.codice_fiscale),
-                        codice_regionale_sostituito=codice(ricetta.prescrittore.codice_fiscale) if sost else None,
-                        maggior_tutela=p.get("maggior_tutela", False),
-                    )
-        except RicettaNonValida as e:
-            return _esito_rifiuto(op, atteso, str(e))
-        if op == "codifica_sist_cda":
-            from ..fse.validazione import SchemiNonTrovati, _schema_cda
-
-            try:
-                schema = _schema_cda()
-            except SchemiNonTrovati as e:
-                return _esito_codifica(op, atteso, el, None, str(e))
-        else:
-            schema = self._xsd_sist()
-        return _esito_codifica(op, atteso, el, _errori_schema(schema, el),
-                               "CVPService.xsd non fornito (--xsd-sist o $VARCO_XSD_SIST): "
-                               "lo schema della Regione non sta nel repository")
 
     # ------------------------------------------------------------------ SAR FVG (Insiel)
 

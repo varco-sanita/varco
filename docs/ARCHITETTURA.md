@@ -18,14 +18,6 @@
           │
   TrasportoHTTP    (HTTPS, guardia produzione SAC, FSE, Regione Puglia, Regione FVG, Regione Piemonte e Regione Umbria, limite di frequenza, registrazione)
 
-  RicettaSIST ─── xml_sist (codec CVP) + cda_sist (CDA2 di prescrizione) + FirmatarioCAdES
-          ▼                                   (stesso contratto ServizioRicetta, SAR della Puglia)
-  CanaleSIST       (datiOperatore, datiApplicativo/applDigest, SOAPAction, adesione)
-          │
-  wssecurity       (intestazione WS-Security firmata con la CNS: ChiaveOperatore)
-          │
-  soap + TrasportoHTTP  (gli stessi di sopra)
-
   RicettaFVG ──── xml_fvg (tracciato del SAC con namespace, attributi e tipi FVG) + CifratoreSanitel
           ▼                                   (stesso contratto ServizioRicetta, SAR del Friuli-Venezia Giulia)
   CanaleFVG        (User-Agent del par. 3.1, SOAPAction vuota, token federati; CF della carta = medico)
@@ -347,8 +339,8 @@ specifica a sé:
 - `ricetta.schema.json` e `pss.schema.json` descrivono i dati di ingresso. Un test
   verifica che restino allineati alle dataclass, campo per campo;
 - `rapporto.schema.json` descrive il rapporto JSON dell'esecuzione;
-- `casi/` (143 casi), `risposte/` (risposte reali del SAC; in `risposte/sist/`, `risposte/fvg/` e
-  `risposte/piemonte/` risposte **sintetiche** del SIST, del SAR FVG e di SIRPED), `documenti/` (CDA con
+- `casi/` (148 casi), `risposte/` (risposte reali del SAC; in `risposte/fvg/`, `risposte/piemonte/` e
+  `risposte/umbria/` risposte **sintetiche** del SAR FVG, di SIRPED e del SAR umbro), `documenti/` (CDA con
   l'esito atteso), `dati/` (PSS in JSON da far generare all'implementazione).
 
 Famiglie:
@@ -363,13 +355,6 @@ Famiglie:
 - **`fse`**: `valida_documento` (un CDA e l'esito atteso del validatore) e `genera_pss`
   (dati JSON → CDA dell'implementazione → validatore → esito atteso). Se il validatore
   non controlla i vocabolari e l'aspettativa ne dipende, il passo è SALTATO, mai verde.
-- **`sist`**: SIST della Puglia, senza rete. Ci sono due tipi di passo:
-  - **lettura** di risposte sintetiche (`leggi_sist_*`);
-  - **codifica** di `chkPrescrizione` e della ricerca contro `CVPService.xsd`, e del CDA2 di
-    prescrizione contro lo schema CDA (`codifica_sist_*`).
-
-  `CVPService.xsd` non sta nel repository e si passa con `--xsd-sist` o `$VARCO_XSD_SIST`:
-  senza, la parte XSD di quei passi è SALTATO, mai verde.
 - **`fvg`**: SAR del Friuli-Venezia Giulia, senza rete. `leggi_fvg` legge risposte sintetiche,
   `codifica_fvg` codifica le richieste e le valida contro gli XSD di Insiel, che si passano con
   `--xsd-fvg` o `$VARCO_XSD_FVG` (cartella `wsdl/sar`). Anche qui, senza gli XSD la parte XSD è
@@ -386,7 +371,7 @@ Per collaudare un'altra implementazione:
 
 - ricetta: si passa un adattatore `crea(credenziali, valida_localmente) -> ServizioRicetta`
   con `--adattatore modulo:funzione`, **solo con `--famiglia online`**. Le famiglie offline,
-  sist, fvg e piemonte eseguono i codec di questo kit (lettori e codifica), non un
+  fvg, piemonte e umbria eseguono i codec di questo kit (lettori e codifica), non un
   `ServizioRicetta`: con `--adattatore` la riga di comando si rifiuta (exit 2) invece di dare
   verdi che non riguardano l'implementazione indicata. Anche `tutte` si rifiuta, perché
   mescolerebbe i verdi dell'adattatore con quelli del kit;
@@ -444,62 +429,19 @@ Un domani lo Stato potrebbe pubblicare casi come questi come collaudo
 ufficiale e trasparente. Chi dichiara un'integrazione allega il rapporto JSON,
 e chiunque può rieseguirlo.
 
-## SAR regionali: il SIST della Puglia
+## SAR regionali: la Puglia (SIST) è sospesa
 
-Il primo SAR del kit. Dettagli del canale, differenze dal SAC, discrepanze nelle specifiche e
-cosa manca per il collaudo: `docs/SAR_PUGLIA.md`. **Scritto e verificato sulle specifiche,
-NON collaudato sul sistema regionale.**
-
-È un altro trasporto sotto lo **stesso** modello. `RicettaSIST` rispetta `ServizioRicetta`
-e il programma del medico la usa come `RicettaSAC`.
-
-**Il modello dati: cosa si è piegato e perché.**
-- `Assistito.codice_regione` (facoltativo, 3 cifre): **l'unico campo nuovo del modello.**
-  Il CDA2 di prescrizione pugliese vuole il codice **nazionale** dell'ASL dell'assistito, cioè
-  regione + ASL (`160114`). Il SAC non ne ha bisogno, ma non c'era altro modo di ricavarlo
-  dall'ASL (`114` esiste in più regioni). Aggiunto anche a `conformita/schema/ricetta.schema.json`.
-- `ServizioRicetta.visualizza(nre, cf_medico=None, *, cf_assistito=None)`: **l'unico punto in
-  cui il contratto si piega.** Il SIST identifica la prescrizione con NRE **e** CF
-  dell'assistito («identificazione forte»). `RicettaSAC` accetta il parametro e lo ignora.
-  `RicettaSIST` senza `cf_assistito` alza `ValueError` prima di chiamare.
-- `Messaggio.gravita`: riconosce anche `C` (Critical) come bloccante. Il SIST classifica le
-  anomalie C/W, non E/W.
-- `EsitoInvioSAR` ed `EsitoVisualizzazioneSAR`: sottoclassi, non campi nuovi negli esiti del SAC.
-  L'invio SIST è due chiamate e una firma, e se la seconda non riesce va ripetuta: servono
-  `registrato`, `errore_registrazione` e il CDA firmato per ripeterla. `solo_ricetta_rossa`
-  dice che il SAC non era disponibile.
-
-**Cosa NON è entrato nel modello, e perché.**
-- I codici regionali dei medici, la struttura e il ruolo dell'operatore, e l'applicativo
-  censito sono configurazione del canale o del servizio. Una ricetta resta la stessa ricetta
-  in Abruzzo e in Puglia.
-- Nome, sesso, nascita e residenza dell'assistito, se servono, vengono dal `Paziente` del
-  modello FSE, attraverso un risolutore (`anagrafica=`). Gli assistiti in anagrafe regionale
-  bastano col CF.
-- Oscuramento nel fascicolo, maggior tutela e Piano Care Puglia sono argomenti per nome di
-  `RicettaSIST.invia`. Il contratto comune non li conosce.
-
-**Errori.** I `SoapFaultException` applicativi (NRE non trovato, stato non annullabile, altro
-medico, periodo mancante) diventano un Esito non riuscito, come i rifiuti del SAC. Quelli di
-sicurezza e di sistema restano eccezioni.
-
-**Firma.** Due firme diverse:
-- **WS-Security** (RSA-SHA1 sul Timestamp, imposta dalla policy del server): dietro il
-  protocollo `ChiaveOperatore`;
-- **CAdES del CDA** (SHA-256, signing-certificate-v2): dietro `FirmatarioCAdES`.
-
-Con la CNS vera si implementano su PKCS#11. Il kit include solo la variante da file .p12, per
-le prove.
-
-**Verifica senza la Regione.** `strumenti/sist_server_finto.py` è un server su 127.0.0.1 che
-controlla le richieste come dice la specifica (WS-Security, SOAPAction, `CVPService.xsd`,
-applDigest, CAdES, CDA). `asn1crypto` serve solo a lui, quindi non entra in `src/`. Le
-risposte di prova sono **sintetiche** (`conformita/risposte/sist/`): la specifica non ne
-pubblica.
+Il primo SAR scritto per il kit fu il SIST della Puglia (01/10/2026). Il 03/10/2026 abbiamo visto che
+la sezione del portale SIST da cui vengono le specifiche le dichiara riservate e legate a un accordo
+di riservatezza per le terze parti. Per la regola delle fonti (`docs/TERZE_PARTI.md`, sez. 3) il
+modulo è **sospeso** dalla versione 0.1.1 e il suo codice non è più nel repository; la guardia sugli
+host `*.puglia.it` resta. Del modello dati è rimasto ciò che serve anche agli altri canali:
+`Assistito.codice_regione` (facoltativo) e `visualizza(..., cf_assistito=None)`, che oggi usa
+l'Umbria.
 
 ## SAR regionali: il SAR del Friuli-Venezia Giulia (Insiel)
 
-Il secondo SAR del kit. Dettagli del canale, differenze dal SAC e dal SIST, difetti delle
+Dettagli del canale, differenze dal SAC, difetti delle
 specifiche e cosa manca per il collaudo: `docs/SAR_FVG.md`. **Scritto e verificato sulle
 specifiche, NON collaudato sul sistema regionale.**
 
@@ -514,7 +456,7 @@ tipo di accesso, `testata2` per i RAO. Il resto è configurazione:
 - il cifratore del CF dell'assistito, passato esplicito.
 
 La verifica della posizione del sostituto, un servizio solo regionale, è un metodo in più di
-`RicettaFVG`, fuori dal contratto comune, come gli argomenti regionali di `RicettaSIST.invia`.
+`RicettaFVG`, fuori dal contratto comune.
 
 **Il codec FVG non manda i tag facoltativi vuoti.** Verso il SAC il kit li manda tutti, anche vuoti,
 come il progetto SoapUI del MEF (par. 3.4 della specifica MEF). Negli XSD FVG parecchi tipi hanno una
@@ -528,13 +470,13 @@ una ricetta resta una ricetta.
   regionale non pubblico secondo il par. 4.6. `RicettaFVG` non ha un default: il cifratore si passa.
 - *Dove arrivano i codici di downgrade 060120-060130*: non possono stare in `codEsito`, che ha 4
   cifre. `richiede_downgrade_mir` li cerca nei messaggi, e un SOAP Fault che li contiene diventa un
-  esito non riuscito (`esito_da_fault_invio`), come i Fault applicativi del SIST.
+  esito non riuscito (`esito_da_fault_invio`).
 
 **Mutua autenticazione con la carta.** La chiave del medico non passa dal canale: sta nel
 `ssl.SSLContext` del trasporto, che esisteva già (`contesto_tls`). Il canale riceve solo il
 certificato, per controllare che sia del medico che invia (par. 2.2). Con una CRS/CNS vera la chiave
 non esce dalla carta, e la libreria standard non sa usarla: serve un provider OpenSSL per PKCS#11,
-oppure un componente esterno. Non incluso, come la variante PKCS#11 del SIST.
+oppure un componente esterno. Non incluso.
 
 **Modalità federata.** Il kit mette nei due header (`Authorization: Bearer`, `X-JWT-ASSERTION`) i
 token che gli dà chi integra (`TokenFVG`). Come si creano lo dicono due allegati non pubblici: il
@@ -618,9 +560,8 @@ quella. Le risposte di prova sono **sintetiche** (`conformita/risposte/umbria/`)
 
 ## Limiti noti e passi successivi
 
-- SIST Puglia: **non collaudato** sul sistema regionale (serve l'adesione, vedi
-  `docs/SAR_PUGLIA.md` §10). Non implementati: ricovero, ricetta bianca (CVPNSSN), IUP offline,
-  erogazione, FSE regionale (SAML), `getRuoliStruttureOperatore`.
+- Puglia (SIST): modulo **sospeso** dal 03/10/2026, in attesa della risposta di InnovaPuglia
+  (`docs/BLOCCHI.md`).
 - SAR FVG: **non collaudato** sul sistema regionale (serve l'accreditamento Insiel, vedi
   `docs/SAR_FVG.md` §10). Non implementati: lotti NRE (schema non pubblicato), canale MIR e procedura
   di downgrade, creazione dei token federati, CNS su PKCS#11, FSE regionale (specifica a

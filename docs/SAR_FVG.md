@@ -142,26 +142,26 @@ Una comunicazione è tutta regionale: `0196` «CONTIENE FARMACI IN DPC NELLA REG
 - **Lotti di NRE** (par. 4.1). C'è la tabella dei campi, ma nello zip non ci sono né WSDL né XSD
   per `RichiestaLotto`: non implementato.
 
-## 4. Differenze dal SAC e dal SIST
+## 4. Differenze dal SAC
 
-| | SAC (MEF) | SIST (Puglia) | SAR FVG (Insiel) |
-|---|---|---|---|
-| Rete | Internet | RUPAR | non detta; host con nomi pubblici `*.sanita.fvg.it`, in mutua autenticazione |
-| Autenticazione | Basic + pincode cifrato + 2FA | WS-Security con la CNS + codice applicativo | mTLS con CRS/CNS, oppure token federati |
-| Identificazione del software | nessuna | `datiApplicativo` + `applDigest` | `User-Agent` + attributo `prodottoCme` |
-| Pincode | cifrato | assente | elemento obbligatorio ma vuoto («non utilizzato») |
-| CF dell'assistito | cifrato con SanitelCF | in chiaro dentro il TLS | cifrato: SanitelCF o certificato regionale (sez. 7) |
-| Tracciato | XSD del MEF | CVP proprio + CDA2 firmato CAdES | quello del SAC con namespace, attributi e tipi propri |
-| Invio | una chiamata | due chiamate e una firma | una chiamata |
-| Tag vuoti | il kit li manda tutti | — | i facoltativi si mandano solo se valorizzati: vuoti non validano |
-| `numsedute` | sì | `numSedute` | **no**, il tracciato FVG non ce l'ha |
-| Televisita | `prescrizione1 = TV;` | catalogo | codice di catalogo regionale; «TV» non ammesso (par. 4.2.2) |
-| Catalogo | facoltativo | obbligatorio | `codCatalogoPrescr` obbligatorio per la specialistica, più `versioneCR` |
-| RAO | — | — | indicazione clinica in `descrizioneDiagnosi`, `testata2 = R<classe>;P<progressivo>` (par. 4.2.3) |
-| Visualizza | per NRE | per NRE **e** CF dell'assistito | per NRE |
-| Sostituto | `cfMedico2` | CNS del sostituto | `cfMedico2`, carta del sostituto; più un servizio di verifica |
-| Ricetta rossa | — | solo IUP se il SAC non risponde | downgrade MIR, con i codici 060120-060130 o con la soglia di tempo |
-| Produzione | pubblicata | pubblicata | non pubblicata |
+| | SAC (MEF) | SAR FVG (Insiel) |
+|---|---|---|
+| Rete | Internet | non detta; host con nomi pubblici `*.sanita.fvg.it`, in mutua autenticazione |
+| Autenticazione | Basic + pincode cifrato + 2FA | mTLS con CRS/CNS, oppure token federati |
+| Identificazione del software | nessuna | `User-Agent` + attributo `prodottoCme` |
+| Pincode | cifrato | elemento obbligatorio ma vuoto («non utilizzato») |
+| CF dell'assistito | cifrato con SanitelCF | cifrato: SanitelCF o certificato regionale (sez. 7) |
+| Tracciato | XSD del MEF | quello del SAC con namespace, attributi e tipi propri |
+| Invio | una chiamata | una chiamata |
+| Tag vuoti | il kit li manda tutti | i facoltativi si mandano solo se valorizzati: vuoti non validano |
+| `numsedute` | sì | **no**, il tracciato FVG non ce l'ha |
+| Televisita | `prescrizione1 = TV;` | codice di catalogo regionale; «TV» non ammesso (par. 4.2.2) |
+| Catalogo | facoltativo | `codCatalogoPrescr` obbligatorio per la specialistica, più `versioneCR` |
+| RAO | — | indicazione clinica in `descrizioneDiagnosi`, `testata2 = R<classe>;P<progressivo>` (par. 4.2.3) |
+| Visualizza | per NRE | per NRE |
+| Sostituto | `cfMedico2` | `cfMedico2`, carta del sostituto; più un servizio di verifica |
+| Ricetta rossa | — | downgrade MIR, con i codici 060120-060130 o con la soglia di tempo |
+| Produzione | pubblicata | non pubblicata |
 
 ## 5. Il modello dati ha tenuto, senza modifiche
 
@@ -178,8 +178,7 @@ ricevuta del MEF e il lettore comune scartava).
   - lo User-Agent;
   - il certificato di cifratura.
 - `numsedute` esiste nel modello ma non nel tracciato FVG: rifiuto locale, non un campo tolto.
-- `visualizza(..., cf_assistito=)`, il punto in cui il contratto si era piegato per la Puglia, qui
-  non serve: il parametro si ignora come nel SAC.
+- `visualizza(..., cf_assistito=)` qui non serve: il parametro si ignora come nel SAC.
 - La verifica del sostituto è un metodo in più di `RicettaFVG`, fuori dal contratto comune.
 - Il downgrade è una funzione sugli esiti (`richiede_downgrade_mir`), non un campo nuovo.
 
@@ -204,7 +203,7 @@ certificazione» (Tabella 2).
 - dove sta l'elenco dei prodotti accreditati, a parte la Tabella 1.
 
 Nel kit il collaudo regionale è chiuso da due serrature:
-- il flag del trasporto, `consenti_collaudo_regionale=True` (lo stesso del SIST, distinto da
+- il flag del trasporto, `consenti_collaudo_regionale=True` (distinto da
   quello della produzione). La guardia (`varco/ambienti.py`) scatta in
   `varco/trasporto/http.py::consegna`, l'unico punto in cui il canale consegna la richiesta a un
   trasporto, prima di `invia`: vale anche con un **trasporto proprio** al posto di

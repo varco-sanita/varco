@@ -34,19 +34,16 @@ HOST_FSE_PRODUZIONE = "modipa.fse.salute.gov.it"
 DOMINIO_FSE = "fse.salute.gov.it"
 
 
-# SIST della Regione Puglia (SAR, InnovaPuglia). Specifiche di integrazione v4.03.27, par. 6.1:
-# collaudo e produzione stanno sulla RUPAR (rete privata regionale), raggiungibili solo con
-# un'adesione (VPN, modulo di richiesta, CNS). Il kit non li chiama senza due atti espliciti:
-# il flag sul trasporto e un'adesione dichiarata nel canale (trasporto/sist.py).
-HOST_SIST_COLLAUDO = "pddasl-preprod.sanita.regione.rsr.rupar.puglia.it"
-HOST_SIST_PRODUZIONE = "pdd-virtasl.rmmg.rsr.rupar.puglia.it"
+# Regione Puglia. Il modulo del SIST (SAR della Puglia) è sospeso dal 03/10/2026 (CHANGELOG, 0.1.1):
+# il kit non ha più un canale pugliese, ma la guardia resta. Ogni host *.puglia.it conta come
+# produzione, senza eccezioni di collaudo: si raggiunge solo con consenti_produzione=True.
 DOMINIO_PUGLIA = "puglia.it"
 
 
 # SAR della Regione Friuli-Venezia Giulia (Insiel). Specifiche Idof-dem-AT-01 dell'11/02/2026, cap. 5:
 # sono pubblicati SOLO gli host di collaudo, raggiungibili in mutua autenticazione TLS con i
 # certificati rilasciati da Insiel. Gli host di produzione non sono pubblicati: per prudenza ogni
-# altro host *.fvg.it o *.insiel.it conta come produzione. Il collaudo, come quello del SIST,
+# altro host *.fvg.it o *.insiel.it conta come produzione. Il collaudo
 # è un sistema reale della Regione: serve il flag del collaudo regionale e un'AdesioneFVG.
 HOST_FVG_COLLAUDO = frozenset({
     "demtest.sanita.fvg.it",  # SAR dematerializzata, autenticazione con CRS/CNS (mTLS)
@@ -194,13 +191,8 @@ def _regione_piemonte(host: str) -> bool:
 
 
 def e_regione_puglia(url: str) -> bool:
-    """True per qualunque host *.puglia.it (SIST, portali, RUPAR)."""
+    """True per qualunque host *.puglia.it (portali, RUPAR, SAR regionale)."""
     return any(_regione_puglia(h) for h in host_normalizzati(url))
-
-
-def e_collaudo_sist(url: str) -> bool:
-    """True solo per l'ambiente di collaudo del SIST (pddasl-preprod): è un ambiente REALE della Regione."""
-    return any(h == HOST_SIST_COLLAUDO for h in host_normalizzati(url))
 
 
 def e_regione_fvg(url: str) -> bool:
@@ -252,8 +244,8 @@ def _collaudo_piemonte(host: str) -> bool:
 
 
 def e_collaudo_regionale(url: str) -> bool:
-    """Collaudo di un SAR regionale (SIST Puglia, SAR FVG, SIRPED Piemonte, SAR Umbria): ambienti REALI delle Regioni."""
-    return e_collaudo_sist(url) or e_collaudo_fvg(url) or e_collaudo_piemonte(url) or e_collaudo_umbria(url)
+    """Collaudo di un SAR regionale (SAR FVG, SIRPED Piemonte, SAR Umbria): ambienti REALI delle Regioni."""
+    return e_collaudo_fvg(url) or e_collaudo_piemonte(url) or e_collaudo_umbria(url)
 
 
 class Ambiente(str, Enum):
@@ -273,12 +265,13 @@ def e_produzione(url: str) -> bool:
 
     Regola prudente: qualunque host *.sanita.finanze.it che non contenga "test"
     nel nome è trattato come produzione; lo stesso per *.fse.salute.gov.it (gateway
-    FSE 2.0) che non sia l'ambiente di validazione "-val", e per *.puglia.it che non
-    sia il collaudo SIST (che però ha una sua guardia: vedi `verifica_url_consentito`), e per
-    *.fvg.it e *.insiel.it che non siano i collaudi del SAR FVG (stessa guardia del SIST), e per gli
+    FSE 2.0) che non sia l'ambiente di validazione "-val", per ogni host *.puglia.it (nessuna
+    eccezione: il modulo Puglia è sospeso), e per
+    *.fvg.it e *.insiel.it che non siano i collaudi del SAR FVG (che hanno una loro guardia: vedi
+    `verifica_url_consentito`), e per gli
     host della Regione Piemonte e del CSI (*.piemonte.it, *.csi.it, ...) che non abbiano un nome da
     collaudo (guardia propria: flag del collaudo più host dichiarato), e per *.umbria.it e
-    *.puntozeroscarl.it che non siano l'host di test del SAR Umbria (che ha la guardia del SIST).
+    *.puntozeroscarl.it che non siano l'host di test del SAR Umbria (stessa guardia del FVG).
     """
     return any(_produzione(h) for h in host_normalizzati(url))
 
@@ -288,12 +281,11 @@ def _produzione(host: str) -> bool:
     if ip is not None:
         # IP letterale: non si sa di chi è. Solo il loopback vale come localhost (vedi sopra)
         return not _ip_loopback(ip)
-    if host in (HOST_PRODUZIONE, HOST_FSE_PRODUZIONE, HOST_SIST_PRODUZIONE):
+    if host in (HOST_PRODUZIONE, HOST_FSE_PRODUZIONE):
         return True
     if _regione_puglia(host):
-        # prudenza: ogni host della Regione Puglia che non sia il collaudo SIST conta come produzione
-        # (compreso wsit-virtasl.rmmg.rsr.rupar.puglia.it, l'indirizzo scritto nei WSDL ufficiali)
-        return host != HOST_SIST_COLLAUDO
+        # prudenza: ogni host della Regione Puglia conta come produzione, senza eccezioni
+        return True
     if _regione_fvg(host):
         # prudenza: gli host di produzione del SAR FVG non sono pubblicati, quindi ogni host della
         # Regione FVG o di Insiel che non sia uno dei collaudi elencati conta come produzione
@@ -320,18 +312,13 @@ def verifica_url_consentito(
 ) -> None:
     """Solleva AmbienteBloccato se l'URL è di produzione, o di un collaudo regionale, senza il flag esplicito.
 
-    Il collaudo SIST non è un ambiente pubblico come quello del MEF: è un sistema della Regione,
-    raggiungibile solo dopo un'adesione. Per questo ha un flag suo, distinto dalla produzione.
+    I collaudi regionali non sono ambienti pubblici come quello del MEF: sono sistemi delle Regioni,
+    raggiungibili solo dopo un'adesione. Per questo hanno un flag loro, distinto dalla produzione.
     """
     if e_produzione(url) and consenti_produzione is not True:
         raise AmbienteBloccato(
             f"Chiamata verso PRODUZIONE bloccata ({url}). "
             "Serve consenti_produzione=True esplicito, e credenziali reali del medico."
-        )
-    if e_collaudo_sist(url) and consenti_collaudo_regionale is not True:
-        raise AmbienteBloccato(
-            f"Chiamata verso il collaudo SIST della Regione Puglia bloccata ({url}). "
-            "Serve un'adesione al collaudo concessa da InnovaPuglia e consenti_collaudo_regionale=True esplicito."
         )
     if e_collaudo_fvg(url) and consenti_collaudo_regionale is not True:
         raise AmbienteBloccato(

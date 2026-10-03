@@ -11,10 +11,6 @@ Esempi:
     # tutto, contro l'ambiente di TEST del MEF, con le utenze del kit pubblico
     python -m varco.conformita.esegui --famiglia tutte --kit percorso/kit-ricetta-dematerializzata-datamatrix
 
-    # SIST Regione Puglia, nessuna rete: codifica CVP e CDA2, risposte SINTETICHE
-    # (lo schema CVPService.xsd è della Regione e non sta nel repository: va indicato)
-    python -m varco.conformita.esegui --famiglia sist --xsd-sist percorso/wsdl-pddasl/CVPService.xsd
-
     # SAR Regione FVG (Insiel), nessuna rete: codifica contro gli XSD di wsdl_prescritto.zip, risposte SINTETICHE
     python -m varco.conformita.esegui --famiglia fvg --xsd-fvg percorso/wsdl/sar
 
@@ -72,8 +68,8 @@ def contesto_offline() -> dict:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="varco-conformita", description="Suite di conformità del kit (ricetta SAC, documenti FSE, SIST Puglia, SAR FVG, SIRPED Piemonte, SAR Umbria)")
-    ap.add_argument("--famiglia", choices=["offline", "online", "fse", "sist", "fvg", "piemonte", "umbria", "tutte"], default="offline")
+    ap = argparse.ArgumentParser(prog="varco-conformita", description="Suite di conformità del kit (ricetta SAC, documenti FSE, SAR FVG, SIRPED Piemonte, SAR Umbria)")
+    ap.add_argument("--famiglia", choices=["offline", "online", "fse", "fvg", "piemonte", "umbria", "tutte"], default="offline")
     ap.add_argument("--casi", help="cartella della suite (default: conformita/ del progetto o $VARCO_CONFORMITA)")
     ap.add_argument("--kit", help="cartella del kit MEF (default: $VARCO_KIT_MEF), serve per i casi online")
     ap.add_argument("--solo", nargs="+", help="esegue solo questi id (un id sconosciuto è un errore)")
@@ -82,8 +78,6 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--adattatore-fse", help="modulo:funzione(dati: dict) -> bytes che genera il CDA da collaudare "
                     "(solo con --famiglia fse)")
     ap.add_argument("--validatore-fse", choices=["auto", "ufficiale", "locale"], default="auto")
-    ap.add_argument("--xsd-sist", help="CVPService.xsd del SIST (default: $VARCO_XSD_SIST); senza, la parte XSD "
-                    "dei casi di codifica SIST è SALTATO")
     ap.add_argument("--xsd-fvg", help="cartella wsdl/sar di wsdl_prescritto.zip (Insiel; default: $VARCO_XSD_FVG); "
                     "senza, la parte XSD dei casi di codifica FVG è SALTATO")
     ap.add_argument("--xsd-a2f", help="cartella wsdl del kit A2F del Sistema TS (default: $VARCO_XSD_A2F); "
@@ -165,7 +159,6 @@ def main(argv: list[str] | None = None) -> int:
 
     motore = Motore(adattatore, credenziali, contesto, credenziali_sostituto=sostituto,
                     validatore_fse=validatore, generatore_pss=generatore, cartella=cartella,
-                    xsd_sist=Path(args.xsd_sist) if args.xsd_sist else None,
                     xsd_fvg=Path(args.xsd_fvg) if args.xsd_fvg else None,
                     xsd_a2f=Path(args.xsd_a2f) if args.xsd_a2f else None,
                     openapi_umbria=Path(args.openapi_umbria) if args.openapi_umbria else None)

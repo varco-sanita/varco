@@ -4,6 +4,46 @@ Formato: una sezione per versione, la più recente in alto. Versioni secondo
 [Semantic Versioning](https://semver.org/lang/it/): finché la versione è 0.x l'interfaccia
 può cambiare tra un rilascio e l'altro.
 
+## [0.1.1] — 03/10/2026
+
+### Puglia (SIST): modulo sospeso
+
+**Perché.** Le *Specifiche di integrazione SIST* della Regione Puglia, da cui era scritto il modulo,
+si scaricano senza login e il documento non porta diciture. Ma la sezione «Integratori» del portale
+SIST, che le contiene, dichiara tutta la sua documentazione «RISERVATO e vincolato all'Accordo di
+riservatezza Terze Parti». L'abbiamo vista il 03/10/2026, dopo la pubblicazione della 0.1.0. La regola
+del progetto è usare solo fonti pubbliche, mai materiale riservato, e non abbiamo firmato nessun
+accordo: finché InnovaPuglia non dice se quel materiale può servire a un progetto aperto, il modulo
+resta fuori (`docs/BLOCCHI.md`, `docs/TERZE_PARTI.md` sez. 3).
+
+**Cosa è stato tolto.**
+- Codice: `varco.trasporto.sist` (`CanaleSIST`, `AdesioneSIST`, `OperatoreSIST`, `AmbienteSIST`,
+  `ApplicativoSIST`), `varco.trasporto.wssecurity` (`ChiaveOperatore`, `ChiavePKCS12`: li usava solo il
+  SIST), `varco.ricetta.sist` (`RicettaSIST`, `FirmatarioCAdES`, `FirmatarioCAdESPKCS12`),
+  `varco.ricetta.xml_sist`, `varco.ricetta.cda_sist`; dal modello `EsitoInvioSAR` ed
+  `EsitoVisualizzazioneSAR`, usati solo dal SIST.
+- Strumenti: `sist_server_finto.py`, `genera_prove_sist.py`, `genera_risposte_sist.py`; la voce `sist`
+  di `strumenti/fonti_specifiche.json` e l'host del portale SIST tra quelli da cui si scarica.
+- Conformità: la famiglia `sist` (24 casi `SIS-*`, le risposte sintetiche `conformita/risposte/sist/`,
+  le operazioni `leggi_sist_*` e `codifica_sist_*` nello schema dei casi, l'opzione `--xsd-sist` e la
+  variabile `VARCO_XSD_SIST`). Restano 148 casi.
+- Prove: `prove/20261001-165725-sist-server-finto/`.
+- Test: `test_sist.py`, `test_issue_puglia.py`, `test_revisione_giro2_sar_puglia.py`,
+  `test_revisione_giro3_sar_puglia.py` e le parti SIST dei test della conformità.
+- Documenti: `docs/SAR_PUGLIA.md`, `docs/PROPOSTA_PUGLIA.md`, la colonna del SIST nelle tabelle di
+  confronto, le minacce 12-15 di `docs/MINACCE.md`.
+
+**Cosa resta.**
+- La guardia: ogni host `*.puglia.it` conta come produzione, ora **senza eccezioni** (prima il collaudo
+  SIST aveva una serratura sua). Test: `test_puglia_sempre_produzione_anche_col_flag_del_collaudo`.
+- `cf_del_certificato` passa in `varco.trasporto.fvg`, l'unico canale che lo usa ancora.
+- La cronologia di git non è stata riscritta: il codice era nostro e le specifiche SIST non sono mai
+  entrate nel repository (controllato: nessun file sotto `specifiche/` in nessun commit, nessun file
+  delle specifiche tra gli oggetti del repository, né per nome né per contenuto).
+
+**Se cambia.** Se InnovaPuglia risponde che il materiale si può usare, il modulo torna, con la
+risposta citata in `docs/TERZE_PARTI.md`.
+
 ## [0.1.0] — 03/10/2026
 
 Prima versione, col nome **Varco**. Repository: <https://github.com/varco-sanita/varco>
@@ -27,7 +67,7 @@ Prima versione, col nome **Varco**. Repository: <https://github.com/varco-sanita
 ### Correzioni delle issue del giro 3 (03/10/2026)
 
 - CI verde su ubuntu, macOS e Windows (Python 3.11 e 3.12): file temporaneo di Saxon chiuso prima della lettura su Windows, `.gitattributes` senza conversione dei fine riga (#13).
-- Puglia: CDA degli assicurati esteri con identificativi TEAM e personale, `displayName` del motivo di non sostituibilità, WS-Security accettata solo nell'header (#3, #4, #5).
+- Puglia: tre correzioni del modulo SIST (#3, #4, #5), uscite col modulo nella 0.1.1.
 - FVG: un CF ordinario che comincia per «STP» non è più scambiato per un codice STP; carta e medico controllati a ogni chiamata; campi solo farmaceutici rifiutati sulla specialistica (#6, #7, #8).
 - Piemonte e conformità: il server finto rispetta i permessi del gestionale e rifiuta `nbf`/`exp` non finiti; l'esecutore Java accetta `errori_contengono: []` come il Python (#9, #10, #11).
 - Registro e guardia: credenziali in dichiarazioni di namespace e commenti XML redatte, `code` redatto nel JSON OAuth2; i thread avviati durante una chiamata ereditano la guardia, quelli estranei non fanno più fallire una risposta già arrivata (#1, #2, #12).
@@ -66,7 +106,7 @@ Rapporti in `kit-mmg-review/2026-10-02-giro3/`. Ogni correzione ha un test che r
 
 #### Area 3 — Puglia (test: `tests/unit/test_revisione_giro3_sar_puglia.py`)
 
-- Residuo alto del bug 2 del giro 1: dopo un `chkPrescrizione` riuscito qualunque errore (orologio e dati del canale, busta di registrazione, CDA, firma) torna come `EsitoInvioSAR` con `da_ripetere`, mai come eccezione; anche `ripeti_registrazione` restituisce l'esito invece di sollevare.
+- Modulo sospeso nella 0.1.1 (sopra): i dettagli di questa voce sono usciti dal registro insieme al codice.
 
 #### Area 5 — Piemonte (test: `tests/unit/test_revisione_giro3_sar_piemonte.py`, `test_revisione_giro3_conformita.py`)
 
@@ -100,10 +140,7 @@ Rapporti in `kit-mmg-review/2026-10-02-giro3/`. Ogni correzione ha un test che r
 
 #### Area 3 — SAR Puglia (test: `tests/unit/test_revisione_giro2_sar_puglia.py`)
 
-- Residuo bug 2: la CNS tolta durante la firma WS-Security di `setRegistraPrescrizione` faceva uscire `RuntimeError` senza esito, con la prescrizione già allocata. Ora `ripeti_registrazione` intercetta qualunque errore della chiamata e restituisce l'`EsitoInvioSAR` con `da_ripetere` e il CDA firmato.
-- N1: il CDA si scrive con l'anagrafica (`Paziente`) letta e controllata prima di `chkPrescrizione`, conservata in `EsitoInvioSAR.paziente`; se l'esito non la porta, la nuova lettura passa lo stesso controllo d'identità. Prima una seconda lettura del callback mescolava il CF della ricetta con nome e nascita di un altro.
-- N2: `verifica_security` legge la finestra temporale solo dall'unico `wsu:Timestamp` di `Security`, che deve essere quello firmato (Specifiche SIST 4.03.27, par. 5.1.1). Un Timestamp fresco non firmato davanti a una firma scaduta non la rende più valida; il server finto risponde 000265.
-- N3 (residuo bug 7): il server finto applica `dataErogazioneDal/Al` (javadoc CVP, getPrescrizioniIdentificate): una prescrizione mai erogata non esce da una ricerca per erogazione.
+- Modulo sospeso nella 0.1.1 (sopra): i dettagli di questa voce sono usciti dal registro insieme al codice.
 
 #### Area 4 — SAR FVG (test: `tests/unit/test_revisione_giro2_sar_fvg.py`)
 
@@ -196,24 +233,7 @@ Non toccati, per decisione separata: licenza HL7 (giro 1, bug 5) e completamenti
 
 ### Ricetta in Puglia: SIST (SAR regionale) — scritto e verificato sulle specifiche, NON collaudato
 
-- `RicettaSIST`, `CanaleSIST`, WS-Security con la CNS (`ChiaveOperatore`), CDA2 di
-  prescrizione con firma CAdES (`FirmatarioCAdES`). Specifiche SIST pubblicate come 4.03.27 del
-  16/09/2026.
-- Stesso contratto `ServizioRicetta` e stesso modello. Campo nuovo `Assistito.codice_regione`;
-  `visualizza(..., cf_assistito=)`; esiti `EsitoInvioSAR` e `EsitoVisualizzazioneSAR`
-  (ricetta rossa, registrazione da ripetere). Motivi in `docs/ARCHITETTURA.md`.
-- Guardia: produzione SIST e ogni host `*.puglia.it` bloccati come produzione. Il collaudo
-  regionale è bloccato finché non ci sono `consenti_collaudo_regionale=True` **e**
-  un'`AdesioneSIST`.
-- Registratore: tag SIST redatti.
-- Verificato senza la Regione:
-  - richieste contro `CVPService.xsd`;
-  - struttura confrontata con gli esempi ufficiali;
-  - WS-Security con un verificatore indipendente;
-  - giro completo con un server finto in locale (`strumenti/sist_server_finto.py`).
-
-  Risposte di prova sintetiche. Dettagli e cosa manca: `docs/SAR_PUGLIA.md`; bozza per
-  InnovaPuglia: `docs/PROPOSTA_PUGLIA.md`.
+- Modulo sospeso nella 0.1.1 (sopra): i dettagli di questa voce sono usciti dal registro insieme al codice.
 
 ### FSE 2.0, lato documento
 

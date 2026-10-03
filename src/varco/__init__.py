@@ -2,9 +2,10 @@
 """varco: kit aperto per far parlare i software dei medici con i servizi pubblici.
 
 Modulo 1: ricetta dematerializzata via SAC (Sistema TS / MEF), lato prescrittore.
-Lo stesso contratto verso i SAR della Regione Puglia (SIST, `RicettaSIST`) e della Regione
-Friuli-Venezia Giulia (Insiel, `RicettaFVG`) e della Regione Piemonte (SIRPED, CSI Piemonte,
-`RicettaPiemonte`): scritti e verificati sulle specifiche, NON collaudati sui sistemi regionali.
+Lo stesso contratto verso i SAR della Regione Friuli-Venezia Giulia (Insiel, `RicettaFVG`), della
+Regione Piemonte (SIRPED, CSI Piemonte, `RicettaPiemonte`) e della Regione Umbria (PuntoZero,
+`RicettaUmbria`): scritti e verificati sulle specifiche, NON collaudati sui sistemi regionali.
+Il modulo della Regione Puglia (SIST) è sospeso dal 03/10/2026: vedi CHANGELOG, versione 0.1.1.
 
 Uso minimo (ambiente di TEST):
 
@@ -24,10 +25,10 @@ from .errori import (
     ErroreTrasporto,
     RicettaNonValida,
 )
-from .ricetta import RicettaFVG, RicettaPiemonte, RicettaSAC, RicettaSIST, ServizioRicetta
-from .trasporto import CanaleFVG, CanalePiemonte, CanaleSAC, CanaleSIST, RegistratoreFile, TrasportoHTTP
+from .ricetta import RicettaFVG, RicettaPiemonte, RicettaSAC, ServizioRicetta
+from .trasporto import CanaleFVG, CanalePiemonte, CanaleSAC, RegistratoreFile, TrasportoHTTP
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "Ambiente",
@@ -40,12 +41,10 @@ __all__ = [
     "ErroreTrasporto",
     "RicettaNonValida",
     "RicettaSAC",
-    "RicettaSIST",
     "RicettaFVG",
     "RicettaPiemonte",
     "ServizioRicetta",
     "CanaleSAC",
-    "CanaleSIST",
     "CanaleFVG",
     "CanalePiemonte",
     "RegistratoreFile",

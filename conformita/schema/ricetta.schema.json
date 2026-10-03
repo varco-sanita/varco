@@ -148,7 +148,7 @@
         "codice_regione": {
           "type": "string",
           "pattern": "^[0-9]{3}$",
-          "description": "Regione dell'ASL di residenza (3 cifre). Il SAC non la usa; il SIST pugliese la usa per il codice nazionale dell'ASL (regione + ASL)."
+          "description": "Regione dell'ASL di residenza (3 cifre). Il SAC non la usa; serve ai SAR che chiedono il codice nazionale dell'ASL (regione + ASL)."
         },
         "oscura_dati": {
           "type": "boolean"

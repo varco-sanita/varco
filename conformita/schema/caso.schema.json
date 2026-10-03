@@ -7,8 +7,8 @@
   "required": ["id", "famiglia", "titolo", "riferimento", "passi"],
   "additionalProperties": false,
   "properties": {
-    "id": {"type": "string", "pattern": "^(OFF|SAC|FSE|SIS|FVG|PIE|UMB)-[0-9]{3}$", "description": "Identificativo stabile. OFF offline, SAC online contro il SAC di test, FSE documenti FSE 2.0. SIS SIST Regione Puglia (codifica e risposte sintetiche, nessuna rete). FVG SAR Regione Friuli-Venezia Giulia (codifica e risposte sintetiche, nessuna rete). PIE SIRPED Regione Piemonte (codifica, intestazioni, PKCE, JWT e risposte sintetiche, nessuna rete). UMB SAR Regione Umbria (codifica JSON e risposte sintetiche, nessuna rete)."},
-    "famiglia": {"enum": ["offline", "online", "fse", "sist", "fvg", "piemonte", "umbria"], "description": "offline: nessuna rete (risposte reali registrate, codifica delle richieste). online: chiamate all'ambiente di TEST del MEF con le utenze pubbliche del kit. fse: documenti CDA2 e loro validazione, nessuna rete. sist: SIST della Regione Puglia, nessuna rete: codifica delle richieste CVP (contro CVPService.xsd, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e del CDA2 di prescrizione (contro lo schema CDA), lettura di risposte SINTETICHE scritte sullo schema (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST è disponibile. fvg: SAR della Regione Friuli-Venezia Giulia (Insiel), nessuna rete: codifica delle richieste contro gli XSD di wsdl_prescritto.zip (che l'esecutore riceve da fuori: senza, il passo è SALTATO), lettura di risposte SINTETICHE scritte su quegli XSD (conformita/risposte/fvg/LEGGIMI.md): nessuna risposta reale del SAR FVG è disponibile. piemonte: SIRPED, SAR della Regione Piemonte (CSI Piemonte), nessuna rete: codifica delle richieste di prescrizione (tracciato e XSD del MEF, inclusi nel kit) e di CreateAuth/CheckToken/RevokeAuth (XSD del kit A2F del Sistema TS, che l'esecutore riceve da fuori: senza, il passo è SALTATO), intestazioni HTTP delle due modalità di secondo fattore, PKCE (RFC 7636), firma del JWT, lettura di risposte SINTETICHE (conformita/risposte/piemonte/LEGGIMI.md): nessuna risposta reale di SIRPED è disponibile. umbria: SAR della Regione Umbria (PuntoZero), nessuna rete: codifica JSON delle richieste (controlli locali, poi lo schema dell'OpenAPI ufficiale sar-open-api-prescrittore.yaml, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e lettura di risposte JSON SINTETICHE scritte sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md): nessuna risposta reale del SAR Umbria è disponibile."},
+    "id": {"type": "string", "pattern": "^(OFF|SAC|FSE|FVG|PIE|UMB)-[0-9]{3}$", "description": "Identificativo stabile. OFF offline, SAC online contro il SAC di test, FSE documenti FSE 2.0. FVG SAR Regione Friuli-Venezia Giulia (codifica e risposte sintetiche, nessuna rete). PIE SIRPED Regione Piemonte (codifica, intestazioni, PKCE, JWT e risposte sintetiche, nessuna rete). UMB SAR Regione Umbria (codifica JSON e risposte sintetiche, nessuna rete)."},
+    "famiglia": {"enum": ["offline", "online", "fse", "fvg", "piemonte", "umbria"], "description": "offline: nessuna rete (risposte reali registrate, codifica delle richieste). online: chiamate all'ambiente di TEST del MEF con le utenze pubbliche del kit. fse: documenti CDA2 e loro validazione, nessuna rete. fvg: SAR della Regione Friuli-Venezia Giulia (Insiel), nessuna rete: codifica delle richieste contro gli XSD di wsdl_prescritto.zip (che l'esecutore riceve da fuori: senza, il passo è SALTATO), lettura di risposte SINTETICHE scritte su quegli XSD (conformita/risposte/fvg/LEGGIMI.md): nessuna risposta reale del SAR FVG è disponibile. piemonte: SIRPED, SAR della Regione Piemonte (CSI Piemonte), nessuna rete: codifica delle richieste di prescrizione (tracciato e XSD del MEF, inclusi nel kit) e di CreateAuth/CheckToken/RevokeAuth (XSD del kit A2F del Sistema TS, che l'esecutore riceve da fuori: senza, il passo è SALTATO), intestazioni HTTP delle due modalità di secondo fattore, PKCE (RFC 7636), firma del JWT, lettura di risposte SINTETICHE (conformita/risposte/piemonte/LEGGIMI.md): nessuna risposta reale di SIRPED è disponibile. umbria: SAR della Regione Umbria (PuntoZero), nessuna rete: codifica JSON delle richieste (controlli locali, poi lo schema dell'OpenAPI ufficiale sar-open-api-prescrittore.yaml, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e lettura di risposte JSON SINTETICHE scritte sull'OpenAPI (conformita/risposte/umbria/LEGGIMI.md): nessuna risposta reale del SAR Umbria è disponibile."},
     "titolo": {"type": "string", "minLength": 1},
     "riferimento": {"type": "string", "minLength": 1, "description": "Da dove viene la regola: specifica, paragrafo, file ufficiale, o la prova reale che l'ha mostrata."},
     "passi": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/passo"}},
@@ -19,7 +19,7 @@
       "type": "object",
       "required": ["operazione"],
       "properties": {
-        "operazione": {"enum": ["invia", "visualizza", "annulla", "interroga_nre", "leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre", "codifica_invio", "codifica_interroga_nre", "valida_documento", "genera_pss", "leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata", "leggi_sist_ricerca", "codifica_sist_chk", "codifica_sist_ricerca", "codifica_sist_cda", "leggi_fvg", "codifica_fvg", "codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte", "leggi_piemonte_jwt", "codifica_umbria", "leggi_umbria"]}
+        "operazione": {"enum": ["invia", "visualizza", "annulla", "interroga_nre", "leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre", "codifica_invio", "codifica_interroga_nre", "valida_documento", "genera_pss", "leggi_fvg", "codifica_fvg", "codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte", "leggi_piemonte_jwt", "codifica_umbria", "leggi_umbria"]}
       },
       "allOf": [
         {"if": {"properties": {"operazione": {"const": "invia"}}}, "then": {"$ref": "#/$defs/opInvia"}},
@@ -30,10 +30,6 @@
         {"if": {"properties": {"operazione": {"const": "codifica_interroga_nre"}}}, "then": {"$ref": "#/$defs/opCodificaInterroga"}},
         {"if": {"properties": {"operazione": {"const": "valida_documento"}}}, "then": {"$ref": "#/$defs/opValidaDocumento"}},
         {"if": {"properties": {"operazione": {"const": "genera_pss"}}}, "then": {"$ref": "#/$defs/opGeneraPss"}},
-        {"if": {"properties": {"operazione": {"enum": ["leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata", "leggi_sist_ricerca"]}}}, "then": {"$ref": "#/$defs/opLeggiSist"}},
-        {"if": {"properties": {"operazione": {"const": "codifica_sist_chk"}}}, "then": {"$ref": "#/$defs/opCodificaSistChk"}},
-        {"if": {"properties": {"operazione": {"const": "codifica_sist_ricerca"}}}, "then": {"$ref": "#/$defs/opCodificaSistRicerca"}},
-        {"if": {"properties": {"operazione": {"const": "codifica_sist_cda"}}}, "then": {"$ref": "#/$defs/opCodificaSistCda"}},
         {"if": {"properties": {"operazione": {"const": "leggi_fvg"}}}, "then": {"$ref": "#/$defs/opLeggiFvg"}},
         {"if": {"properties": {"operazione": {"const": "codifica_fvg"}}}, "then": {"$ref": "#/$defs/opCodificaFvg"}},
         {"if": {"properties": {"operazione": {"const": "codifica_umbria"}}}, "then": {"$ref": "#/$defs/opCodificaUmbria"}},
@@ -168,7 +164,7 @@
       }
     },
     "osservatoSac": {
-      "description": "Cosa l'esecutore ricava da una risposta del SAC, e su cui si confronta 'atteso'. Se la risposta è un SOAP Fault: solo {\"fault\": faultstring}. Altrimenti: codice (codEsito... della ricevuta), messaggi (ElencoErroriRicette: codice, testo, tipo grezzo, bloccante, avviso), comunicazioni (codici di ElencoComunicazioni), e se presenti nre, codice_autenticazione, data_inserimento, stato_processo, righe (numero di prescrizioni), pdf_promemoria (true se il PDF c'è e inizia con %PDF), cognome_medico e nome_medico (comunicazioni 0199 e 0198, parte dopo '='), cfMedico1 e cfMedico2 (testata della visualizzazione), ricette (lista degli NRE di ElencoNreUtilRecord), note (ElencoNota della ricevuta d'invio, se c'è: lista di oggetti {progressivo, codice_prestazione, tipo_ambulatorio} da progrPresc, codProdPrest, tipoAmbulatorio, nell'ordine della ricevuta). Gravità: 'bloccante' se tipoErrore è 'E', 'Bloccante', o un valore sconosciuto; 'avviso' se è 'W', 'Avviso', 'Warning' o 'Non bloccante'. Il SAC di test risponde 'Bloccante' e 'Avviso', la specifica dice E/W. Esiti dei SAR (SIST): in più stato_sar (stato nel SIST: 0 annullata, 1 prescritta), oscurato (oscuramento nel fascicolo), solo_ricetta_rossa (NRE senza codice di autenticazione: SAC non disponibile), cda (true se la risposta contiene il CDA). SAR FVG: per l'invio in più downgrade_mir (true se tra i messaggi c'è un codice 060120-060130: la ricetta di specialistica va emessa come ricetta rossa MIR; un SOAP Fault con uno di quei codici nel faultstring diventa un esito 9999 con quel messaggio, non un fault); per verifica_sostituto abilitato (isAbilitato), cfMedico1 e cfMedico2 (titolare e sostituto della ricevuta), messaggi e comunicazioni, senza codice.",
+      "description": "Cosa l'esecutore ricava da una risposta del SAC, e su cui si confronta 'atteso'. Se la risposta è un SOAP Fault: solo {\"fault\": faultstring}. Altrimenti: codice (codEsito... della ricevuta), messaggi (ElencoErroriRicette: codice, testo, tipo grezzo, bloccante, avviso), comunicazioni (codici di ElencoComunicazioni), e se presenti nre, codice_autenticazione, data_inserimento, stato_processo, righe (numero di prescrizioni), pdf_promemoria (true se il PDF c'è e inizia con %PDF), cognome_medico e nome_medico (comunicazioni 0199 e 0198, parte dopo '='), cfMedico1 e cfMedico2 (testata della visualizzazione), ricette (lista degli NRE di ElencoNreUtilRecord), note (ElencoNota della ricevuta d'invio, se c'è: lista di oggetti {progressivo, codice_prestazione, tipo_ambulatorio} da progrPresc, codProdPrest, tipoAmbulatorio, nell'ordine della ricevuta). Gravità: 'bloccante' se tipoErrore è 'E', 'Bloccante', o un valore sconosciuto; 'avviso' se è 'W', 'Avviso', 'Warning' o 'Non bloccante'. Il SAC di test risponde 'Bloccante' e 'Avviso', la specifica dice E/W. SAR FVG: per l'invio in più downgrade_mir (true se tra i messaggi c'è un codice 060120-060130: la ricetta di specialistica va emessa come ricetta rossa MIR; un SOAP Fault con uno di quei codici nel faultstring diventa un esito 9999 con quel messaggio, non un fault); per verifica_sostituto abilitato (isAbilitato), cfMedico1 e cfMedico2 (titolare e sostituto della ricevuta), messaggi e comunicazioni, senza codice.",
       "type": "object"
     },
     "attesoSac": {
@@ -202,8 +198,8 @@
         "xsd_valido": {"type": "boolean", "default": true, "description": "true: la richiesta deve essere valida contro lo XSD. false: deve NON esserlo (si collauda un rifiuto dello schema): non vuol dire «salta lo XSD». Se lo schema non è disponibile all'esecutore il passo è SALTATO (FALLITO se un'altra aspettativa è già violata), mai SUPERATO."},
         "tag": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Valore testuale dei figli diretti dell'elemento radice (nome locale del tag)."},
         "tag_assenti": {"type": "array", "items": {"type": "string"}, "description": "Figli diretti che non devono esserci."},
-        "attributi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_sist_* e codifica_fvg: 'percorso@attributo' -> valore atteso (es. 'templateId@extension'). L'attributo si cerca per nome locale ('@prodottoCme' trova tip:prodottoCme)."},
-        "rifiuto_locale": {"const": true, "description": "Solo codifica_sist_*, codifica_fvg, codifica_piemonte e codifica_umbria: l'implementazione deve rifiutare PRIMA di codificare (controlli locali)."},
+        "attributi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_fvg: 'percorso@attributo' -> valore atteso (es. 'templateId@extension'). L'attributo si cerca per nome locale ('@prodottoCme' trova tip:prodottoCme)."},
+        "rifiuto_locale": {"const": true, "description": "Solo codifica_fvg, codifica_piemonte e codifica_umbria: l'implementazione deve rifiutare PRIMA di codificare (controlli locali)."},
         "testi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_piemonte: 'nome/nome/...' (nomi locali, a partire dalla radice) -> testo del primo elemento corrispondente (es. 'identificativo/tipo', 'infoAggiuntive/opzione/valore')."}
       }
     },
@@ -222,57 +218,6 @@
       }
     },
     "esitoFse": {"enum": ["OK", "SYNTAX_ERROR", "SEMANTIC_ERROR", "SEMANTIC_WARNING", "VOCABULARY_ERROR"]},
-    "opLeggiSist": {
-      "description": "Legge una risposta del SIST (busta SOAP in conformita/risposte/sist/) con il lettore dell'implementazione. Le risposte sono SINTETICHE. Osservato: come osservatoSac; leggi_sist_registra riporta esito TRUE/FALSE a codice 0000/9999. Un SoapFaultException dà {\"fault\": faultstring}.",
-      "type": "object",
-      "required": ["risposta", "atteso"],
-      "properties": {
-        "operazione": true,
-        "risposta": {"type": "string", "pattern": "^sist/[A-Za-z0-9_.-]+\\.xml$"},
-        "atteso": {"$ref": "#/$defs/attesoSac"}
-      },
-      "additionalProperties": false
-    },
-    "opCodificaSistChk": {
-      "description": "Codifica la ricetta in <chkPrescrizione> (SIST, CVPService) SENZA mandarla, con datiOperatore/datiApplicativo fittizi, e la valida contro CVPService.xsd. Prima applica i controlli locali (rifiuto_locale). 'tag': figli diretti di <chkPrescrizione>.",
-      "type": "object",
-      "required": ["ricetta", "codici_regionali", "atteso"],
-      "properties": {
-        "operazione": true,
-        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}]},
-        "codici_regionali": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Codice fiscale del medico -> codice regionale SIST (codMedicoPrescrittore, author del CDA). Un CF assente = rifiuto locale."},
-        "atteso": {"$ref": "#/$defs/attesoCodifica"}
-      },
-      "additionalProperties": false
-    },
-    "opCodificaSistRicerca": {
-      "description": "Codifica i criteri in <getPrescrizioniIdentificate> (la ricerca del SIST: per periodo, prescrittore, assistito e tipo; niente NRE puntuale né lotto) e la valida contro CVPService.xsd. 'operatore': CF del medico che chiama (default il titolare di test).",
-      "type": "object",
-      "required": ["criteri", "codici_regionali", "atteso"],
-      "properties": {
-        "operazione": true,
-        "criteri": {"$ref": "#/$defs/criteriNre"},
-        "operatore": {"type": "string"},
-        "codici_regionali": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Codice fiscale del medico -> codice regionale SIST (codMedicoPrescrittore, author del CDA). Un CF assente = rifiuto locale."},
-        "atteso": {"$ref": "#/$defs/attesoCodifica"}
-      },
-      "additionalProperties": false
-    },
-    "opCodificaSistCda": {
-      "description": "Genera il CDA2 di prescrizione (CDA2_Prescrizione Regione Puglia) con NRE e codice di autenticazione dati, e lo valida contro lo schema CDA (POCD_MT000040). Senza codice_autenticazione = ricetta rossa (setId = NRE). 'attributi': 'percorso/di/nomi/locali@attributo' sul primo elemento corrispondente, percorso vuoto = radice.",
-      "type": "object",
-      "required": ["ricetta", "nre", "codici_regionali", "atteso"],
-      "properties": {
-        "operazione": true,
-        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}]},
-        "nre": {"type": "string"},
-        "codice_autenticazione": {"type": "string"},
-        "maggior_tutela": {"type": "boolean", "default": false},
-        "codici_regionali": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Codice fiscale del medico -> codice regionale SIST (codMedicoPrescrittore, author del CDA). Un CF assente = rifiuto locale."},
-        "atteso": {"$ref": "#/$defs/attesoCodifica"}
-      },
-      "additionalProperties": false
-    },
     "opLeggiFvg": {
       "description": "Legge una risposta del SAR FVG (busta SOAP in conformita/risposte/fvg/, SINTETICA) con il lettore dell'implementazione per il servizio indicato. Osservato: come osservatoSac, con le aggiunte FVG (downgrade_mir, abilitato).",
       "type": "object",

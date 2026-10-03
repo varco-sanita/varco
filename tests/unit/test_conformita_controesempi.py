@@ -20,7 +20,6 @@ from varco.conformita.motore import cartella_conformita
 
 CONF = cartella_conformita()
 SPEC = CONF.parent / "specifiche"
-XSD_SIST = SPEC / "sist" / "specifiche SIST 4.02.27" / "wsdl-pddasl" / "CVPService.xsd"
 XSD_FVG = SPEC / "fvg" / "wsdl" / "sar"
 XSD_A2F = SPEC / "piemonte" / "a2f" / "Kit per lo sviluppo - A2F SistemaTS - ver. 20250902" / "wsdl"
 
@@ -122,12 +121,11 @@ def test_pie110_con_xsd_a2f_xsd_valido_false_e_fallito():
     assert Motore(xsd_a2f=XSD_A2F).esegui(caso).stato == "FALLITO"
 
 
-@pytest.mark.parametrize("caso_id,cartella", [("FVG-101", "xsd_fvg"), ("SIS-101", "xsd_sist")])
+@pytest.mark.parametrize("caso_id,cartella", [("FVG-101", "xsd_fvg")])
 def test_regionali_senza_xsd_e_xsd_valido_false_saltato(caso_id, cartella, monkeypatch):
-    """Stessa regola per SIST e FVG: schema assente → SALTATO, qualunque sia xsd_valido."""
+    """Schema regionale assente → SALTATO, qualunque sia xsd_valido."""
     pytest.importorskip("lxml")
     monkeypatch.delenv("VARCO_XSD_FVG", raising=False)
-    monkeypatch.delenv("VARCO_XSD_SIST", raising=False)
     caso = _caso(caso_id)
     caso["passi"][0]["atteso"]["xsd_valido"] = False
     assert Motore().esegui(caso).stato == "SALTATO"
@@ -135,7 +133,7 @@ def test_regionali_senza_xsd_e_xsd_valido_false_saltato(caso_id, cartella, monke
 
 @pytest.mark.parametrize(
     "caso_id,chiave,xsd",
-    [("FVG-101", "xsd_fvg", XSD_FVG), ("SIS-101", "xsd_sist", XSD_SIST), ("SIS-106", None, None)],
+    [("FVG-101", "xsd_fvg", XSD_FVG)],
 )
 @pytest.mark.schemi_hl7
 def test_regionali_con_xsd_e_xsd_valido_false_fallito(caso_id, chiave, xsd):
@@ -247,14 +245,14 @@ def test_adattatore_con_famiglia_offline_rifiutato(capsys):
     assert "--adattatore" in io.err and "superati" not in io.out
 
 
-@pytest.mark.parametrize("famiglia", ["fse", "sist", "fvg", "piemonte", "tutte"])
+@pytest.mark.parametrize("famiglia", ["fse", "fvg", "piemonte", "umbria", "tutte"])
 def test_adattatore_con_altre_famiglie_rifiutato(famiglia):
     with pytest.raises(SystemExit) as e:
         esegui_suite(["--famiglia", famiglia, "--adattatore", "modulo_inesistente:fallisce"])
     assert e.value.code != 0
 
 
-@pytest.mark.parametrize("famiglia", ["offline", "sist", "fvg", "piemonte", "online", "tutte"])
+@pytest.mark.parametrize("famiglia", ["offline", "fvg", "piemonte", "umbria", "online", "tutte"])
 def test_adattatore_fse_fuori_dalla_famiglia_fse_rifiutato(famiglia):
     with pytest.raises(SystemExit) as e:
         esegui_suite(["--famiglia", famiglia, "--adattatore-fse", "modulo_inesistente:fallisce"])

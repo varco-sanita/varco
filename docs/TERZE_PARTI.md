@@ -12,16 +12,15 @@ La cartella `specifiche/` è esclusa dal repository (`.gitignore`).
 
 ```sh
 python strumenti/scarica_specifiche.py              # gruppi mef, fse-validatore e cda-xsd
-python strumenti/scarica_specifiche.py --gruppi sist   # specifiche SIST della Regione Puglia
 python strumenti/scarica_specifiche.py --gruppi fvg    # specifiche SAR della Regione FVG (Insiel)
 python strumenti/scarica_specifiche.py --gruppi piemonte   # specifiche SIRPED (Regione Piemonte, CSI) e kit A2F del MEF
 python strumenti/scarica_specifiche.py --gruppi umbria     # OpenAPI e wiki del SAR umbro (PuntoZero), senza i certificati
 python strumenti/scarica_specifiche.py --gruppi cda-xsd    # XSD HL7 del CDA R2 e schematron PSS (validazione locale, test)
-python strumenti/scarica_specifiche.py --tutto      # anche il materiale di riferimento FSE, il SIST, il SAR FVG e SIRPED
+python strumenti/scarica_specifiche.py --tutto      # anche il materiale di riferimento FSE, il SAR FVG, SIRPED e il SAR umbro
 python strumenti/scarica_specifiche.py --solo-verifica --tutto   # senza rete: controlla le copie
 ```
 
-Esito del 01/10/2026: tutte le 21 voci scaricate da zero e verificate (più la voce `sist`, aggiunta e verificata lo stesso giorno); le copie locali
+Esito del 01/10/2026: tutte le 21 voci scaricate da zero e verificate (più la voce `sist`, aggiunta e verificata lo stesso giorno e tolta il 03/10/2026, vedi sotto); le copie locali
 coincidono con il manifesto; un byte aggiunto a un file o a un repository viene
 segnalato (gruppo di controllo). Le due voci `fvg` sono state aggiunte, scaricate da zero e
 verificate lo stesso giorno. Così anche le 11 voci `piemonte`: scaricate da zero in una cartella
@@ -34,7 +33,6 @@ vuota, tutte verificate; un file alterato viene segnalato. Le 7 voci `umbria` (0
 | 10 XSD del tracciato SAC (`InvioPrescritto*`, `VisualizzaPrescritto*`, `AnnullaPrescritto*`, `InterrogaNreUtil*`, `TipiDati*`) | `src/varco/schemi/` | kit di sviluppo prescrittore del MEF, cartella `wsdl/` (identici byte per byte) | nessuna licenza dichiarata dal MEF | la libreria valida le richieste contro lo schema ufficiale |
 | Certificato pubblico SanitelCF 2024-2027 | `src/varco/certificati/SanitelCF-2024-2027.pem` | kit MEF, `SanitelCF-2024-2027.txt` (stessa chiave) | nessuna licenza dichiarata; è un certificato pubblico pensato per essere distribuito ai gestionali | senza, il kit non può cifrare CF e pincode |
 | Skeleton ISO Schematron XSLT2 (2010-04-14) | `src/varco/fse/iso_schematron/` | risorse di `com.helger:ph-schematron` 5.6.5 (la libreria che usa il gateway), cartella `schematron/20100414-xslt2/` (identici) | © 2000-2010 Rick Jelliffe e Academia Sinica Computing Center: licenza permissiva in stile zlib, scritta in testa ai file | compilare lo schematron con Saxon |
-| Risposte **sintetiche** del SIST (Puglia) | `conformita/risposte/sist/` | scritte da noi sullo schema `CVPService.xsd` (`strumenti/genera_risposte_sist.py`): nessuna risposta reale del SIST | EUPL-1.2 | la suite le usa come casi `sist`; lo dice `LEGGIMI.md` nella cartella |
 | Risposte **sintetiche** del SAR FVG | `conformita/risposte/fvg/` | scritte da noi sugli XSD di `wsdl_prescritto.zip` (`strumenti/fvg_server_finto.py`): nessuna risposta reale del SAR FVG | EUPL-1.2 | la suite le usa come casi `fvg`; lo dice `LEGGIMI.md` nella cartella |
 | Risposte **sintetiche** di SIRPED (Piemonte) e JWT/JWKS di prova | `conformita/risposte/piemonte/` | scritte da noi sugli XSD del kit A2F (`strumenti/piemonte_server_finto.py`); JWT firmato con una chiave generata al momento e non conservata: nessuna risposta reale di SIRPED | EUPL-1.2 | la suite le usa come casi `piemonte`; lo dice `LEGGIMI.md` nella cartella |
 | Risposte reali dell'ambiente di **test** del SAC | `conformita/risposte/`, `prove/` | `demservicetest.sanita.finanze.it`, 30/09/2026, con le sole identità di test del kit | output del servizio del MEF, riprodotto come documentazione tecnica | la suite di conformità le usa come casi `offline` |
@@ -129,7 +127,6 @@ Manifesto con URL, hash e commit: [`strumenti/fonti_specifiche.json`](../strumen
 | `fse-riferimento` | `it-fse-support` @ `e4fb8890` | <https://github.com/ministero-salute/it-fse-support> | nessuna dichiarata | documentazione ed esempi; un esempio di PSS serve ai test del validatore ufficiale |
 | `fse-riferimento` | `it-fse-gtw-tools` @ `6967f3ab` | <https://github.com/ministero-salute/it-fse-gtw-tools> | BSD-3-Clause | riferimento |
 | `fse-riferimento` | `it-fse-gtw-test-container` @ `d9e763a3` | <https://github.com/ministero-salute/it-fse-gtw-test-container> | nessuna dichiarata | riferimento |
-| `sist` | *Specifiche di integrazione SIST* (zip, pubblicato come 4.03.27 del 16/09/2026; il file si chiama `specifiche SIST 4.02.27.zip`), scompattato in `specifiche/sist/`: documento, WSDL e XSD, javadoc, CDA2 di prescrizione con esempi, `Allegati Tecnici.zip` | <https://sist.sanita.puglia.it/en/specifiche-integrazione> (InnovaPuglia, Regione Puglia) | nessuna sul documento. **Ma** la pagina sta nella sezione «Integratori», che il portale dichiara «RISERVATO e vincolato all'Accordo di riservatezza Terze Parti» (letto il 03/10/2026, non visto il 01/10): domanda aperta a InnovaPuglia, `docs/BLOCCHI.md` | servono solo ai test (schema `CVPService.xsd`, esempi). Alcuni esempi riportano nomi e CF **che sembrano di persone vere**; gli `Allegati Tecnici` contengono la «Nota Tecnica IUP.doc» con un **avviso di copyright restrittivo** e keystore JKS: niente di questo entra nel repository |
 | `fvg` | *Specifiche di interfaccia applicativa del servizio SAR, Prescrizione ricetta dematerializzata*, Idof-dem-AT-01 dell'11/02/2026 (PDF, «Documento a libera circolazione») e `wsdl_prescritto.zip` (WSDL e XSD dei servizi in collaudo), scompattato in `specifiche/fvg/wsdl/` | <https://medicinrete.insiel.it/allegati/> (Insiel, Regione Friuli-Venezia Giulia) | «© Tutti i diritti riservati. Proprietà INSIEL SpA» sul PDF; nessuna licenza sugli XSD | servono solo ai test (XSD) e alla documentazione. Insiel è una società della Regione: che valga l'art. 52 del CAD come per MEF e Ministero non l'abbiamo verificato, e il PDF riserva i diritti, quindi non redistribuiamo nemmeno gli XSD. L'esempio di User-Agent del par. 3.1 riporta un CF e un MAC address che sembrano veri: non li copiamo |
 | `piemonte` | Documenti della scheda SIRPED del catalogo dei servizi regionali: REL-STC-01 V04 (02/03/2026) e `api-docs_idsessione.yaml`; processo, modulo xlsx, piano dei test SIRPED-TES-01 V02 e due attestati dell'autocertificazione 2026; RE-SRS-SAR V05 (2018); RE-TES-01 V02 (2016). Tutti «Uso: Esterno» | <https://servizi.regione.piemonte.it/catalogo/sistema-informativo-regionale-prescrizione-elettronica-dematerializzata-sirped> (Regione Piemonte, CSI Piemonte) | nessuna dichiarata | servono solo alla documentazione e ai test. Nessuno porta «circolazione limitata». Non li redistribuiamo per la stessa prudenza usata col FVG |
 | `piemonte` | Allegato 1 dell'avviso AP26_003 del CSI Piemonte (flusso SIAP) | `www.csipiemonte.it`, percorso `indagini_di_mercato/2026/AP26_003/` | nessuna dichiarata | solo documentazione (`docs/SAR_PIEMONTE.md`, sez. 12). La pagina principale dell'avviso non è stata trovata (`docs/BLOCCHI.md`) |
@@ -156,6 +153,18 @@ destinatari, **non entra nel kit**, anche se si scarica senza login. In pratica:
 - non ci si scrive codice sopra.
 
 Al massimo se ne riporta l'esistenza, il titolo e la dicitura, per spiegare perché una parte manca.
+
+Caso concreto, 03/10/2026: *Specifiche di integrazione SIST* della Regione Puglia (InnovaPuglia).
+- Si scaricano senza login e il documento non porta diciture. Il 01/10/2026 le avevamo messe nel
+  manifesto e ci avevamo scritto il modulo Puglia.
+- La pagina della sezione «Integratori» del portale SIST, che le contiene, dichiara però tutta la
+  documentazione delle sue sottopagine «RISERVATO e vincolato all'Accordo di riservatezza Terze
+  Parti». L'abbiamo vista solo il 03/10/2026, dopo la pubblicazione.
+- Non abbiamo firmato nessun accordo. Per rispetto di quella dicitura il modulo è **sospeso** dalla
+  versione 0.1.1: codice, casi `SIS-*`, risposte sintetiche, prove e voce del manifesto sono tolti dal
+  repository. Le specifiche non sono mai state nel repository (verificato sulla cronologia di git).
+- La domanda per InnovaPuglia è se il materiale può essere usato per un progetto aperto e gratuito
+  (`docs/BLOCCHI.md`). Se la risposta è sì, il modulo torna con la risposta citata qui.
 
 Caso concreto, 01/10/2026: *Specifiche di integrazione, Integrazione per l'invio al FSE regionale dei
 Patient Summary*, Insiel, **ISAD-FSE-SPT-02-2025** v1.8 (`medicinrete.insiel.it/allegati/`).

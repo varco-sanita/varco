@@ -42,7 +42,7 @@ Il modulo copre:
   piano dei test dice che in produzione lo farà SIRPED: così l'errore emerge prima.
 
 Il programma del medico lo usa con la stessa interfaccia del canale nazionale (SAC) e dei SAR di
-Puglia e Friuli-Venezia Giulia.
+Friuli-Venezia Giulia e Umbria.
 
 ## Cosa è già verificato
 

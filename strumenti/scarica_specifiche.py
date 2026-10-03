@@ -20,10 +20,9 @@ Uso:
     python strumenti/scarica_specifiche.py                     # gruppi mef, fse-validatore e cda-xsd
     python strumenti/scarica_specifiche.py --gruppi cda-xsd    # solo gli schemi HL7 (XSD CDA e schematron PSS) per i test
     python strumenti/scarica_specifiche.py --gruppi mef
-    python strumenti/scarica_specifiche.py --gruppi sist       # specifiche SIST della Regione Puglia
     python strumenti/scarica_specifiche.py --gruppi fvg        # specifiche SAR della Regione FVG (Insiel)
     python strumenti/scarica_specifiche.py --gruppi piemonte   # SIRPED della Regione Piemonte (CSI) e kit A2F del Sistema TS
-    python strumenti/scarica_specifiche.py --tutto             # anche fse-riferimento, sist, fvg e piemonte
+    python strumenti/scarica_specifiche.py --tutto             # anche fse-riferimento, fvg, piemonte e umbria
     python strumenti/scarica_specifiche.py --solo-verifica     # nessuna rete: controlla cosa c'è
     python strumenti/scarica_specifiche.py --destinazione /tmp/spec
 
@@ -49,7 +48,7 @@ MANIFESTO = Path(__file__).resolve().parent / "fonti_specifiche.json"
 # (varco.fse.validazione) per trovare gli schemi HL7 scaricati: va lasciata in questa forma.
 CARTELLA_PREDEFINITA = "specifiche"
 GRUPPI_DEFAULT = ("mef", "fse-validatore", "cda-xsd")
-HOST_UFFICIALI = ("sistemats1.sanita.finanze.it", "raw.githubusercontent.com", "github.com", "sist.sanita.puglia.it",
+HOST_UFFICIALI = ("sistemats1.sanita.finanze.it", "raw.githubusercontent.com", "github.com",
                   "medicinrete.insiel.it", "servizi.regione.piemonte.it", "www.csipiemonte.it")
 
 

@@ -27,7 +27,7 @@ senza chiedervi niente prima. Il modulo copre:
 - SmartCUP in `testata2`, con i controlli di formato della wiki.
 
 Il programma del medico lo usa con la stessa interfaccia del canale nazionale (SAC) e degli altri
-SAR che copriamo (Puglia, Friuli-Venezia Giulia, Piemonte).
+SAR che copriamo (Friuli-Venezia Giulia, Piemonte).
 
 ## Cosa è già verificato
 

@@ -4,7 +4,6 @@
     "mef": "Sistema TS (MEF): specifiche e kit di sviluppo prescrittore. Serve per i test di integrazione e le prove (utenze di test).",
     "fse-validatore": "Codice ufficiale del gateway FSE 2.0 (AGPL-3.0) e dump dei dizionari: serve solo al banco strumenti/validatore-ufficiale.",
     "fse-riferimento": "Documentazione, esempi e casi di accreditamento del FSE 2.0: consultazione e test del validatore ufficiale.",
-    "sist": "Regione Puglia, SIST di InnovaPuglia (SAR): specifiche di integrazione v4.03.27 del 16/09/2026 (docx, WSDL, XSD, javadoc, specifiche ed esempi dei CDA). Serve ai test del modulo SIST (XSD ufficiali, esempi). Gli esempi contengono nomi e codici fiscali: restano fuori dal repository.",
     "fvg": "Regione Friuli-Venezia Giulia, SAR di Insiel: specifiche Idof-dem-AT-01 dell'11/02/2026 (PDF, «Documento a libera circolazione», © Insiel tutti i diritti riservati) e WSDL/XSD dei servizi in collaudo (wsdl_prescritto.zip). Serve ai test del modulo FVG (XSD, esempi). NON comprende ISAD-FSE-SPT-02-2025 (FSE regionale): porta «Documento a circolazione limitata» e non si scarica (docs/TERZE_PARTI.md).",
     "piemonte": "Regione Piemonte, SIRPED (SAR gestito dal CSI Piemonte): specifiche dell'autenticazione forte REL-STC-01 V04 del 02/03/2026, YAML dei servizi Id-Sessione OAuth2, processo, richiesta, piano dei test e attestati dell'autocertificazione (gennaio-febbraio 2026), requisiti di integrazione per le cartelle MMG/PLS V05 (2018) e piano dei test V02 (2016), tutti «Uso: Esterno» e scaricabili senza login da servizi.regione.piemonte.it; allegato tecnico dell'avviso CSI AP26_003; kit A2F del Sistema TS (WSDL e XSD di CreateAuth/CheckToken/RevokeAuth, che REL-STC-01 par. 4.2 dichiara identici per SIRPED). Serve ai test del modulo Piemonte (XSD A2F) e alla documentazione. Il kit A2F contiene utenze e pincode di test del MEF: restano fuori dal repository.",
     "cda-xsd": "Schemi XSD del CDA R2 (HL7) nella versione del gateway FSE 2.0 (ministero-salute/it-fse-catalogs, schema/POCD_MT000040UV02/, commit 141be7f0) e schematron del PSS v4.0 (stesso repository e commit, schematron/). Servono a ValidatoreLocale (validazione XSD e schematron del PSS) e sono nei gruppi di default dello script. Lo schematron traduce la guida PSS di HL7 Italia, «All Rights Reserved», senza licenza. Copyright Health Level Seven: 4 file hanno una licenza nell'intestazione (BSD per datatypes*, EPL-1.0 per POCD_MT000040UV02.xsd), gli altri no e la HL7 IP Policy non autorizza un non membro a ridistribuirli: si scaricano dalla fonte (docs/TERZE_PARTI.md).",
@@ -101,14 +100,6 @@
       "destinazione": "fse/accreditamento/PSS477.xml",
       "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/Validazione/Documenti%20XML%20Casi%20OK/8%20-%20Casi%20OK%20Profilo%20Sanitario%20Sintetico/PSS477.xml",
       "sha256": "79141b74b78c9fe1a2f83c42f87e21244c9aa22f4358ea2a93081a15e07fc566"
-    },
-    {
-      "gruppo": "sist",
-      "destinazione": "sist/specifiche_SIST_4.03.27.zip",
-      "url": "https://sist.sanita.puglia.it/documents/76427961/0/specifiche+SIST+4.02.27/3a32e54e-7fb6-4e32-a23d-94b35468b07d",
-      "sha256": "0c20810629ec0f20607c4855611b2c405f265e4b70f9b13b408f595e776c1bf6",
-      "scompatta_in": "sist",
-      "nota": "Sulla pagina https://sist.sanita.puglia.it/en/specifiche-integrazione il link si chiama «v. 4.03.27 del 16/09/2026», ma il file servito si chiama «specifiche SIST 4.02.27.zip»: il contenuto è la 4.03.27 (docx «Specifiche di integrazione SIST_4_03_27», storia delle revisioni fino a 4.03.27)."
     },
     {
       "gruppo": "fvg",

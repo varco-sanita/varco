@@ -71,7 +71,7 @@ REGIONI = [
     ("Sardegna", 961, "SAC (anche CNS)", "-", "Canale coperto (MEF), da provare", "media", "ok"),
     ("Sicilia", 3654, "SAC nazionale", "-", "Canale coperto (MEF), da provare", "alta", "ok"),
     ("Valle d'Aosta", 72, "SAC nazionale", "-", "Canale coperto (MEF), da provare", "media", "ok"),
-    ("Puglia", 2811, "SAR SIST", "InnovaPuglia", "Modulo scritto, attende collaudo", "alta", "scritto"),
+    ("Puglia", 2811, "SAR SIST", "InnovaPuglia", "Modulo sospeso il 03/10: specifiche forse riservate, chiesto a InnovaPuglia", "alta", "no"),
     ("Friuli-Venezia Giulia", 712, "SAR regionale", "Insiel", "Modulo scritto, attende collaudo", "alta", "scritto"),
     ("Piemonte", 2732, "SAR SIRPED", "CSI Piemonte", "Modulo scritto, attende collaudo", "alta", "scritto"),
     ("Toscana", 2814, "SAR via CART", "Regione / CART", "Specifiche solo in parte pubbliche", "alta", "no"),
@@ -117,7 +117,7 @@ s.append(Paragraph("Un kit aperto e gratuito che fa parlare qualsiasi software d
                    "pubblici (ricetta, Fascicolo). Situazione al 3 ottobre 2026, Regione per Regione.", SUB))
 
 s.append(Table([[kpi(pct(ok), f"dei medici di famiglia in Regioni sul canale nazionale, già provato sul MEF di test<br/>({num(ok)} MMG, 9 Regioni)", VERDE),
-                 kpi(pct(ok + scritto), f"con Puglia, Friuli e Piemonte dopo il collaudo regionale<br/>({num(ok + scritto)} MMG, 12 Regioni)", GIALLO),
+                 kpi(pct(ok + scritto), f"con Friuli e Piemonte dopo il collaudo regionale<br/>({num(ok + scritto)} MMG, 11 Regioni)", GIALLO),
                  kpi("PSS", "Fascicolo: documento valido per lo standard nazionale; invio al gateway da attivare", GRIGIO)]],
                colWidths=[60 * mm] * 3, style=[("LEFTPADDING", (0, 0), (-1, -1), 0), ("VALIGN", (0, 0), (-1, -1), "TOP")]))
 s.append(Spacer(1, 10))
@@ -128,9 +128,10 @@ s += bullets([
     "funzionano contro l'ambiente di test ufficiale del MEF, con risposte vere salvate come prova (primo NRE: 1300A4019294833).",
     "<b>Fascicolo Sanitario Elettronico 2.0:</b> il Profilo Sanitario Sintetico generato dal kit passa il validatore "
     "ufficiale del Ministero, fatto girare in locale. Il collegamento al gateway Sogei richiede i loro certificati di test.",
-    "<b>Tre sistemi regionali scritti:</b> Puglia (SIST), Friuli-Venezia Giulia (Insiel), Piemonte (SIRPED). Verificati "
-    "su schemi ufficiali e simulatori locali; manca il collaudo, che solo la Regione può aprire.",
-    "<b>Un solo modello dati per tutti:</b> tre sistemi regionali diversi sono entrati con un solo campo facoltativo e un parametro facoltativo in più (Puglia); Friuli e Piemonte senza modifiche. "
+    "<b>Due sistemi regionali scritti:</b> Friuli-Venezia Giulia (Insiel), Piemonte (SIRPED). Verificati "
+    "su schemi ufficiali e simulatori locali; manca il collaudo, che solo la Regione può aprire. Il modulo Puglia (SIST) "
+    "è sospeso: la sezione del portale da cui vengono le specifiche si dichiara riservata, e lo abbiamo chiesto a InnovaPuglia.",
+    "<b>Un solo modello dati per tutti:</b> Friuli e Piemonte sono entrati senza modifiche al modello. "
     "L'idea \"un kit, tanti dialetti\" regge.",
     "<b>Qualità:</b> 1.916 test automatici verdi (1.904 senza Java), tre giri di revisione esterna con le correzioni, "
     "suite di conformità pubblica (143 casi) "
@@ -196,8 +197,6 @@ s += bullets([
 s.append(Paragraph("Contributi da regalare alle Regioni", H2))
 s.append(Paragraph("Scrivendo i moduli abbiamo trovato difetti nelle specifiche pubbliche. Li consegniamo insieme al codice.", P))
 s += bullets([
-    "<b>Puglia:</b> certificato di produzione allegato scaduto il 29/04/2026; tre numeri di versione diversi; esempi XML non "
-    "validi; esempi con nomi e codici fiscali che sembrano reali (non copiati).",
     "<b>Friuli-Venezia Giulia:</b> 17 punti, tra cui due certificati di cifratura contraddittori, un residuo dell'editor nello "
     "schema, un esempio con codice fiscale valido e MAC address; un documento \"a circolazione limitata\" scaricabile senza login.",
     "<b>Piemonte:</b> 24 punti, tra cui il comando d'esempio PKCE che produce valori non validi circa 3 volte su 4 e un pincode "
@@ -218,13 +217,13 @@ s += bullets([
     "<b>1. Pubblicazione</b> del codice (EUPL-1.2) e prima versione; archivio su Software Heritage.",
     "<b>2. Catalogo Developers Italia</b> come software open source di terzi (publiccode.yml già valido).",
     "<b>3. Sogei:</b> certificati di test FSE e un'utenza di test dedicata (bozza mail pronta).",
-    "<b>4. Regioni:</b> proposte pronte per Puglia, Friuli e Piemonte: \"il vostro modulo è già scritto, gratis e aperto: "
+    "<b>4. Regioni:</b> proposte pronte per Friuli e Piemonte: \"il vostro modulo è già scritto, gratis e aperto: "
     "ci aprite l'ambiente di test per il collaudo?\". Toscana tramite contatto diretto.",
     "<b>5. Un secondo manutentore e una prima PA che lo adotti:</b> sono le condizioni di fiducia per l'adozione.",
 ])
 s.append(Spacer(1, 8))
 s.append(Paragraph("Documenti di dettaglio con tutte le fonti: indagine-mmg-opensource/INVENTARIO.md, REGIONI.md, "
-                   "GITHUB_SIMILI.md; varco/docs/ (ARCHITETTURA, DONO, SAR_PUGLIA, SAR_FVG, SAR_PIEMONTE, MINACCE, "
+                   "GITHUB_SIMILI.md; varco/docs/ (ARCHITETTURA, DONO, SAR_FVG, SAR_PIEMONTE, MINACCE, "
                    "NON_DISPOSITIVO_MEDICO). Medici per Regione: Agenas, Il personale del SSN, dati 2023, Tab. 18.", NOTE))
 
 if SIMILI:

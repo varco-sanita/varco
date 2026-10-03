@@ -12,10 +12,10 @@ Due moduli, sullo **stesso modello dati**:
 
 - **Ricetta dematerializzata**, dalla parte del medico prescrittore: invio al SAC
   (il sistema centrale del MEF), visualizzazione, annullamento, medico sostituto,
-  lista degli NRE utilizzati. Per la Puglia, lo stesso attraverso il SIST regionale, per il
-  Friuli-Venezia Giulia attraverso il SAR di Insiel, per il Piemonte attraverso SIRPED (CSI
-  Piemonte) e per l'Umbria attraverso il SAR di PuntoZero: scritti e verificati sulle specifiche,
-  **non collaudati** sui sistemi delle Regioni.
+  lista degli NRE utilizzati. Per il Friuli-Venezia Giulia, lo stesso attraverso il SAR di Insiel,
+  per il Piemonte attraverso SIRPED (CSI Piemonte) e per l'Umbria attraverso il SAR di PuntoZero:
+  scritti e verificati sulle specifiche, **non collaudati** sui sistemi delle Regioni. Il modulo
+  della Puglia è sospeso (sotto, «Stato per Regione»).
 - **FSE 2.0, lato documento**: il Profilo Sanitario Sintetico (PSS) in CDA2 HL7
   Italia, generato dagli stessi oggetti della ricetta, validato con gli schemi, lo
   schematron e il **codice del validatore ufficiale** del gateway, messo in un PDF e
@@ -28,23 +28,28 @@ Nessun fine commerciale. **Non è un dispositivo medico** (sotto).
 ## Limiti noti
 
 I 12 difetti trovati dalla revisione esterna del giro 3 (registro, guardia, Puglia, FVG, Piemonte,
-conformità) sono corretti, ognuno con un test che prima falliva (issue chiuse dalle PR #13-#17).
+conformità) sono corretti, ognuno con un test che prima falliva (issue chiuse dalle PR #13-#17); i tre
+della Puglia sono usciti dal repository col modulo, sospeso nella 0.1.1.
 I difetti aperti stanno nelle issue con l'etichetta `bug`:
 <https://github.com/varco-sanita/varco/issues?q=is%3Aissue+is%3Aopen+label%3Abug>.
 
-I moduli regionali (Puglia, FVG, Piemonte, Umbria) sono verificati sulle specifiche e su server di
+I moduli regionali (FVG, Piemonte, Umbria) sono verificati sulle specifiche e su server di
 prova locali, **non collaudati** sui sistemi delle Regioni: per ognuno serve un'adesione. Il gateway
 FSE non ha ancora un canale (servono i certificati di Sogei).
-
-**Puglia, domanda aperta.** Le specifiche SIST si scaricano senza login e il documento non ha
-diciture, ma la sezione «Integratori» del portale, dove stanno, si dichiara riservata e legata a un
-accordo di riservatezza per le terze parti. Lo abbiamo visto il 03/10/2026, dopo aver scritto il
-modulo. Finché InnovaPuglia non risponde il modulo Puglia non cresce (`docs/BLOCCHI.md`).
 
 Fino al 03/10/2026 il progetto si chiamava *kit-mmg*: il pacchetto Python era `kit_mmg` e le
 variabili d'ambiente avevano il prefisso `KITMMG_`. Ora sono `varco` e `VARCO_*`; per la
 versione 0.1 le vecchie variabili valgono ancora, con un avviso di deprecazione
 (`varco.ambiente`), poi spariscono.
+
+## Stato per Regione
+
+- Regioni sul canale nazionale (SAC del MEF): ricetta provata sull'ambiente di test del MEF.
+- Friuli-Venezia Giulia, Piemonte, Umbria: moduli scritti e verificati sulle specifiche, **non
+  collaudati** sui sistemi regionali (sezioni sotto).
+- Puglia: modulo sospeso il 03/10/2026 — le specifiche SIST risultano riservate ai sottoscrittori di un
+  accordo; abbiamo chiesto a InnovaPuglia se possono essere usate per un progetto aperto. Dettagli in
+  [`docs/BLOCCHI.md`](docs/BLOCCHI.md) e nel [`CHANGELOG`](CHANGELOG.md) (0.1.1).
 
 ## Perché esiste
 
@@ -100,29 +105,6 @@ ufficiale, sono in [`prove/`](prove/INDICE.md).
 
 **Non c'è** nessun supporto clinico: niente interazioni tra farmaci, niente
 consigli terapeutici. I controlli locali sono solo di forma.
-
-### Puglia (SIST): scritto e verificato sulle specifiche, NON collaudato sul sistema regionale
-
-In Puglia il medico non chiama il SAC ma il **SIST**, il SAR della Regione
-(InnovaPuglia). `RicettaSIST` rispetta lo stesso contratto di `RicettaSAC`, sullo
-stesso modello dati. Ecco come lavora:
-
-- WS-Security firmata con la CNS del medico;
-- `chkPrescrizione` → NRE e codice di autenticazione, oppure solo NRE (ricetta rossa);
-- CDA2 di prescrizione firmato CAdES e registrato con `setRegistraPrescrizione`, con la
-  ripetizione se fallisce;
-- visualizzazione con NRE e CF dell'assistito, annullamento, ricerca per periodo.
-
-**Nessuna chiamata è mai partita verso la Regione.** Il modulo è verificato in quattro modi:
-
-- contro lo schema ufficiale `CVPService.xsd`;
-- contro la struttura degli esempi della specifica;
-- con un verificatore indipendente della firma WS-Security;
-- con un server finto in locale che controlla le richieste come dice la specifica.
-
-Le risposte di prova sono **sintetiche**, perché la specifica non ne pubblica. Per il
-collaudo vero servono l'adesione, l'accesso alla RUPAR, una CNS di collaudo e il codice
-applicativo da InnovaPuglia. Tutto in [`docs/SAR_PUGLIA.md`](docs/SAR_PUGLIA.md).
 
 ### Friuli-Venezia Giulia (SAR di Insiel): scritto e verificato sulle specifiche, NON collaudato sul sistema regionale
 
@@ -356,14 +338,8 @@ consentito vale come produzione, e una connessione `http.client` già aperta si 
 scrittura, prima che partano richiesta e credenziali. Per sbloccarlo servono
 `TrasportoHTTP(consenti_produzione=True)` **e** un id di sessione a due fattori reale.
 
-**Regione Puglia (SIST).** La produzione (`pdd-virtasl.rmmg.rsr.rupar.puglia.it`)
-e qualunque host `*.puglia.it` contano come produzione. Il **collaudo** regionale
-(`pddasl-preprod.sanita.regione.rsr.rupar.puglia.it`) non è un ambiente libero come quello
-del MEF: è un sistema della Regione, e il kit lo blocca finché non ci sono due cose:
-
-- un flag suo, `TrasportoHTTP(consenti_collaudo_regionale=True)`;
-- un'adesione dichiarata nel canale, `AdesioneSIST` (riferimento e codice applicativo
-  rilasciati da InnovaPuglia).
+**Regione Puglia.** Ogni host `*.puglia.it` conta come produzione, senza eccezioni di collaudo. Il
+modulo Puglia è sospeso (sopra), ma la guardia resta.
 
 **Regione Friuli-Venezia Giulia (SAR).** Gli host di produzione non sono pubblicati. Per questo
 ogni host `*.fvg.it` o `*.insiel.it` conta come produzione, tranne i collaudi indicati dalla
@@ -417,12 +393,11 @@ non serve. Minacce e misure: [`docs/MINACCE.md`](docs/MINACCE.md).
 ```
 src/varco/
   ricetta/       modello dati, codec XML del SAC, servizio (invio, visualizza, annulla, lista NRE);
-                 SIST Puglia: xml_sist (codec CVP), cda_sist (CDA2 di prescrizione), sist (RicettaSIST)
                  SAR FVG: xml_fvg (tracciato del SAC con namespace e attributi FVG), fvg (RicettaFVG)
                  SIRPED Piemonte: piemonte (RicettaPiemonte, sul codec del SAC)
                  SAR Umbria: json_umbria (codec JSON dell'OpenAPI, LottoNRE), umbria (RicettaUmbria)
   fse/           PSS: modello (sopra quello della ricetta), codec CDA2, validazione, PDF e firma
-  trasporto/     HTTPS + SOAP + canale SAC + canale SIST e WS-Security + canale FVG
+  trasporto/     HTTPS + SOAP + canale SAC + canale FVG
                  + canale Piemonte (piemonte, piemonte_a2f, piemonte_oauth2)
                  + canale Umbria (umbria: mTLS e due JWT firmati): separato dal modello
   cifratura.py   SanitelCF (RSA PKCS#1 v1.5)
@@ -430,8 +405,7 @@ src/varco/
   schemi/        XSD ufficiali del kit MEF
 conformita/      LA SUITE: casi JSON, schema dei casi, risposte reali, documenti, dati
 strumenti/
-  genera_prove*.py            prove reali in prove/ (genera_prove_sist.py: contro il server finto)
-  sist_server_finto.py        server SIST finto su 127.0.0.1, per le prove senza la Regione
+  genera_prove*.py            prove reali in prove/ (genera_prove_fvg.py: contro il server finto FVG)
   fvg_server_finto.py         server SAR FVG finto su 127.0.0.1 (HTTPS, mutua autenticazione); genera_prove_fvg.py
   piemonte_server_finto.py    SIRPED finto su 127.0.0.1 (servizi di prescrizione, Id-Sessione A2F, OAuth2)
   umbria_server_finto.py      SAR Umbria finto su 127.0.0.1 (HTTPS, mutua autenticazione, verifica dei due JWT)
@@ -440,8 +414,7 @@ strumenti/
 tests/unit, tests/integrazione (rete), tests/ufficiale (validatore ufficiale)
 prove/           XML reali scambiati col MEF, esiti reali delle validazioni
 docs/ARCHITETTURA.md   scelte e motivazioni
-docs/SAR_PUGLIA.md     il SIST della Puglia: canale, differenze dal SAC, collaudo
-docs/SAR_FVG.md        il SAR del Friuli-Venezia Giulia: canale, differenze dal SAC e dal SIST, collaudo
+docs/SAR_FVG.md        il SAR del Friuli-Venezia Giulia: canale, differenze dal SAC, collaudo
 docs/SAR_PIEMONTE.md   SIRPED del Piemonte: canale, 2FA regionale, collaudo, «certificata SIRPED»
 docs/SAR_UMBRIA.md     il SAR dell'Umbria: REST, JWT, lotti NRE, invio incerto, difetti delle specifiche
 docs/BLOCCHI.md        dove il lavoro si è fermato e perché
@@ -472,7 +445,6 @@ invece è incluso (XSD del SAC, scheletro ISO Schematron, certificato SanitelCF)
   `it-fse-gtw-validator` e `it-fse-gtw-dispatcher` (codice del gateway, AGPL-3.0,
   usato senza modificarlo), `it-fse-accreditamento` (solo la cartella `Test Case`
   del PSS: nessun materiale dei fornitori), `it-fse-gtw-tools`, `it-fse-gtw-test-container`;
-- Regione Puglia (InnovaPuglia): *Specifiche di integrazione SIST* 4.03.27;
 - Regione Friuli-Venezia Giulia (Insiel): *Specifiche di interfaccia applicativa del servizio SAR*
   Idof-dem-AT-01 dell'11/02/2026 e `wsdl_prescritto.zip`. Non usiamo i documenti «a circolazione
   limitata» ([`docs/TERZE_PARTI.md`](docs/TERZE_PARTI.md), sezione 3);

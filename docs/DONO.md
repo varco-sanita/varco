@@ -28,7 +28,7 @@ cercato e non l'ho trovato, non che non esiste.
 | Cosa | Dove sta | Nota |
 |---|---|---|
 | Libreria Python (ricetta, FSE, trasporto, cifratura) | `src/varco/` | ~4.000 righe, una sola dipendenza di esercizio (`cryptography`) |
-| Suite di conformità | `conformita/` | 143 casi JSON con schema; rieseguibile in qualunque linguaggio |
+| Suite di conformità | `conformita/` | 148 casi JSON con schema; rieseguibile in qualunque linguaggio |
 | Esecutore Java dei casi FSE col validatore ufficiale | `strumenti/validatore-ufficiale/` | prova che il formato non dipende dal Python |
 | Prove reali | `prove/` | XML scambiati con l'ambiente di **test** del MEF, esiti del validatore |
 | Documentazione | `README.md`, `docs/ARCHITETTURA.md` | in italiano |

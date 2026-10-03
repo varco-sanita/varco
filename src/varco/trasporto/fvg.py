@@ -31,6 +31,7 @@ Scritto e verificato sulle specifiche: NON collaudato sul sistema regionale.
 
 from __future__ import annotations
 
+import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from enum import Enum
@@ -41,8 +42,20 @@ from urllib.parse import urlparse
 from ..errori import ConfigurazioneNonValida
 from .http import Richiesta, Trasporto, TrasportoHTTP, consegna
 from .sac import RispostaGrezza
-from .sist import cf_del_certificato
 from .soap import imbusta, sbusta
+
+_CF = re.compile(r"[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]")
+
+
+def cf_del_certificato(der: bytes) -> str | None:
+    """Il codice fiscale scritto nel soggetto del certificato (CN della CNS "CF/numero.hash",
+    oppure serialNumber "TINIT-CF"). None se non c'è."""
+    from cryptography import x509
+
+    cert = x509.load_der_x509_certificate(der)
+    trovati = {m for attr in cert.subject for m in _CF.findall(str(attr.value).upper())}
+    return trovati.pop() if len(trovati) == 1 else None
+
 
 # Versione dell'interfaccia (VersioneAddOn, par. 3.1, Tabella 2): entra nei namespace («-v1.0»).
 VERSIONE_ADDON = "1.0"

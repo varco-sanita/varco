@@ -2,10 +2,9 @@
 """Interfaccia pubblica del modulo ricetta e sua implementazione verso il SAC.
 
 `ServizioRicetta` è il contratto: chi scrive un gestionale programma contro
-questo, non contro il SAC. `RicettaSIST` (ricetta/sist.py) lo soddisfa verso il
-SAR della Regione Puglia, `RicettaFVG` (ricetta/fvg.py) verso quello del
-Friuli-Venezia Giulia, `RicettaPiemonte` (ricetta/piemonte.py) verso SIRPED del Piemonte, ciascuno
-con il suo canale.
+questo, non contro il SAC. `RicettaFVG` (ricetta/fvg.py) lo soddisfa verso il SAR del
+Friuli-Venezia Giulia, `RicettaPiemonte` (ricetta/piemonte.py) verso SIRPED del Piemonte,
+`RicettaUmbria` (ricetta/umbria.py) verso il SAR dell'Umbria, ciascuno con il suo canale.
 """
 
 from __future__ import annotations
@@ -34,8 +33,8 @@ class ServizioRicetta(Protocol):
     def visualizza(
         self, nre: str, cf_medico: str | None = None, *, cf_assistito: str | None = None
     ) -> EsitoVisualizzazione:
-        """`cf_assistito`: il SAC non lo usa; un SAR può esigerlo (il SIST pugliese fa
-        un'identificazione "forte": NRE più CF dell'assistito)."""
+        """`cf_assistito`: il SAC non lo usa; un SAR può esigerlo (in Umbria serve al claim
+        person_id del JWT)."""
         ...
 
     def annulla(self, nre: str, cf_medico: str | None = None) -> EsitoAnnullamento: ...

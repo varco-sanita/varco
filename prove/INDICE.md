@@ -1,4 +1,4 @@
-# Prove: scambi reali con l'ambiente di TEST del MEF, validazioni ufficiali FSE, SIST contro un server finto
+# Prove: scambi reali con l'ambiente di TEST del MEF, validazioni ufficiali FSE, SAR regionali contro server finti
 
 > **Nota sul nome (03/10/2026).** Il progetto si chiamava *kit-mmg* e dal 03/10/2026 si chiama
 > **Varco**. Le prove precedenti alla rinomina sono rimaste come erano: nei comandi, nei percorsi,
@@ -158,44 +158,9 @@ Test di integrazione (`KITMMG_INTEGRAZIONE=1`), 6 su 6: i 4 di prima più sostit
   dell'allegato, metadati).
 - **Firma del medico vera**: serve il suo certificato qualificato. Qui solo un certificato
   autofirmato di test.
-- **SIST della Regione Puglia**: nessuna chiamata, né al collaudo né alla produzione. Serve
-  un'adesione di InnovaPuglia (RUPAR, CNS di collaudo, codice applicativo): vedi
-  `docs/SAR_PUGLIA.md`. Le prove SIST sono contro un server finto in locale.
-
-## `20261001-165725-sist-server-finto/`: SIST Puglia contro il server FINTO (script `strumenti/genera_prove_sist.py`)
-
-**Scritto e verificato sulle specifiche, NON collaudato sul sistema regionale.** Nessuna
-chiamata alla Regione Puglia. Gli scambi sono con `strumenti/sist_server_finto.py` su
-127.0.0.1, che controlla ogni richiesta come dice la specifica:
-- WS-Security (firma del Timestamp con il certificato);
-- SOAPAction;
-- `CVPService.xsd` ufficiale;
-- CF del certificato = operatore;
-- `applDigest`;
-- firma CAdES del CDA, con firmatario = operatore = autore;
-- CDA contro lo schema CDA.
-
-Il server l'abbiamo scritto noi leggendo la stessa specifica: dimostra che il kit fa quello
-che abbiamo capito, **non** che il SIST lo accetti. Certificati autofirmati di test, generati
-al momento e non salvati; identità di test del kit MEF. Gli XML sono **redatti** (registratore
-di default): niente identità di test da riconoscere, quindi niente in chiaro.
-
-| Passo | Cosa | Esito |
-|---|---|---|
-| 01 | Invio farmaceutica (`chkPrescrizione` + `setRegistraPrescrizione`) | `0000`, NRE, codice di autenticazione, registrato |
-| 02 | Visualizza con NRE e CF dell'assistito | stato SIST 1, stato SAC 3, CDA in chiaro, 1 riga |
-| 03 | Visualizza con CF sbagliato | `9999`, `000004` (rifiuto atteso) |
-| 04-05 | Annulla, poi di nuovo | `0000`; poi `9999`, `000279` (rifiuto atteso) |
-| 06 | Invio specialistica (catalogo regionale, `numSedute`) | `0000`, registrato |
-| 07 | Anomalie del server finto (`0053` C, `0051` W) | `9999`, niente registrazione |
-| 08 | SAC non disponibile (simulato) | solo NRE: ricetta rossa, CDA con setId = NRE registrato |
-| 09 | Ricetta del sostituto con la CNS del titolare | rifiuto **locale** (sarebbe `000271`) |
-| 10 | Invio del sostituto | `0000`, registrato |
-| 11-12 | CDA firmato da un altro medico, poi `ripeti_registrazione` con la firma giusta | Fault `000271`, registrazione da ripetere; poi registrato, stesso NRE, nessun nuovo controllo |
-| 13 | Ricerca per periodo e CF assistito | 3 prescrizioni |
-| 14 | Codice applicativo sbagliato | Fault `000220` |
-
-WS-Security verificata su 18 richieste su 18 (`riepilogo.json`).
+- **SIST della Regione Puglia**: modulo sospeso il 03/10/2026 (`CHANGELOG.md`, 0.1.1). Le prove
+  contro il server finto del SIST (`20261001-165725-sist-server-finto/`) sono state tolte con il
+  modulo; nessuna chiamata era mai partita verso la Regione.
 
 ## `20261001-pubblicabilita/`: controlli prima della pubblicazione (01/10/2026)
 

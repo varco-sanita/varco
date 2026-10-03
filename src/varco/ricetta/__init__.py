@@ -9,9 +9,7 @@ from .modello import (
     EsitoAnnullamento,
     EsitoInterrogazioneNre,
     EsitoInvio,
-    EsitoInvioSAR,
     EsitoVisualizzazione,
-    EsitoVisualizzazioneSAR,
     Messaggio,
     NotaPrestazione,
     NreUtilizzato,
@@ -22,7 +20,6 @@ from .modello import (
     TipoVisita,
 )
 from .servizio import RicettaSAC, ServizioRicetta
-from .sist import FirmatarioCAdES, FirmatarioCAdESPKCS12, RicettaSIST
 from .fvg import RicettaFVG, VerificaSostituto, richiede_downgrade_mir
 from .piemonte import RicettaPiemonte
 from .umbria import RicettaUmbria
@@ -38,9 +35,7 @@ __all__ = [
     "EsitoAnnullamento",
     "EsitoInterrogazioneNre",
     "EsitoInvio",
-    "EsitoInvioSAR",
     "EsitoVisualizzazione",
-    "EsitoVisualizzazioneSAR",
     "Messaggio",
     "NotaPrestazione",
     "NreUtilizzato",
@@ -51,9 +46,6 @@ __all__ = [
     "TipoVisita",
     "RicettaSAC",
     "ServizioRicetta",
-    "RicettaSIST",
-    "FirmatarioCAdES",
-    "FirmatarioCAdESPKCS12",
     "RicettaFVG",
     "VerificaSostituto",
     "richiede_downgrade_mir",
