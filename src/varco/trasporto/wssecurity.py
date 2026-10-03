@@ -38,6 +38,7 @@ from xml.sax.saxutils import escape
 NS_WSSE = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
 NS_WSU = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
 NS_DS = "http://www.w3.org/2000/09/xmldsig#"
+NS_SOAPENV = "http://schemas.xmlsoap.org/soap/envelope/"  # lo stesso di soap.NS_SOAPENV
 EXC_C14N = "http://www.w3.org/2001/10/xml-exc-c14n#"
 RSA_SHA1 = "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
 DIGEST_SHA1 = "http://www.w3.org/2000/09/xmldsig#sha1"
@@ -182,10 +183,18 @@ def verifica_security(busta: bytes, *, adesso: _dt.datetime | None = None) -> Es
     from lxml import etree
 
     doc = etree.fromstring(busta)
-    ns = {"wsse": NS_WSSE, "wsu": NS_WSU, "ds": NS_DS}
-    sec = doc.find(".//wsse:Security", ns)
-    if sec is None:
-        return EsitoVerificaWSS(False, "manca wsse:Security")
+    ns = {"wsse": NS_WSSE, "wsu": NS_WSU, "ds": NS_DS, "soapenv": NS_SOAPENV}
+    # SIST §5.1.1: il Timestamp firmato sta nell'HEADER SOAP. Un solo wsse:Security, figlio diretto di
+    # soapenv:Header; altrove (Body compreso) non se ne accettano (issue #5: Security spostato nel Body).
+    if doc.tag != f"{{{NS_SOAPENV}}}Envelope":
+        return EsitoVerificaWSS(False, "la busta non è un soapenv:Envelope")
+    nell_header = doc.findall("soapenv:Header/wsse:Security", ns)
+    ovunque = doc.findall(".//wsse:Security", ns)
+    if len(nell_header) != 1:
+        return EsitoVerificaWSS(False, f"serve esattamente un wsse:Security in soapenv:Header (trovati {len(nell_header)})")
+    if len(ovunque) != 1:
+        return EsitoVerificaWSS(False, "wsse:Security fuori da soapenv:Header")
+    sec = nell_header[0]
     firma = sec.find("ds:Signature", ns)
     token = sec.find("wsse:BinarySecurityToken", ns)
     if firma is None or token is None:

@@ -110,6 +110,8 @@ OID_SETID_MEF = "2.16.840.1.113883.2.9.2.4.3.20"  # p. 19: NRE o codice di auten
 OID_ASL = "2.16.840.1.113883.2.9.4.1.1"
 OID_CLASSE_RICETTA, OID_TIPO_RICETTA = "2.16.840.1.113883.2.9.6.1.45", "2.16.840.1.113883.2.9.6.1.47"
 OID_LOINC, LOINC_SPECIALISTICA = "2.16.840.1.113883.6.1", "57832-8"
+OID_TEAM, OID_PERSONALE_ESTERO = "2.16.840.1.113883.2.9.4.3.1", "2.16.840.1.113883.2.9.4.3.3"  # pp. 24-25
+OID_CF_MEF, OID_MOTIVO_NS = "2.16.840.1.113883.2.9.4.3.2", "2.16.840.1.113883.2.9.6.1.52"  # p. 23, p. 162
 ALFABETO_31 = "0123456789ABCDEFGHILMNXPQRSTUVZ"  # Nota Tecnica IUP, par. 2.2.1
 
 
@@ -269,6 +271,27 @@ def _difetto_cda(doc, presc: PrescrizioneFinta) -> str | None:
     asl = doc.find(f"h:participant/h:associatedEntity[@classCode='GUAR']/h:scopingOrganization/h:id[@root='{OID_ASL}']", h)
     if tipo.get("code") == "IT" and asl is None:
         return "manca l'ASL di residenza, obbligatoria per gli assistiti SSN (p. 2)"
+    ids = doc.findall("h:recordTarget/h:patientRole/h:id", h)
+    if not 1 <= len(ids) <= 3:
+        return f"patientRole con {len(ids)} id: ne servono da uno a tre (p. 23)"
+    if tipo.get("code") in ("UE", "EE", "NE", "NX"):
+        # assicurati da istituzioni estere: id1_Estero_IT e id2_Estero_IT OBBLIGATORI (pp. 24-25),
+        # extension «[sigla della nazione].[identificativo]»; il CF non sta accanto all'id principale (p. 23)
+        for oid, nome in ((OID_TEAM, "tessera TEAM (id1_Estero_IT)"), (OID_PERSONALE_ESTERO, "identificativo personale (id2_Estero_IT)")):
+            trovati = [i for i in ids if i.get("root") == oid]
+            if len(trovati) != 1:
+                return f"assicurato estero: manca {nome} (pp. 24-25)"
+            nazione, _, numero = (trovati[0].get("extension") or "").partition(".")
+            if not nazione or not numero:
+                return f"assicurato estero: {nome} senza «nazione.identificativo» (pp. 24-25)"
+        if any(i.get("root") == OID_CF_MEF for i in ids):
+            return "assicurato estero: il CF non può stare accanto a TEAM e identificativo personale (p. 23)"
+    for c in doc.iter("{urn:hl7-org:v3}code"):
+        if c.get("codeSystem") == OID_MOTIVO_NS:
+            if c.get("code") not in ("1", "2", "3", "4"):
+                return f"motivo di non sostituibilità {c.get('code')!r} non ammesso (p. 162)"
+            if not (c.get("displayName") or "").strip():
+                return "motivo di non sostituibilità senza displayName, che è required (p. 162)"
     if doc.find("h:code", h).get("code") == LOINC_SPECIALISTICA:
         for obs in doc.findall("h:component/h:structuredBody/h:component/h:section/h:entry/h:observation", h):
             if obs.get("moodCode") != "PRMS":

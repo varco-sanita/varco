@@ -248,6 +248,18 @@ dichiarata.
    Il kit segue gli esempi di prescrizione. **Da confermare.**
 9. L'ordine della sezione PRIORITA e i codici class/mood della prestazione variano tra gli
    esempi.
+9a. **Descrizione dei motivi di non sostituibilità.** `ObservationCodDettaglioMotivoNS_IT`
+    (CDA2_Prescrizione p. 162) vuole `displayName` obbligatorio, ma la specifica ne pubblica una
+    sola: «2» = «Obiettive difficoltà di assunzione» (p. 162 ed esempi). Le linee guida di altre
+    Regioni numerano in modo diverso (Sardegna, DGR 13/4 del 31/03/2015: «2» = complessità della
+    terapia, «3» = difficoltà di assunzione). Il kit non inventa la corrispondenza: per «2» usa la
+    descrizione della specifica, per 1, 3 e 4 una descrizione neutra con il codice e
+    l'art. 15, c. 11-bis, DL 95/2012. **Da confermare: la tabella codice → descrizione del SIST.**
+9b. **Assicurati da istituzioni estere** (pp. 23-25): tessera TEAM e identificativo personale sono
+    entrambi obbligatori, e accanto all'id principale possono stare solo tessera sanitaria e SASN.
+    Il kit scrive sempre i due id esteri, non mette il CF accanto a loro e rifiuta, prima di
+    `chkPrescrizione`, un assicurato estero senza nazione, tessera o identificativo personale
+    (issue #3). Il server finto applica gli stessi vincoli.
 
 **Firma, SOAP e schema**
 
@@ -255,6 +267,9 @@ dichiarata.
     `$FIRMA_START{...}$FIRMA_END`. Il kit manda **base64 del p7m**, per analogia con
     `addDocument` del FSE (`BASE64(CDA2_P7M_DOCUMENT)`). **Da confermare: è la cosa più
     importante da chiedere.**
+10a. **Dove sta `wsse:Security`.** §5.1.1 vuole il Timestamp firmato nell'header SOAP. Il
+    verificatore del kit (e quindi il server finto) accetta un solo `wsse:Security`, figlio
+    diretto di `soapenv:Header`, e nessun altro nel documento (issue #5).
 11. L'esempio Java di WS-Security crea i messaggi con una factory SOAP 1.2, ma i WSDL sono SOAP
     1.1. Il kit usa SOAP 1.1, come i WSDL.
 12. `CVPService.xsd` è molto lasco: quasi tutti gli elementi sono `minOccurs="0"`. Validare
