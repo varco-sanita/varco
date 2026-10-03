@@ -468,10 +468,14 @@ class Redattore:
         """Redige un testo intero (per esempio un XML serializzato): come `corpo`."""
         return self.corpo(t.encode("utf-8")).decode("utf-8")
 
-    def corpo(self, b: bytes, *, redigi: bool = True) -> bytes:
+    def corpo(self, b: bytes, *, redigi: bool = True, code_json_credenziale: bool = False) -> bytes:
         """Il corpo da scrivere su disco. `redigi=False` (modalità in chiaro): toglie solo le credenziali,
-        e se non ce ne sono restituisce i byte originali, identici."""
-        esito = self._corpo(b, redigi)
+        e se non ce ne sono restituisce i byte originali, identici.
+
+        `code_json_credenziale`: la chiave JSON `code` è una credenziale (authorization code OAuth2).
+        Di norma non lo è (è anche un codice d'errore in molti servizi); il registratore la accende per i
+        servizi `piemonte.oauth2.*` (issue #12)."""
+        esito = self._corpo(b, redigi, code_json_credenziale)
         return b if esito is None else esito
 
     def non_scritto(self, b: bytes, motivo: str) -> bytes:
@@ -480,7 +484,7 @@ class Redattore:
         impronta = hmac.new(self._chiave, b, hashlib.sha256).hexdigest()[:16]
         return f"[NON SCRITTO: corpo non leggibile ({motivo}), {len(b)} byte, hmac-sha256 {impronta}]".encode()
 
-    def _corpo(self, b: bytes, redigi: bool) -> bytes | None:
+    def _corpo(self, b: bytes, redigi: bool, code_json_credenziale: bool = False) -> bytes | None:
         """Nel dubbio non si scrive: un corpo si scrive (redatto, o in chiaro con le sole credenziali
         tolte) solo se il registro lo legge davvero (XML ben formato, JSON, form, testo semplice UTF-8).
         Un XML che il parser non legge (troncato, UTF-16, altra codifica) o byte che non sono testo
@@ -489,7 +493,15 @@ class Redattore:
         if xml is not None:
             try:
                 cambiato = self._albero(xml.radice, redigi)
-                return _serializza(xml) if (cambiato or redigi) else None
+                # Le dichiarazioni di namespace stanno fuori dall'albero e i commenti/le istruzioni di
+                # elaborazione il parser li scarta: in chiaro, ad albero invariato, tornavano i byte
+                # originali con un `password=` in un xmlns o in un commento (issue #1). Le credenziali si
+                # tolgono anche dagli URI dei namespace, e un corpo con commenti o PI si riscrive dall'albero.
+                uri_cambiati = any(self._uri_namespace(u) != u
+                                   for dichiarate in xml.dichiarazioni.values() for _, u in dichiarate)
+                if cambiato or redigi or uri_cambiati or _COMMENTO_O_PI.search(b):
+                    return _serializza(xml, uri_namespace=self._uri_namespace)
+                return None
             except RecursionError:
                 return self.non_scritto(b, "XML annidato oltre il limite")
         motivo = _motivo_illeggibile(b)
@@ -502,7 +514,7 @@ class Redattore:
                 dati = json.loads(s)
             except ValueError:
                 return self.non_scritto(b, "JSON non valido")
-            nuovi = self._json(dati, redigi)
+            nuovi = self._json(dati, redigi, code_credenziale=code_json_credenziale)
             return json.dumps(nuovi, ensure_ascii=False).encode("utf-8") if (redigi or nuovi != dati) else None
         if _FORM.fullmatch(s):
             coppie = parse_qsl(s, keep_blank_values=True)
@@ -513,7 +525,12 @@ class Redattore:
         nuovo = self._con_json(testo, True, self._testo_libero) if redigi else self._solo_credenziali(testo)
         return None if (not redigi and nuovo == testo) else nuovo.encode("utf-8")
 
-    def _valore(self, nome: str, v: str, redigi: bool, contesto: str = "parametro") -> str:
+    def _uri_namespace(self, u: str) -> str:
+        """L'URI di una dichiarazione di namespace come si scrive su disco: senza credenziali, in ogni
+        modalità (issue #1). Un URI ordinario resta identico."""
+        return self._solo_credenziali(u) if u else u
+
+    def _valore(self, nome: str, v: str, redigi: bool, contesto: str = "parametro", code_credenziale: bool = False) -> str:
         """Il valore di un parametro (URL, form), di una chiave JSON o di un attributo XML con quel nome.
 
         Per i parametri vale la regola larga dei nomi (compreso `code` dell'OAuth2); per le chiavi JSON
@@ -523,7 +540,7 @@ class Redattore:
         if contesto == "attributo":
             credenziale = bool(_TAG_CREDENZIALE.search(nome))
         elif contesto == "json":
-            credenziale = nome.strip().lower() != "code" and e_nome_credenziale(nome)
+            credenziale = (code_credenziale or nome.strip().lower() != "code") and e_nome_credenziale(nome)
         else:
             credenziale = e_nome_credenziale(nome) or bool(_TAG_CREDENZIALE.search(nome))
         if credenziale:
@@ -534,9 +551,9 @@ class Redattore:
                 return self.segnaposto(tipo, v.strip())
         return self._nodo(v, redigi)
 
-    def _json(self, x, redigi: bool, nome: str | None = None):
+    def _json(self, x, redigi: bool, nome: str | None = None, *, code_credenziale: bool = False):
         if nome is not None and x is not None and not isinstance(x, bool):
-            credenziale = nome.strip().lower() != "code" and e_nome_credenziale(nome)
+            credenziale = (code_credenziale or nome.strip().lower() != "code") and e_nome_credenziale(nome)
             tipo = _TAG_REDATTI_MINUSCOLO.get(nome.lower()) if redigi else None
             if isinstance(x, (dict, list)) and (credenziale or tipo):
                 # la chiave classifica TUTTO il contenuto, a ogni profondità: {"password":{"value":…}}
@@ -544,11 +561,11 @@ class Redattore:
                 intero = json.dumps(x, ensure_ascii=False, sort_keys=True)
                 return self.credenziale(intero) if credenziale else self.segnaposto(tipo, intero)
             if credenziale or tipo:
-                return self._valore(nome, str(x), redigi, "json")
+                return self._valore(nome, str(x), redigi, "json", code_credenziale)
         if isinstance(x, dict):
-            return {k: self._json(v, redigi, k) for k, v in x.items()}
+            return {k: self._json(v, redigi, k, code_credenziale=code_credenziale) for k, v in x.items()}
         if isinstance(x, list):
-            return [self._json(v, redigi, nome) for v in x]
+            return [self._json(v, redigi, nome, code_credenziale=code_credenziale) for v in x]
         if isinstance(x, str):
             return self._nodo(x, redigi)
         return x
@@ -560,7 +577,7 @@ class Redattore:
             annidato = _analizza_xml(s.encode("utf-8"))
             if annidato is not None:  # XML scritto come testo (escape o CDATA): si redige anche quello
                 self._albero(annidato.radice, redigi)
-                fuori = _serializza(annidato, prologo=False).decode("utf-8")
+                fuori = _serializza(annidato, prologo=False, uri_namespace=self._uri_namespace).decode("utf-8")
                 return t[: len(t) - len(t.lstrip())] + fuori + t[len(t.rstrip()):]
             # markup che il parser non legge: nel dubbio non si scrive
             return self.non_scritto(s.encode("utf-8"), "XML annidato non leggibile").decode()
@@ -577,9 +594,11 @@ class Redattore:
             xml = _analizza_xml(dec.strip().encode("utf-8"))
             if xml is None:
                 return self.non_scritto(t.encode("utf-8"), "markup codificato non leggibile").decode()
-            if not self._albero(xml.radice, False):
+            cambiato = self._albero(xml.radice, False)
+            uri_cambiati = any(self._uri_namespace(u) != u for d in xml.dichiarazioni.values() for _, u in d)
+            if not (cambiato or uri_cambiati or _COMMENTO_O_PI.search(dec.encode("utf-8"))):
                 return t
-            return _serializza(xml, prologo=False).decode("utf-8")
+            return _serializza(xml, prologo=False, uri_namespace=self._uri_namespace).decode("utf-8")
         tolto = self._con_json(dec, False, self.credenziali)
         return t if tolto == dec else tolto
 
@@ -652,7 +671,8 @@ class Redattore:
             pezzi = [self._con_json(xml.radice.text or "", redigi, resto)]
             for figlio in xml.radice:
                 coda, figlio.tail = figlio.tail, None
-                pezzi.append(_serializza(_XML(figlio, xml.dichiarazioni, False), prologo=False).decode("utf-8"))
+                pezzi.append(_serializza(_XML(figlio, xml.dichiarazioni, False), prologo=False,
+                                         uri_namespace=self._uri_namespace).decode("utf-8"))
                 if coda:
                     pezzi.append(self._con_json(coda, redigi, resto))
             return "".join(pezzi)
@@ -857,7 +877,12 @@ def _escape(t: str, attributo: bool = False) -> str:
     return t
 
 
-def _serializza(xml: _XML, prologo: bool | None = None) -> bytes:
+# Commenti e istruzioni di elaborazione dopo il prologo: il parser li scarta, quindi non si redigono.
+# Un corpo che ne contiene non si restituisce mai così com'è (issue #1).
+_COMMENTO_O_PI = re.compile(rb"<!--|<\?(?!xml[\s?])", re.IGNORECASE)
+
+
+def _serializza(xml: _XML, prologo: bool | None = None, uri_namespace=lambda u: u) -> bytes:
     out: list[str] = []
     if xml.prologo if prologo is None else prologo:
         out.append("<?xml version='1.0' encoding='utf-8'?>\n")
@@ -892,6 +917,7 @@ def _serializza(xml: _XML, prologo: bool | None = None) -> bytes:
         attributi = [(nome(k, scope, nuove, True), v) for k, v in e.attrib.items()]
         out.append("<" + tag)
         for p, u in nuove:
+            u = uri_namespace(u)  # solo in uscita: lo scope resta sull'URI vero, per risolvere i prefissi
             out.append(f' xmlns:{p}="{_escape(u, True)}"' if p else f' xmlns="{_escape(u, True)}"')
         for k, v in attributi:
             out.append(f' {k}="{_escape(v, True)}"')
@@ -1124,7 +1150,8 @@ class RegistratoreFile:
         in_chiaro, negato = self._decidi(richiesta, risposta)
         r = self._redattore
         # in chiaro si tolgono SOLO le credenziali (password, pincode, token, Id-Sessione, JWT): sempre
-        red = (lambda b: r.corpo(b, redigi=False)) if in_chiaro else r.corpo
+        oauth2 = richiesta.servizio.startswith("piemonte.oauth2.")  # `code` JSON = authorization code (issue #12)
+        red = lambda b: r.corpo(b, redigi=not in_chiaro, code_json_credenziale=oauth2)  # noqa: E731
         # header ed errori: XML e JSON annidati si redigono come i corpi (giro 3, N2)
         red_t = lambda v: r.metadato(v, redigi=not in_chiaro)  # noqa: E731
 

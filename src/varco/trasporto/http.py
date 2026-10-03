@@ -24,6 +24,7 @@ import threading
 import time
 import urllib.error
 import urllib.request
+import weakref
 from dataclasses import dataclass, field
 from typing import Callable, Iterable, Protocol
 from urllib.parse import urlparse
@@ -84,8 +85,18 @@ def permessi_del_trasporto(trasporto: object) -> tuple[bool, bool, frozenset[str
 # (`socket.getaddrinfo`, `gethostbyname`: ci passano anche requests, httpx e i socket grezzi) e su
 # ogni connect di socket verso un NOME. Un host vietato solleva `AmbienteBloccato` lì, prima del
 # socket; se il trasporto ingoia l'eccezione, `consegna` la risolleva comunque al ritorno.
-# La guardia vale nel thread di `invia` e nei thread che non hanno una guardia loro (un trasporto
-# che lavora in un pool): lì si applicano TUTTE le guardie attive, cioè i permessi più stretti.
+# A quale chiamata appartiene un accesso (issue #2: un thread estraneo del gestionale faceva fallire
+# una risposta SAC già arrivata):
+#   - il thread di `invia` (contextvar) e i thread AVVIATI da lui o dai suoi thread durante la chiamata
+#     (un pool creato dal trasporto): l'evento di audit `_thread.start_new_thread` /
+#     `_thread.start_joinable_thread` lega il nuovo `threading.Thread` alla guardia del thread che lo
+#     avvia. Lì valgono i permessi della chiamata, e una violazione ricade sulla chiamata;
+#   - un thread senza legame (un altro servizio del gestionale, un pool nato prima della chiamata):
+#     si ferma solo ciò che è vietato PER NOME secondo tutte le guardie attive (un host di produzione,
+#     o un IP che il modulo socket ha risolto da un nome vietato). Un IP letterale che nessuno ha
+#     risolto non si attribuisce a nessuno e passa. La violazione NON ricade sulla chiamata in corso.
+#   Un trasporto che usa un pool già esistente può legarne i thread con `contextvars.copy_context()`
+#   o con `esegui_nella_guardia` (sotto).
 #
 # Principio (giro 3 di revisione, N1): l'host si valuta nel momento in cui i byte stanno per partire,
 # non solo quando si apre il socket.
@@ -103,6 +114,7 @@ _EVENTI_DI_RETE = frozenset({
     "urllib.Request", "http.client.connect", "http.client.send", "socket.getaddrinfo",
     "socket.gethostbyname", "socket.gethostbyname_ex", "socket.connect",
 })
+_EVENTI_AVVIO_THREAD = frozenset({"_thread.start_new_thread", "_thread.start_joinable_thread"})
 
 # IP restituiti dal modulo socket -> nomi da cui sono stati risolti (ultimi N, di processo).
 _MAX_RISOLTI = 4096
@@ -185,6 +197,8 @@ class _GuardiaDiRete:
 _guardia_corrente: contextvars.ContextVar[_GuardiaDiRete | None] = contextvars.ContextVar(
     "varco_guardia_di_rete", default=None)
 _guardie_attive: dict[int, _GuardiaDiRete] = {}
+# threading.Thread avviati durante una chiamata -> la sua guardia (si liberano col thread)
+_thread_legati: "weakref.WeakKeyDictionary[threading.Thread, _GuardiaDiRete]" = weakref.WeakKeyDictionary()
 _lock_guardie = threading.Lock()
 _in_verifica = threading.local()
 _hook_installato = False
@@ -252,28 +266,78 @@ def _verifica_destinazione(evento: str, url: str, permessi) -> None:
         raise
 
 
+def _guardia_del_thread() -> _GuardiaDiRete | None:
+    """La guardia della chiamata a cui appartiene il thread corrente, o None (thread senza legame)."""
+    propria = _guardia_corrente.get()
+    if propria is not None:
+        return propria
+    try:
+        g = _thread_legati.get(threading.current_thread())
+    except TypeError:
+        return None
+    if g is not None and id(g) in _guardie_attive:
+        return g
+    return None
+
+
+def _lega_thread(args: tuple) -> None:
+    """Avvio di un thread: se chi lo avvia appartiene a una chiamata, il nuovo thread le appartiene."""
+    g = _guardia_del_thread()
+    if g is None or not args:
+        return
+    t = getattr(args[0], "__self__", None)  # threading.Thread._bootstrap, metodo legato al Thread
+    if isinstance(t, threading.Thread):
+        with _lock_guardie:
+            _thread_legati[t] = g
+
+
+def _vietato_per_nome(evento: str, url: str, permessi) -> None:
+    """Thread senza legame: si ferma un host vietato per nome, o un IP risolto da un nome vietato;
+    un IP che nessuno ha risolto davanti alla guardia non si attribuisce a nessuno (issue #2)."""
+    ip = urlparse(url).hostname or ""
+    if indirizzo_ip(ip) is None:
+        verifica_url_consentito(url, *permessi)
+        return
+    for nome in sorted(_nomi_di(ip)):
+        verifica_url_consentito(_url_di_un_host(nome) or "", *permessi)
+
+
 def _hook_di_rete(evento: str, args: tuple) -> None:
-    if evento not in _EVENTI_DI_RETE or not _guardie_attive:
+    if not _guardie_attive:
+        return
+    if evento in _EVENTI_AVVIO_THREAD:
+        _lega_thread(args)
+        return
+    if evento not in _EVENTI_DI_RETE:
         return
     if getattr(_in_verifica, "attivo", False):
         return
-    propria = _guardia_corrente.get()
-    if propria is not None:
-        guardie = [propria]
-    else:
-        with _lock_guardie:
-            guardie = list(_guardie_attive.values())
     _in_verifica.attivo = True
     try:
+        propria = _guardia_del_thread()
+        if propria is not None:
+            for url in _destinazioni(evento, args):
+                try:
+                    _verifica_destinazione(evento, url, propria.permessi)
+                except AmbienteBloccato as e:
+                    propria.violazioni.append(e)  # ricade sulla chiamata: `consegna` la risolleva
+                    raise
+            return
+        with _lock_guardie:
+            guardie = list(_guardie_attive.values())
         for url in _destinazioni(evento, args):
             for g in guardie:
-                try:
-                    _verifica_destinazione(evento, url, g.permessi)
-                except AmbienteBloccato as e:
-                    g.violazioni.append(e)
-                    raise
+                _vietato_per_nome(evento, url, g.permessi)  # si ferma qui, NON si registra sulla chiamata
     finally:
         _in_verifica.attivo = False
+
+
+def esegui_nella_guardia(funzione: Callable, *args, **kwargs):
+    """Per un trasporto che usa un pool di thread già esistente: `pool.submit(esegui_nella_guardia(f), ...)`
+    restituisce una funzione che, nel thread del pool, gira con la guardia della chiamata corrente
+    (la stessa cosa di `contextvars.copy_context().run`)."""
+    contesto = contextvars.copy_context()
+    return lambda *a, **k: contesto.run(funzione, *(args + a), **{**kwargs, **k})
 
 
 def _installa_hook() -> None:
