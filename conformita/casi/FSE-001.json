@@ -1,0 +1,16 @@
+{
+  "id": "FSE-001",
+  "famiglia": "fse",
+  "titolo": "PSS completo (voci in tutte le sezioni obbligatorie + esenzione): valido",
+  "riferimento": "schematron_PSS_v4.0.sch e schema CDA POCD_MT000040UV02 (it-fse-catalogs); dizionari del gateway (mongo-dump); esito come RawValidationEnum di it-fse-gtw-validator",
+  "passi": [
+    {
+      "operazione": "valida_documento",
+      "documento": "documenti/pss_01_completo.xml",
+      "atteso": {
+        "esito": "OK",
+        "senza_errori": true
+      }
+    }
+  ]
+}

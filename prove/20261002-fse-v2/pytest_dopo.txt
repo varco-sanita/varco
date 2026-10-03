@@ -1,0 +1,3 @@
+# Suite completa DOPO le correzioni, JAVA_HOME su JDK 21 (validatore ufficiale attivo). Base prima delle correzioni: 625 passed, 6 skipped
+FAILED tests/unit/test_conformita_formato.py::test_schema_e_modello_allineati[pss-percorso4-ProfiloSanitarioSintetico]
+1 failed, 770 passed, 6 skipped in 162.56s (0:02:42)

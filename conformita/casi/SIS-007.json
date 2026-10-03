@@ -1,0 +1,34 @@
+{
+  "id": "SIS-007",
+  "famiglia": "sist",
+  "titolo": "SIST, annullamento: riuscito, rifiutato, e Fault 000279 (prescrizione non in stato Prescritta)",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), javadoc setAnnullaPrescrizione (esito, elencoAnomalie; SoapFaultException 000279, 000280). Risposta SINTETICA scritta sullo schema CVPService.xsd (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST disponibile",
+  "passi": [
+    {
+      "operazione": "leggi_sist_annulla",
+      "risposta": "sist/annulla_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ]
+      }
+    },
+    {
+      "operazione": "leggi_sist_annulla",
+      "risposta": "sist/annulla_esito_false.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "0184"
+      }
+    },
+    {
+      "operazione": "leggi_sist_annulla",
+      "risposta": "sist/fault_000279.xml",
+      "atteso": {
+        "fault_contiene": "000279"
+      }
+    }
+  ]
+}

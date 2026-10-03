@@ -1,0 +1,36 @@
+# Test nuovi (tests/unit/test_fse_revisione_esterna.py, tests/ufficiale/test_fse_revisione_ufficiale.py) eseguiti sul codice FSE PRIMA delle correzioni (copia del 30/09), validatore ufficiale attivo
+FAILED tests/unit/test_fse_revisione_esterna.py::test_terapia_senza_via_non_diventa_orale
+FAILED tests/unit/test_fse_revisione_esterna.py::test_da_riga_non_deduce_via_ne_stato
+FAILED tests/unit/test_fse_revisione_esterna.py::test_nessun_valore_clinico_predefinito[Terapia-campi0]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_nessun_valore_clinico_predefinito[Allergia-campi1]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_nessun_valore_clinico_predefinito[Problema-campi2]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_nessun_valore_clinico_predefinito[Esenzione-campi3]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_stato_mancante_rifiutato[allergia]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_stato_mancante_rifiutato[terapia]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_stato_mancante_rifiutato[problema]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_stato_mancante_rifiutato[esenzione]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_allergia_senza_tipo_non_diventa_allergia
+FAILED tests/unit/test_fse_revisione_esterna.py::test_assenze_senza_data_di_inizio_inventata
+FAILED tests/unit/test_fse_revisione_esterna.py::test_iniezione_su_pdf_che_ha_gia_il_cda_rifiutata
+FAILED tests/unit/test_fse_revisione_esterna.py::test_iniezione_con_sostituzione_lascia_un_solo_cda
+FAILED tests/unit/test_fse_revisione_esterna.py::test_estrazione_rifiuta_due_cda_invece_di_scegliere
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versione_2_setid_distinto_e_relateddocument_rplc
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versioni_incoerenti_rifiutate[modifica0-serve id_set]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versioni_incoerenti_rifiutate[modifica1-deve essere diverso da id_set]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versioni_incoerenti_rifiutate[modifica2-serve id_documento_precedente]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versioni_incoerenti_rifiutate[modifica3-versione 1: id_set]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versioni_incoerenti_rifiutate[modifica4-versione 1: non sostituisce]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versioni_incoerenti_rifiutate[modifica5-versione: intero]
+FAILED tests/unit/test_fse_revisione_esterna.py::test_versione_2_valida_in_locale
+FAILED tests/unit/test_fse_revisione_esterna.py::test_pdf_riporta_note_stato_e_fine
+FAILED tests/unit/test_fse_revisione_esterna.py::test_pdf_riporta_ogni_valore_presente_nel_cda
+FAILED tests/unit/test_fse_revisione_esterna.py::test_pdf_assenze_e_dati_non_noti_detti_come_tali
+FAILED tests/unit/test_fse_revisione_esterna.py::test_pdf_non_sostituisce_caratteri_in_silenzio
+FAILED tests/unit/test_fse_revisione_esterna.py::test_sistemi_non_verificati_nell_esito_pubblico
+FAILED tests/unit/test_fse_revisione_esterna.py::test_nessun_avviso_se_tutti_i_sistemi_sono_noti
+FAILED tests/unit/test_fse_revisione_esterna.py::test_data_di_nascita_sconosciuta_rifiutata_prima_della_generazione
+FAILED tests/ufficiale/test_fse_revisione_ufficiale.py::test_correzioni_validate_dal_validatore_ufficiale
+FAILED tests/ufficiale/test_fse_revisione_ufficiale.py::test_codici_non_controllati_dichiarati_nell_esito_pubblico
+FAILED tests/ufficiale/test_fse_revisione_ufficiale.py::test_sostituzione_del_cda_kit_e_dispatcher_estraggono_lo_stesso
+FAILED tests/ufficiale/test_fse_revisione_ufficiale.py::test_pdf_con_due_cda_il_kit_non_sceglie
+34 failed, 1 passed in 8.16s

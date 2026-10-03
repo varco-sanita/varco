@@ -1,0 +1,63 @@
+{
+  "paziente": {
+    "assistito": {
+      "codice_fiscale": "PNIMRA70A01H501P",
+      "provincia": "AQ",
+      "asl": "201"
+    },
+    "nome": "Paziente",
+    "cognome": "Di Prova",
+    "sesso": "M",
+    "data_nascita": "1970-01-01",
+    "luogo_nascita": {
+      "comune": "Roma",
+      "codice_istat_comune": "058091",
+      "provincia": "RM",
+      "codice_regione": "120",
+      "stato": "100"
+    },
+    "residenza": {
+      "comune": "L'Aquila",
+      "codice_istat_comune": "066049",
+      "via": "Via di Prova 1",
+      "cap": "67100",
+      "provincia": "AQ",
+      "codice_regione": "130",
+      "stato": "100"
+    }
+  },
+  "autore": {
+    "prescrittore": {
+      "codice_fiscale": "PROVAX00X00X000Y",
+      "codice_regione": "130",
+      "codice_asl": "201",
+      "codice_specializzazione": "F"
+    },
+    "nome": "Medico",
+    "cognome": "Di Prova",
+    "telefono": "0000000000",
+    "email": "medico.di.prova@example.invalid",
+    "titolo": "Dott.",
+    "ruolo": "MMG"
+  },
+  "custode": {
+    "id_radice": "2.16.840.1.113883.2.9.4.1.2",
+    "id_estensione": "130201",
+    "nome": "ASL DI PROVA 201 (dato di test)",
+    "indirizzo": {
+      "comune": "L'Aquila",
+      "codice_istat_comune": "066049",
+      "via": "Via di Prova 2",
+      "codice_regione": "130",
+      "stato": "100"
+    }
+  },
+  "id_documento": "PSS-TEST-0002",
+  "data": "2026-09-30T17:00:00",
+  "allergie_assenti": "no-known-allergies",
+  "terapie_assenti": "no-known-medications",
+  "problemi_assenti": "no-known-problems",
+  "anamnesi_familiare_assente": "no-known-problems",
+  "versione": 1,
+  "riservatezza": "N"
+}

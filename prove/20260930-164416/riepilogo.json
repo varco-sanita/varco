@@ -1,0 +1,163 @@
+{
+  "generato": "2026-09-30T16:44:16+02:00",
+  "ambiente": "https://demservicetest.sanita.finanze.it",
+  "utenza": "PROVAX00X00X000Y",
+  "posizione": {
+    "regione": "130",
+    "asl": "201",
+    "specializzazione": "F"
+  },
+  "assistito_test": "PNIMRA70A01H501P",
+  "passi": [
+    {
+      "passo": "F-1 invio farmaceutica",
+      "ora": "2026-09-30T16:44:16+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294833",
+      "codice_autenticazione": "300920261644168700000050622782",
+      "data_inserimento": "2026-09-30 16:44:16",
+      "cognome_medico": "PRO",
+      "nome_medico": "VA"
+    },
+    {
+      "passo": "F-2 visualizza (atteso stato 3)",
+      "ora": "2026-09-30T16:44:17+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294833",
+      "codice_autenticazione": "300920261644168700000050622782",
+      "stato_processo": "3",
+      "data_inserimento": "2026-09-30 16:44:16"
+    },
+    {
+      "passo": "F-3 annulla",
+      "ora": "2026-09-30T16:44:18+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294833"
+    },
+    {
+      "passo": "F-4 visualizza (atteso stato 4)",
+      "ora": "2026-09-30T16:44:19+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294833",
+      "codice_autenticazione": "300920261644168700000050622782",
+      "stato_processo": "4",
+      "data_inserimento": "2026-09-30 16:44:16"
+    },
+    {
+      "passo": "F-5 annulla di nuovo (atteso rifiuto)",
+      "ora": "2026-09-30T16:44:20+02:00",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "1120",
+          "testo": "Operazione non consentita - Annullamento ricetta, stato non valido",
+          "tipo": "Bloccante"
+        }
+      ],
+      "nre": "1300A4019294833"
+    },
+    {
+      "passo": "P-1 invio specialistica",
+      "ora": "2026-09-30T16:44:21+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294834",
+      "codice_autenticazione": "300920261644217230000050622784",
+      "data_inserimento": "2026-09-30 16:44:21"
+    },
+    {
+      "passo": "P-2 annulla",
+      "ora": "2026-09-30T16:44:22+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294834"
+    },
+    {
+      "passo": "X-1 visualizza NRE inesistente",
+      "ora": "2026-09-30T16:44:23+02:00",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "5005",
+          "testo": "Numero Ricetta Elettronica non presente sul sistema",
+          "tipo": "Bloccante"
+        }
+      ],
+      "nre": "1300A4099999999"
+    },
+    {
+      "passo": "X-2 utenza inesistente (atteso SOAP Fault)",
+      "ora": "2026-09-30T16:44:24+02:00",
+      "errore": "ErroreSOAP('SOAP Fault [env:Client] Credenziali invalide (HTTP 500)')"
+    }
+  ],
+  "file": [
+    "20260930-164416_01_sac-invioPrescritto_richiesta.xml",
+    "20260930-164416_01_sac-invioPrescritto_risposta.xml",
+    "20260930-164416_01_sac-invioPrescritto_meta.json",
+    "20260930-164417_02_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-164417_02_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-164417_02_sac-visualizzaPrescritto_meta.json",
+    "20260930-164418_03_sac-annullaPrescritto_richiesta.xml",
+    "20260930-164418_03_sac-annullaPrescritto_risposta.xml",
+    "20260930-164418_03_sac-annullaPrescritto_meta.json",
+    "20260930-164419_04_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-164419_04_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-164419_04_sac-visualizzaPrescritto_meta.json",
+    "20260930-164420_05_sac-annullaPrescritto_richiesta.xml",
+    "20260930-164420_05_sac-annullaPrescritto_risposta.xml",
+    "20260930-164420_05_sac-annullaPrescritto_meta.json",
+    "20260930-164421_06_sac-invioPrescritto_richiesta.xml",
+    "20260930-164421_06_sac-invioPrescritto_risposta.xml",
+    "20260930-164421_06_sac-invioPrescritto_meta.json",
+    "20260930-164422_07_sac-annullaPrescritto_richiesta.xml",
+    "20260930-164422_07_sac-annullaPrescritto_risposta.xml",
+    "20260930-164422_07_sac-annullaPrescritto_meta.json",
+    "20260930-164423_08_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-164423_08_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-164423_08_sac-visualizzaPrescritto_meta.json",
+    "20260930-164424_09_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-164424_09_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-164424_09_sac-visualizzaPrescritto_meta.json"
+  ]
+}

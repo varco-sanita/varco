@@ -1,0 +1,36 @@
+{
+  "id": "OFF-021",
+  "famiglia": "offline",
+  "titolo": "Codifica ricetta del sostituto: cfMedico1 titolare, cfMedico2 sostituto",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1 (sostituti, CASO 2)",
+  "passi": [
+    {
+      "operazione": "codifica_invio",
+      "ricetta": {
+        "prescrittore": "${prescrittore_con_sostituto}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "LEVETIRACETAM 500MG 60 UNITA' USO ORALE"
+          }
+        ]
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "cfMedico1": "PROVAX00X00X000Y",
+          "cfMedico2": "PROVAX00X00X000Z",
+          "codRegione": "130",
+          "codASLAo": "201"
+        }
+      }
+    }
+  ]
+}

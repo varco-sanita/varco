@@ -1,0 +1,70 @@
+%PDF-1.7
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Length 1759 >>
+stream
+BT /F1 9 Tf 12 TL 50 800 Td
+(PROFILO SANITARIO SINTETICO) Tj T*
+(Documento 2.16.840.1.113883.2.9.2.130.4.4 / PSS-TEST-0001 - versione 1 - insieme \(setId\)) Tj T*
+(PSS-TEST-0001) Tj T*
+(Data: 2026-09-30 17:00:00 - riservatezza normale \(N\)) Tj T*
+(Paziente: Di Prova Paziente - CF PNIMRA70A01H501P - sesso M - data di nascita 1970-01-01) Tj T*
+(  luogo di nascita: Roma \(RM\) ISTAT comune 058091 regione 120 Stato 100) Tj T*
+(  residenza: Via di Prova 1 67100 L'Aquila \(AQ\) ISTAT comune 066049 regione 130 Stato 100) Tj T*
+(Medico \(MMG\): Dott. Medico Di Prova - CF PROVAX00X00X000Y - tel. 0000000000 - email) Tj T*
+(medico.di.prova@example.invalid) Tj T*
+(Custode: ASL DI PROVA 201 \(dato di test\) - id 2.16.840.1.113883.2.9.4.1.2 / 130201 - tel. non) Tj T*
+(indicato - indirizzo: Via di Prova 2 L'Aquila ISTAT comune 066049 regione 130 Stato 100) Tj T*
+() Tj T*
+(Allergie e intolleranze:) Tj T*
+(  - Amoxicillina \(ATC J01CA04\) - tipo ALG - inizio 2015-03-01 - stato: attivo \(active\)) Tj T*
+() Tj T*
+(Terapie farmacologiche:) Tj T*
+(  - Ramipril \(ATC C09AA05\) - via PO - inizio 2020-01-10 - stato: attivo \(active\)) Tj T*
+(  - LEVETIRACETAM 500MG 60 UNITA' USO ORALE \(GE G3B\) - via PO - inizio 2026-09-30 - stato:) Tj T*
+(attivo \(active\)) Tj T*
+() Tj T*
+(Lista dei problemi:) Tj T*
+(  - Ipertensione essenziale non specificata \(ICD-9-CM 401.9\) - inizio 2020-01-10 - stato:) Tj T*
+(attivo \(active\)) Tj T*
+() Tj T*
+(Anamnesi familiare:) Tj T*
+(  - FTH \(sesso M\): Infarto miocardico acuto \(ICD-9-CM 410.00\) - et‡ di insorgenza 60 anni) Tj T*
+() Tj T*
+(Esenzioni:) Tj T*
+(  - 031 - inizio 2020-02-01 - stato: attivo \(active\)) Tj T*
+() Tj T*
+(Il documento strutturato \(CDA2 HL7 Italia\) Ë allegato a questo PDF come cda.xml.) Tj T*
+ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Title (PDF del gestionale \(TEST\)) /Producer (kit-mmg) /CreationDate (D:20261001234058Z) >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000218 00000 n 
+0000002029 00000 n 
+0000002155 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R /Info 6 0 R /ID [<ed5da72f63d13559327f1b3e2d42cc95> <ed5da72f63d13559327f1b3e2d42cc95>] >>
+startxref
+2267
+%%EOF

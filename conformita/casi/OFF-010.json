@@ -1,0 +1,15 @@
+{
+  "id": "OFF-010",
+  "famiglia": "offline",
+  "titolo": "Riconoscimento SOAP Fault di validazione schema",
+  "riferimento": "Diagnostici.txt del kit MEF; TipiDati.xsd (integerType)",
+  "passi": [
+    {
+      "operazione": "leggi_invio",
+      "risposta": "fault_schema.xml",
+      "atteso": {
+        "fault_contiene": "cvc-simple-type"
+      }
+    }
+  ]
+}

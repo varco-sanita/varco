@@ -1,0 +1,522 @@
+{
+  "generato": "2026-10-02T01:40:39+02:00",
+  "esiti": [
+    {
+      "documento": "pss_01_completo.xml",
+      "descrizione": "OK atteso: PSS completo (via e stato espliciti)",
+      "sha256": "9d61430d422559086bb8974fb715aff859f24f6e6597d6895ed8abd8200ef510",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [
+          "VOCABOLARIO NON VERIFICATO: il validatore ufficiale non conosce i sistemi di codifica 2.16.840.1.113883.2.9.6.1.51 (gruppi di equivalenza), 2.16.840.1.113883.2.9.6.1.22 (esenzioni): i codici di questi sistemi non sono stati controllati"
+        ],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: ",
+        "sistemi_non_verificati": [
+          "2.16.840.1.113883.2.9.6.1.51",
+          "2.16.840.1.113883.2.9.6.1.22"
+        ],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_01_completo.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": true,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: "
+          },
+          "esito": "OK",
+          "messaggi": [],
+          "log_avvisi": [
+            "Unknown CodeSystems found during the validation: [2.16.840.1.113883.2.9.6.1.51, 2.16.840.1.113883.2.9.6.1.22]"
+          ],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_02_assenze.xml",
+      "descrizione": "OK atteso: codici di assenza, inizio assenza UNK",
+      "sha256": "2f2105f1ca8e7450abe8e6f24455562d619c86b867a90f92b89a06a40c3f5fb3",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: ",
+        "sistemi_non_verificati": [],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_02_assenze.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": true,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: "
+          },
+          "esito": "OK",
+          "messaggi": [],
+          "log_avvisi": [],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_03_ko_vocabolario_tipo_allergia.xml",
+      "descrizione": "KO atteso: DALLERGY non nel dizionario del gateway",
+      "sha256": "e890373361806902907709522b85a94cffba28e1a32980c9bf56b59ca18db294",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "VOCABULARY_ERROR",
+        "errori": [
+          "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.1.11.19700, Codes: DALLERGY]"
+        ],
+        "avvisi": [
+          "VOCABOLARIO NON VERIFICATO: il validatore ufficiale non conosce i sistemi di codifica 2.16.840.1.113883.2.9.6.1.51 (gruppi di equivalenza), 2.16.840.1.113883.2.9.6.1.22 (esenzioni): i codici di questi sistemi non sono stati controllati"
+        ],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.1.11.19700, Codes: DALLERGY]",
+        "sistemi_non_verificati": [
+          "2.16.840.1.113883.2.9.6.1.51",
+          "2.16.840.1.113883.2.9.6.1.22"
+        ],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_03_ko_vocabolario_tipo_allergia.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": false,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.1.11.19700, Codes: DALLERGY]"
+          },
+          "esito": "VOCABULARY_ERROR",
+          "messaggi": [
+            "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.1.11.19700, Codes: DALLERGY]"
+          ],
+          "log_avvisi": [
+            "Unknown CodeSystems found during the validation: [2.16.840.1.113883.2.9.6.1.51, 2.16.840.1.113883.2.9.6.1.22]",
+            "Invalid Codes found during the validation: [{\"code\":\"2.16.840.1.113883.1.11.19700\",\"display-name\":\"ObservationIntoleranceType\",\"codes\":\"[{\"code\":\"DALLERGY\"}]\"}]"
+          ],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_04_ko_vocabolario_icd9.xml",
+      "descrizione": "KO atteso: ICD-9-CM 000.00 inesistente",
+      "sha256": "475905c495a57ca017624bee043371d2c9b2a8e6beee6416b58936fceb4f4830",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "VOCABULARY_ERROR",
+        "errori": [
+          "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]"
+        ],
+        "avvisi": [
+          "VOCABOLARIO NON VERIFICATO: il validatore ufficiale non conosce i sistemi di codifica 2.16.840.1.113883.2.9.6.1.51 (gruppi di equivalenza), 2.16.840.1.113883.2.9.6.1.22 (esenzioni): i codici di questi sistemi non sono stati controllati"
+        ],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]",
+        "sistemi_non_verificati": [
+          "2.16.840.1.113883.2.9.6.1.51",
+          "2.16.840.1.113883.2.9.6.1.22"
+        ],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_04_ko_vocabolario_icd9.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": false,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]"
+          },
+          "esito": "VOCABULARY_ERROR",
+          "messaggi": [
+            "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]"
+          ],
+          "log_avvisi": [
+            "Unknown CodeSystems found during the validation: [2.16.840.1.113883.2.9.6.1.51, 2.16.840.1.113883.2.9.6.1.22]",
+            "Invalid Codes found during the validation: [{\"code\":\"2.16.840.1.113883.6.103\",\"display-name\":\"ICD-9-CM\",\"codes\":\"[{\"code\":\"000.00\",\"display-name\":\"Codice inesistente (dato di test)\"}]\"}]"
+          ],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_08_allergia_senza_tipo.xml",
+      "descrizione": "OK atteso: tipo di allergia non indicato -> value non codificato nullFlavor UNK (ERRORE-b80)",
+      "sha256": "46ef54da92f50e7c837b14f047da2c673bcd9818d936e30c928c73c8bc9fbc1b",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [
+          "VOCABOLARIO NON VERIFICATO: il validatore ufficiale non conosce i sistemi di codifica 2.16.840.1.113883.2.9.6.1.51 (gruppi di equivalenza), 2.16.840.1.113883.2.9.6.1.22 (esenzioni): i codici di questi sistemi non sono stati controllati"
+        ],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: ",
+        "sistemi_non_verificati": [
+          "2.16.840.1.113883.2.9.6.1.51",
+          "2.16.840.1.113883.2.9.6.1.22"
+        ],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_08_allergia_senza_tipo.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": true,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: "
+          },
+          "esito": "OK",
+          "messaggi": [],
+          "log_avvisi": [
+            "Unknown CodeSystems found during the validation: [2.16.840.1.113883.2.9.6.1.51, 2.16.840.1.113883.2.9.6.1.22]"
+          ],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_09_versione_2.xml",
+      "descrizione": "OK atteso: versione 2, setId distinto da id, relatedDocument RPLC",
+      "sha256": "f9f21fc39d7d673b8e93e41c976d7017987f37581a5659a4df2066ce6f364d32",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [
+          "VOCABOLARIO NON VERIFICATO: il validatore ufficiale non conosce i sistemi di codifica 2.16.840.1.113883.2.9.6.1.51 (gruppi di equivalenza), 2.16.840.1.113883.2.9.6.1.22 (esenzioni): i codici di questi sistemi non sono stati controllati"
+        ],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: ",
+        "sistemi_non_verificati": [
+          "2.16.840.1.113883.2.9.6.1.51",
+          "2.16.840.1.113883.2.9.6.1.22"
+        ],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_09_versione_2.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": true,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: "
+          },
+          "esito": "OK",
+          "messaggi": [],
+          "log_avvisi": [
+            "Unknown CodeSystems found during the validation: [2.16.840.1.113883.2.9.6.1.51, 2.16.840.1.113883.2.9.6.1.22]"
+          ],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_10_ko_via_nullflavor.xml",
+      "descrizione": "KO atteso (controllo): routeCode nullFlavor=UNK, alternativa scartata per la via mancante",
+      "sha256": "7f4901733b38bc84ba001de45041714018093e75208d7f6e726c05d65a726f26",
+      "locale": {
+        "esito": "SEMANTIC_ERROR",
+        "errori": [
+          "ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode DEVE essere presente .",
+          "ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode DEVE essere presente ."
+        ],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "SEMANTIC_ERROR",
+        "errori": [
+          "ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode DEVE essere presente .",
+          "ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode DEVE essere presente ."
+        ],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_10_ko_via_nullflavor.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [
+              {
+                "testo": "[ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode  DEVE essere presente .]",
+                "posizione": "/*:ClinicalDocument[namespace-uri()='urn:hl7-org:v3'][1]/*:component[namespace-uri()='urn:hl7-org:v3'][1]/*:structuredBody[namespace-uri()='urn:hl7-org:v3'][1]/*:component[namespace-uri()='urn:hl7-org:v3'][2]/*:section[namespace-uri()='urn:hl7-org:v3'][1]/*:entry[namespace-uri()='urn:hl7-org:v3'][1]"
+              },
+              {
+                "testo": "[ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode  DEVE essere presente .]",
+                "posizione": "/*:ClinicalDocument[namespace-uri()='urn:hl7-org:v3'][1]/*:component[namespace-uri()='urn:hl7-org:v3'][1]/*:structuredBody[namespace-uri()='urn:hl7-org:v3'][1]/*:component[namespace-uri()='urn:hl7-org:v3'][2]/*:section[namespace-uri()='urn:hl7-org:v3'][1]/*:entry[namespace-uri()='urn:hl7-org:v3'][2]"
+              }
+            ],
+            "avvisi": []
+          },
+          "esito": "SEMANTIC_ERROR",
+          "messaggi": [
+            "[ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode  DEVE essere presente .]",
+            "[ERRORE-b112| Sezione Terapia Farmacologica: entry/substanceAdministration/routeCode  DEVE essere presente .]"
+          ],
+          "log_avvisi": [],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_11_ko_nascita_unk.xml",
+      "descrizione": "KO atteso (controllo): birthTime nullFlavor=UNK, ERRORE-17",
+      "sha256": "c25e0666d0687ad1f8d52aeb27fabb36677ce3d09280b6f57ac85c969884360e",
+      "locale": {
+        "esito": "SEMANTIC_ERROR",
+        "errori": [
+          "ERRORE-17| L'elemento ClinicalDocument/recordTaget/patientRole/patient DEVE riportare un elemento 'birthTime' con @value valorizzato. Qualora non si possa risalire al dato, è possibile valorizzare l'elemento con @nullFlavor=\"UNK\""
+        ],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "SEMANTIC_ERROR",
+        "errori": [
+          "ERRORE-17| L'elemento ClinicalDocument/recordTaget/patientRole/patient DEVE riportare un elemento 'birthTime' con @value valorizzato. Qualora non si possa risalire al dato, è possibile valorizzare l'elemento con @nullFlavor=\"UNK\""
+        ],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_11_ko_nascita_unk.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [
+              {
+                "testo": "[ERRORE-17| L'elemento ClinicalDocument/recordTaget/patientRole/patient DEVE riportare un elemento 'birthTime' con @value valorizzato. Qualora non si possa risalire al dato, è possibile valorizzare l'elemento con @nullFlavor=\"UNK\"]",
+                "posizione": "/*:ClinicalDocument[namespace-uri()='urn:hl7-org:v3'][1]"
+              }
+            ],
+            "avvisi": []
+          },
+          "esito": "SEMANTIC_ERROR",
+          "messaggi": [
+            "[ERRORE-17| L'elemento ClinicalDocument/recordTaget/patientRole/patient DEVE riportare un elemento 'birthTime' con @value valorizzato. Qualora non si possa risalire al dato, è possibile valorizzare l'elemento con @nullFlavor=\"UNK\"]"
+          ],
+          "log_avvisi": [],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_12_ko_versione_2_senza_setid.xml",
+      "descrizione": "KO atteso (controllo): versione 2 come la generava il kit prima (ERRORE-8, ERRORE-9)",
+      "sha256": "4a8d3b8108204e515d08099b21dacee59ce3a39375986ebd4d77db06c90631fe",
+      "locale": {
+        "esito": "SEMANTIC_ERROR",
+        "errori": [
+          "ERRORE-8| Se ClinicalDocument.id e ClinicalDocument.setId usano lo stesso dominio di identificazione (@root identico) allora l’attributo @extension del ClinicalDocument.id deve essere diverso da quello del ClinicalDocument.setId a meno che ClinicalDocument.versionNumber non sia uguale ad 1; cioè i valori di setId ed id per un documento clinico coincidono solo per la prima versione di un documento",
+          "ERRORE-9| Se l'attributo ClinicalDocument/versionNumber/@value è maggiore di 1, l'elemento ClinicalDocument deve contenere al più due elementi di tipo 'relatedDocument'."
+        ],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "SEMANTIC_ERROR",
+        "errori": [
+          "ERRORE-8| Se ClinicalDocument.id e ClinicalDocument.setId usano lo stesso dominio di identificazione (@root identico) allora l’attributo @extension del ClinicalDocument.id deve essere diverso da quello del ClinicalDocument.setId a meno che ClinicalDocument.versionNumber non sia uguale ad 1; cioè i valori di setId ed id per un documento clinico coincidono solo per la prima versione di un documento",
+          "ERRORE-9| Se l'attributo ClinicalDocument/versionNumber/@value è maggiore di 1, l'elemento ClinicalDocument deve contenere al più due elementi di tipo 'relatedDocument'."
+        ],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_12_ko_versione_2_senza_setid.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [
+              {
+                "testo": "[ERRORE-8| Se ClinicalDocument.id e ClinicalDocument.setId usano lo stesso dominio di identificazione (@root identico) allora l’attributo @extension del ClinicalDocument.id \n\t\t\tdeve essere diverso da quello del ClinicalDocument.setId a meno che ClinicalDocument.versionNumber non sia uguale ad 1; cioè i valori di setId ed id per un documento clinico coincidono solo per la prima versione di un documento]",
+                "posizione": "/*:ClinicalDocument[namespace-uri()='urn:hl7-org:v3'][1]"
+              },
+              {
+                "testo": "[ERRORE-9| Se l'attributo ClinicalDocument/versionNumber/@value è maggiore di  1, l'elemento ClinicalDocument  deve contenere al più due elementi di tipo 'relatedDocument'.]",
+                "posizione": "/*:ClinicalDocument[namespace-uri()='urn:hl7-org:v3'][1]"
+              }
+            ],
+            "avvisi": []
+          },
+          "esito": "SEMANTIC_ERROR",
+          "messaggi": [
+            "[ERRORE-8| Se ClinicalDocument.id e ClinicalDocument.setId usano lo stesso dominio di identificazione (@root identico) allora l’attributo @extension del ClinicalDocument.id \n\t\t\tdeve essere diverso da quello del ClinicalDocument.setId a meno che ClinicalDocument.versionNumber non sia uguale ad 1; cioè i valori di setId ed id per un documento clinico coincidono solo per la prima versione di un documento]",
+            "[ERRORE-9| Se l'attributo ClinicalDocument/versionNumber/@value è maggiore di  1, l'elemento ClinicalDocument  deve contenere al più due elementi di tipo 'relatedDocument'.]"
+          ],
+          "log_avvisi": [],
+          "log_errori": []
+        }
+      }
+    },
+    {
+      "documento": "pss_13_esenzione_inventata.xml",
+      "descrizione": "OK del gateway con codice esenzione INVENTATO: l'esito pubblico deve avvisare",
+      "sha256": "8ea07cf32a7ac63c20b491e2536bf0c24ea420c2ccd0ca6cd11128e3200f2979",
+      "locale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [],
+        "vocabolario_verificato": false,
+        "messaggio_vocabolario": null,
+        "sistemi_non_verificati": [],
+        "schematron": "schematron_PSS_v4.0.sch",
+        "validatore": "locale (lxml + saxonche, XSD e schematron ufficiali)"
+      },
+      "ufficiale": {
+        "esito": "OK",
+        "errori": [],
+        "avvisi": [
+          "VOCABOLARIO NON VERIFICATO: il validatore ufficiale non conosce i sistemi di codifica 2.16.840.1.113883.2.9.6.1.51 (gruppi di equivalenza), 2.16.840.1.113883.2.9.6.1.22 (esenzioni): i codici di questi sistemi non sono stati controllati"
+        ],
+        "vocabolario_verificato": true,
+        "messaggio_vocabolario": "Almeno uno dei seguenti vocaboli non è censito: ",
+        "sistemi_non_verificati": [
+          "2.16.840.1.113883.2.9.6.1.51",
+          "2.16.840.1.113883.2.9.6.1.22"
+        ],
+        "schematron": "v4.0",
+        "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+        "grezzo": {
+          "file": "pss_13_esenzione_inventata.xml",
+          "typeIdExtension": "POCD_MT000040UV02",
+          "schematron": {
+            "templateIdRoot": "2.16.840.1.113883.2.9.10.1.4.1.1",
+            "versione": "4.0",
+            "errori": [],
+            "avvisi": []
+          },
+          "vocabolario": {
+            "valido": true,
+            "messaggio": "Almeno uno dei seguenti vocaboli non è censito: "
+          },
+          "esito": "OK",
+          "messaggi": [],
+          "log_avvisi": [
+            "Unknown CodeSystems found during the validation: [2.16.840.1.113883.2.9.6.1.51, 2.16.840.1.113883.2.9.6.1.22]"
+          ],
+          "log_errori": []
+        }
+      }
+    }
+  ]
+}

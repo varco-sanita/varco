@@ -1,0 +1,1722 @@
+{
+  "totale": 47,
+  "superati": 47,
+  "falliti": 0,
+  "errori": 0,
+  "saltati": 0,
+  "casi": [
+    {
+      "id": "FSE-001",
+      "titolo": "PSS completo (voci in tutte le sezioni obbligatorie + esenzione): valido",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "OK",
+            "errori": [],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-002",
+      "titolo": "PSS con i codici di assenza IPS in tutte le sezioni obbligatorie: valido",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "OK",
+            "errori": [],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-003",
+      "titolo": "Tipo allergia DALLERGY: HL7 valido ma non censito nel gateway",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "VOCABULARY_ERROR",
+            "errori": [
+              "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.1.11.19700, Codes: DALLERGY]"
+            ],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-004",
+      "titolo": "Codice ICD-9-CM inesistente nella lista dei problemi",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "VOCABULARY_ERROR",
+            "errori": [
+              "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]"
+            ],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-005",
+      "titolo": "Manca la sezione obbligatoria Allergie",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "SEMANTIC_ERROR",
+            "errori": [
+              "ERRORE-b1| Sezione Allergie e intolleranze: la sezione DEVE essere presente.",
+              "ERRORE-b2| Sezione Allergie e intolleranze: la sezione deve contenere l'elemento 'templateId' valorizzato con l'attributo @root='2.16.840.1.113883.2.9.10.1.4.2.1'",
+              "ERRORE-b3| Sezione Allergie e intolleranze: la sezione DEVE contenere un elemento 'title' possibilmente valorizzato con 'Allergie e Intolleranze'",
+              "ERRORE-b4| Sezione Allergie e intolleranze: la sezione DEVE contenere almeno un elemento 'entry'"
+            ],
+            "avvisi": [],
+            "vocabolario_verificato": false,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+            "nota": "vocabolari non verificati da questo validatore"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-006",
+      "titolo": "Codice fiscale del paziente di 15 caratteri",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "SEMANTIC_ERROR",
+            "errori": [
+              "ERRORE-52| Il codice fiscale 'PNIMRA70A01H501' cittadino ed operatore deve essere costituito da 16 cifre [A-Z0-9]{16}"
+            ],
+            "avvisi": [],
+            "vocabolario_verificato": false,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+            "nota": "vocabolari non verificati da questo validatore"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-007",
+      "titolo": "title prima di code: il documento non rispetta lo schema CDA",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "valida_documento",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "SYNTAX_ERROR",
+            "errori": [
+              "ERROR: -1,-1 cvc-complex-type.2.4.a: contenuto non valido che inizia con l'elemento \"{\"urn:hl7-org:v3\":title}\". È previsto un elemento \"{\"urn:hl7-org:v3\":code}\"."
+            ],
+            "avvisi": [],
+            "vocabolario_verificato": false,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)",
+            "nota": "vocabolari non verificati da questo validatore"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-101",
+      "titolo": "Generazione del PSS completo dai dati: il documento deve essere valido",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "genera_pss",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "OK",
+            "errori": [],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-102",
+      "titolo": "Generazione del PSS con i codici di assenza: il documento deve essere valido",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "genera_pss",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "OK",
+            "errori": [],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-103",
+      "titolo": "Dati con tipo allergia non censito (DALLERGY): rifiuto locale oppure documento non valido",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "genera_pss",
+          "superato": true,
+          "dettagli": [
+            "Documento non valido: allergia 1: tipo non ammesso 'DALLERGY'"
+          ],
+          "osservato": {
+            "rifiuto_locale": "Documento non valido: allergia 1: tipo non ammesso 'DALLERGY'"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FSE-104",
+      "titolo": "Dati con ICD-9-CM inesistente: il gateway lo rifiuta (vocabolari)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "genera_pss",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "esito": "VOCABULARY_ERROR",
+            "errori": [
+              "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]"
+            ],
+            "avvisi": [],
+            "vocabolario_verificato": true,
+            "validatore": "ufficiale (codice it-fse-gtw-validator, dump it-fse-catalogs)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-001",
+      "titolo": "Lettura ricevuta di invio riuscito",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294833",
+            "codice_autenticazione": "300920261644168700000050622782",
+            "data_inserimento": "2026-09-30 16:44:16",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-002",
+      "titolo": "Lettura visualizzazione di ricetta da erogare (stato 3)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294833",
+            "codice_autenticazione": "300920261644168700000050622782",
+            "data_inserimento": "2026-09-30 16:44:16",
+            "stato_processo": "3",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-003",
+      "titolo": "Lettura visualizzazione di ricetta annullata (stato 4)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294833",
+            "codice_autenticazione": "300920261644168700000050622782",
+            "data_inserimento": "2026-09-30 16:44:16",
+            "stato_processo": "4",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-004",
+      "titolo": "Lettura annullamento riuscito",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294833"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-005",
+      "titolo": "Lettura rifiuto: annullamento di ricetta non in stato 3 (errore 1120, gravità 'Bloccante')",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1120",
+                "testo": "Operazione non consentita - Annullamento ricetta, stato non valido",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294833"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-006",
+      "titolo": "Lettura rifiuto: NRE inesistente (errore 5005)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "5005",
+                "testo": "Numero Ricetta Elettronica non presente sul sistema",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4099999999",
+            "righe": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-007",
+      "titolo": "Lettura rifiuto: specialistica senza diagnosi (errore 1233)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1233",
+                "testo": "Indicare obbligatoriamente la diagnosi/quesito diagnostico in maniera testuale o tramite uno specifico codice",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0197",
+              "0100"
+            ],
+            "pdf_promemoria": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-008",
+      "titolo": "Lettura rifiuto: ASL del medico non valida (errore 1020)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1020",
+                "testo": "Codice Asl medico non valido",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0197",
+              "0100"
+            ],
+            "pdf_promemoria": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-009",
+      "titolo": "Riconoscimento SOAP Fault di credenziali invalide",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "fault": "Credenziali invalide"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-010",
+      "titolo": "Riconoscimento SOAP Fault di validazione schema",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "fault": "cvc-simple-type 1: element {http://tipodati.xsd.dem.sanita.finanze.it}quantita is not a valid instance of type {http://tipodati.xsd.dem.sanita.finanze.it}integerType. Value is '12'"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-011",
+      "titolo": "Codifica: farmaceutica per principio attivo valida contro l'XSD ufficiale",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "codifica_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "tag": {
+              "pinCode": "CIFRATO==",
+              "cfMedico1": "PROVAX00X00X000Y",
+              "cfMedico2": "",
+              "codRegione": "130",
+              "codASLAo": "201",
+              "codStruttura": "",
+              "codSpecializzazione": "F",
+              "testata1": "",
+              "testata2": "",
+              "nre": "",
+              "tipoRic": "",
+              "codiceAss": "CIFRATO==",
+              "cognNome": "",
+              "indirizzo": "",
+              "oscuramDati": "",
+              "numTessSasn": "",
+              "socNavigaz": "",
+              "tipoPrescrizione": "F",
+              "ricettaInterna": "",
+              "codEsenzione": "",
+              "nonEsente": "1",
+              "reddito": "",
+              "codDiagnosi": "",
+              "descrizioneDiagnosi": "",
+              "dataCompilazione": "2026-09-30 17:34:46",
+              "tipoVisita": "A",
+              "dispReg": "",
+              "provAssistito": "AQ",
+              "aslAssistito": "201",
+              "indicazionePrescr": "",
+              "altro": "",
+              "classePriorita": "",
+              "ElencoDettagliPrescrizioni": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-012",
+      "titolo": "Codifica: specialistica con priorità e catalogo valida contro l'XSD ufficiale",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "codifica_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "tag": {
+              "pinCode": "CIFRATO==",
+              "cfMedico1": "PROVAX00X00X000Y",
+              "cfMedico2": "",
+              "codRegione": "130",
+              "codASLAo": "201",
+              "codStruttura": "",
+              "codSpecializzazione": "F",
+              "testata1": "",
+              "testata2": "",
+              "nre": "",
+              "tipoRic": "",
+              "codiceAss": "CIFRATO==",
+              "cognNome": "",
+              "indirizzo": "",
+              "oscuramDati": "",
+              "numTessSasn": "",
+              "socNavigaz": "",
+              "tipoPrescrizione": "P",
+              "ricettaInterna": "",
+              "codEsenzione": "",
+              "nonEsente": "1",
+              "reddito": "",
+              "codDiagnosi": "",
+              "descrizioneDiagnosi": "CONTROLLO (dato di test)",
+              "dataCompilazione": "2026-09-30 17:34:46",
+              "tipoVisita": "A",
+              "dispReg": "",
+              "provAssistito": "AQ",
+              "aslAssistito": "201",
+              "indicazionePrescr": "",
+              "altro": "",
+              "classePriorita": "P",
+              "ElencoDettagliPrescrizioni": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-013",
+      "titolo": "Lettura lista NRE utilizzati (ricerca puntuale)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": [
+              "1300A4019294847"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-014",
+      "titolo": "Lettura lista NRE per intervallo di date: più ricette",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": [
+              "1300A4019294835",
+              "1300A4019294840",
+              "1300A4019294823",
+              "1300A4019294824",
+              "1300A4019294825",
+              "1300A4019294826",
+              "1300A4019294827",
+              "1300A4019294828",
+              "1300A4019294829",
+              "1300A4019294830",
+              "1300A4019294831",
+              "1300A4019294833",
+              "1300A4019294836",
+              "1300A4019294838",
+              "1300A4019294839",
+              "1300A4019294841",
+              "1300A4019294843",
+              "1300A4019294844",
+              "1300A4019294846",
+              "1300A4019294847"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-015",
+      "titolo": "Lista NRE: senza tipo prescrizione il SAC rifiuta (1153), anche se la specifica lo dà facoltativo",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1153",
+                "testo": "Ricerca - Il tipo prescrizione è un campo obbligatorio",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-016",
+      "titolo": "Lista NRE: NRE inesistente = esito 0000 e lista vuota (non un errore)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-017",
+      "titolo": "Visualizzazione del sostituto: esito 0001 con avviso 1024 (check digit del CF di test)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0001",
+            "messaggi": [
+              {
+                "codice": "1024",
+                "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+                "tipo": "Avviso",
+                "bloccante": false,
+                "avviso": true
+              },
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294846",
+            "codice_autenticazione": "300920261713351440000050622839",
+            "data_inserimento": "2026-09-30 17:13:34",
+            "stato_processo": "3",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y",
+            "cfMedico2": "PROVAX00X00X000Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-018",
+      "titolo": "Annullamento del titolare su ricetta del sostituto: rifiuto 1125",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1125",
+                "testo": "Visualizzazione non consentita - cf medico non valido, diverso da quello associato NRE",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294846"
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-019",
+      "titolo": "Invio con cfMedico2 diverso dall'utente inviante: rifiuto 1212",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "leggi_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1212",
+                "testo": "Il campo cfMedico2 deve coincidere con il CF dell'utente inviante",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0197",
+              "0100"
+            ],
+            "pdf_promemoria": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-020",
+      "titolo": "Codifica InterrogaNreUtilRichiesta per intervallo: valida contro l'XSD, date di 19 caratteri",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "codifica_interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "tag": {
+              "pinCode": "CIFRATO==",
+              "codRegione": "130",
+              "cfMedico": "PROVAX00X00X000Y",
+              "tipoPrescr": "F",
+              "dataCompilazioneRicettaDal": "2026-09-30 00:00:00",
+              "dataCompilazioneRicettaAl": "2026-09-30 23:59:59"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "OFF-021",
+      "titolo": "Codifica ricetta del sostituto: cfMedico1 titolare, cfMedico2 sostituto",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "codifica_invio",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "tag": {
+              "pinCode": "CIFRATO==",
+              "cfMedico1": "PROVAX00X00X000Y",
+              "cfMedico2": "PROVAX00X00X000Z",
+              "codRegione": "130",
+              "codASLAo": "201",
+              "codStruttura": "",
+              "codSpecializzazione": "F",
+              "testata1": "",
+              "testata2": "",
+              "nre": "",
+              "tipoRic": "",
+              "codiceAss": "CIFRATO==",
+              "cognNome": "",
+              "indirizzo": "",
+              "oscuramDati": "",
+              "numTessSasn": "",
+              "socNavigaz": "",
+              "tipoPrescrizione": "F",
+              "ricettaInterna": "",
+              "codEsenzione": "",
+              "nonEsente": "1",
+              "reddito": "",
+              "codDiagnosi": "",
+              "descrizioneDiagnosi": "",
+              "dataCompilazione": "2026-09-30 17:34:46",
+              "tipoVisita": "A",
+              "dispReg": "",
+              "provAssistito": "AQ",
+              "aslAssistito": "201",
+              "indicazionePrescr": "",
+              "altro": "",
+              "classePriorita": "",
+              "ElencoDettagliPrescrizioni": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-001",
+      "titolo": "Ciclo completo farmaceutica: invio, visualizza (3), annulla, visualizza (4)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294848",
+            "codice_autenticazione": "300920261734468600000050622852",
+            "data_inserimento": "2026-09-30 17:34:46",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        },
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294848",
+            "codice_autenticazione": "300920261734468600000050622852",
+            "data_inserimento": "2026-09-30 17:34:46",
+            "stato_processo": "3",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y"
+          }
+        },
+        {
+          "operazione": "annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294848"
+          }
+        },
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294848",
+            "codice_autenticazione": "300920261734468600000050622852",
+            "data_inserimento": "2026-09-30 17:34:46",
+            "stato_processo": "4",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-002",
+      "titolo": "Invio specialistica con classe di priorità e codice catalogo",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294849",
+            "codice_autenticazione": "300920261734507800000050622853",
+            "data_inserimento": "2026-09-30 17:34:50",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-003",
+      "titolo": "Farmaco per AIC non sostituibile con motivazione",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294850",
+            "codice_autenticazione": "300920261734527200000050622854",
+            "data_inserimento": "2026-09-30 17:34:52",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-004",
+      "titolo": "Secondo annullamento della stessa ricetta rifiutato (1120)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294851",
+            "codice_autenticazione": "300920261734548120000050622855",
+            "data_inserimento": "2026-09-30 17:34:54",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        },
+        {
+          "operazione": "annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294851"
+          }
+        },
+        {
+          "operazione": "annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1120",
+                "testo": "Operazione non consentita - Annullamento ricetta, stato non valido",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294851"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-005",
+      "titolo": "Visualizzazione di NRE inesistente (5005)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "5005",
+                "testo": "Numero Ricetta Elettronica non presente sul sistema",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4099999999",
+            "righe": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-006",
+      "titolo": "Regola lato SAC: specialistica senza diagnosi rifiutata (1233)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1233",
+                "testo": "Indicare obbligatoriamente la diagnosi/quesito diagnostico in maniera testuale o tramite uno specifico codice",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0197",
+              "0100"
+            ],
+            "pdf_promemoria": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-007",
+      "titolo": "Regola lato SAC: ASL del medico non valida (1020)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1020",
+                "testo": "Codice Asl medico non valido",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0197",
+              "0100"
+            ],
+            "pdf_promemoria": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-008",
+      "titolo": "Utenza inesistente: SOAP Fault 'Credenziali invalide'",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "fault": "Credenziali invalide"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-009",
+      "titolo": "Violazione di schema (quantità a due cifre): SOAP Fault di validazione",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "fault": "cvc-simple-type 1: element {http://tipodati.xsd.dem.sanita.finanze.it}quantita is not a valid instance of type {http://tipodati.xsd.dem.sanita.finanze.it}integerType. Value is '12'"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-010",
+      "titolo": "Medico sostituto: invio, visualizza (sostituto e titolare), annullamento solo del sostituto",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294852",
+            "codice_autenticazione": "300920261735028210000050622856",
+            "data_inserimento": "2026-09-30 17:35:02",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        },
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0001",
+            "messaggi": [
+              {
+                "codice": "1024",
+                "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+                "tipo": "Avviso",
+                "bloccante": false,
+                "avviso": true
+              },
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294852",
+            "codice_autenticazione": "300920261735028210000050622856",
+            "data_inserimento": "2026-09-30 17:35:02",
+            "stato_processo": "3",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y",
+            "cfMedico2": "PROVAX00X00X000Z"
+          }
+        },
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294852",
+            "codice_autenticazione": "300920261735028210000050622856",
+            "data_inserimento": "2026-09-30 17:35:02",
+            "stato_processo": "3",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y",
+            "cfMedico2": "PROVAX00X00X000Z"
+          }
+        },
+        {
+          "operazione": "annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1125",
+                "testo": "Visualizzazione non consentita - cf medico non valido, diverso da quello associato NRE",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294852"
+          }
+        },
+        {
+          "operazione": "annulla",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0001",
+            "messaggi": [
+              {
+                "codice": "1024",
+                "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+                "tipo": "Avviso",
+                "bloccante": false,
+                "avviso": true
+              },
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0300"
+            ],
+            "nre": "1300A4019294852"
+          }
+        },
+        {
+          "operazione": "visualizza",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0001",
+            "messaggi": [
+              {
+                "codice": "1024",
+                "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+                "tipo": "Avviso",
+                "bloccante": false,
+                "avviso": true
+              },
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0200"
+            ],
+            "nre": "1300A4019294852",
+            "codice_autenticazione": "300920261735028210000050622856",
+            "data_inserimento": "2026-09-30 17:35:02",
+            "stato_processo": "4",
+            "righe": 1,
+            "cfMedico1": "PROVAX00X00X000Y",
+            "cfMedico2": "PROVAX00X00X000Z"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-011",
+      "titolo": "Sostituto indicato ma credenziali del titolare: il SAC rifiuta (1212)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1212",
+                "testo": "Il campo cfMedico2 deve coincidere con il CF dell'utente inviante",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0197",
+              "0100"
+            ],
+            "pdf_promemoria": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-012",
+      "titolo": "Sostituto indicato ma credenziali del titolare: rifiuto locale, nessuna chiamata",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [
+            "Ricetta non valida: con il sostituto (PROVAX00X00X000Z) in cfMedico2 servono le sue credenziali, non quelle di PROVAX00X00X000Y"
+          ],
+          "osservato": {
+            "rifiuto_locale": "Ricetta non valida: con il sostituto (PROVAX00X00X000Z) in cfMedico2 servono le sue credenziali, non quelle di PROVAX00X00X000Y"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-013",
+      "titolo": "Lista NRE utilizzati: ricerca puntuale e per intervallo trovano la ricetta appena inviata",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "invia",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0199",
+              "0198",
+              "0197",
+              "0100"
+            ],
+            "nre": "1300A4019294853",
+            "codice_autenticazione": "300920261735107400000050622857",
+            "data_inserimento": "2026-09-30 17:35:10",
+            "cognome_medico": "PRO",
+            "nome_medico": "VA",
+            "pdf_promemoria": true
+          }
+        },
+        {
+          "operazione": "interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": [
+              "1300A4019294853"
+            ]
+          }
+        },
+        {
+          "operazione": "interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": [
+              "1300A4019294835",
+              "1300A4019294840",
+              "1300A4019294823",
+              "1300A4019294824",
+              "1300A4019294825",
+              "1300A4019294826",
+              "1300A4019294827",
+              "1300A4019294828",
+              "1300A4019294829",
+              "1300A4019294830",
+              "1300A4019294831",
+              "1300A4019294833",
+              "1300A4019294836",
+              "1300A4019294838",
+              "1300A4019294839",
+              "1300A4019294841",
+              "1300A4019294843",
+              "1300A4019294844",
+              "1300A4019294846",
+              "1300A4019294847",
+              "1300A4019294848",
+              "1300A4019294850",
+              "1300A4019294851",
+              "1300A4019294852",
+              "1300A4019294853"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-014",
+      "titolo": "Lista NRE per intervallo senza tipo prescrizione: il SAC rifiuta (1153)",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "9999",
+            "messaggi": [
+              {
+                "codice": "1153",
+                "testo": "Ricerca - Il tipo prescrizione è un campo obbligatorio",
+                "tipo": "Bloccante",
+                "bloccante": true,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "SAC-015",
+      "titolo": "Lista NRE: NRE inesistente = 0000 e lista vuota",
+      "stato": "SUPERATO",
+      "motivo": null,
+      "passi": [
+        {
+          "operazione": "interroga_nre",
+          "superato": true,
+          "dettagli": [],
+          "osservato": {
+            "codice": "0000",
+            "messaggi": [
+              {
+                "codice": "0000",
+                "testo": "Operazione eseguita correttamente",
+                "tipo": null,
+                "bloccante": false,
+                "avviso": false
+              }
+            ],
+            "comunicazioni": [
+              "0400"
+            ],
+            "ricette": []
+          }
+        }
+      ]
+    }
+  ]
+}

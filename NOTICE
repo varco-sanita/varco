@@ -1,0 +1,54 @@
+varco
+Copyright (c) 2026 Lorenzo Nannicini
+
+Codice e suite di conformità: EUPL-1.2 (file LICENSE).
+Documentazione (README.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md, docs/):
+CC-BY-4.0 (file LICENSES/CC-BY-4.0.txt).
+
+Questo prodotto contiene materiale di terzi, redistribuito con le sue note di
+copyright. Elenco completo, fonti e motivi: docs/TERZE_PARTI.md.
+
+- src/varco/schemi/*.xsd
+  Schemi del tracciato SAC, dal Kit per lo sviluppo - Ricetta elettronica -
+  Prescrittore del Sistema Tessera Sanitaria (Ministero dell'Economia e delle
+  Finanze). Nessuna licenza dichiarata dalla fonte.
+
+- src/varco/certificati/SanitelCF-2024-2027.pem
+  Certificato pubblico SanitelCF, dallo stesso kit del MEF.
+
+- src/varco/fse/iso_schematron/*
+  ISO Schematron XSLT2 skeleton, 2010-04-14.
+  Copyright (c) 2000-2010 Rick Jelliffe and Academia Sinica Computing Center,
+  Taiwan. Licenza in testa ai file.
+
+- conformita/risposte/, prove/
+  Risposte dell'ambiente di TEST del Sistema TS (MEF), ottenute con le sole
+  identità pubbliche di test del kit di sviluppo.
+  Fanno eccezione conformita/risposte/sist/, conformita/risposte/fvg/,
+  conformita/risposte/piemonte/, prove/*-sist-server-finto/ e
+  prove/*-fvg-server-finto/: risposte SINTETICHE scritte da questo progetto,
+  nessuna viene dal SIST, dal SAR FVG o da SIRPED.
+
+Gli schemi HL7 del CDA R2 (11 XSD, Copyright Health Level Seven) e lo
+schematron del Profilo Sanitario Sintetico v4.0 (dalla guida di HL7 Italia,
+«All Rights Reserved») NON sono inclusi: la HL7 IP Policy non ne autorizza la
+redistribuzione a un non membro. Si scaricano a parte dalla versione pubblicata
+dal Ministero della Salute (ministero-salute/it-fse-catalogs, commit fissato)
+con strumenti/scarica_specifiche.py --gruppi cda-xsd. Chi li scarica li usa
+alle condizioni di HL7 (docs/TERZE_PARTI.md).
+
+Le Specifiche di integrazione SIST della Regione Puglia (InnovaPuglia) NON sono
+incluse: si scaricano a parte (strumenti/scarica_specifiche.py --gruppi sist).
+
+Le specifiche del SAR della Regione Friuli-Venezia Giulia (Insiel, documento
+Idof-dem-AT-01 e wsdl_prescritto.zip) NON sono incluse: si scaricano a parte
+(strumenti/scarica_specifiche.py --gruppi fvg). I documenti Insiel a
+«circolazione limitata» non sono usati.
+
+Le specifiche di SIRPED della Regione Piemonte (CSI Piemonte), l'allegato
+dell'avviso CSI AP26_003 e il kit A2F del Sistema TS NON sono inclusi: si
+scaricano a parte (strumenti/scarica_specifiche.py --gruppi piemonte).
+
+Il codice AGPL-3.0 del gateway FSE 2.0 del Ministero della Salute
+(it-fse-gtw-validator, it-fse-gtw-dispatcher) NON è incluso: si scarica a parte
+con strumenti/scarica_specifiche.py e si usa solo come strumento di test esterno.

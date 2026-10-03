@@ -1,0 +1,157 @@
+{
+  "totale" : 11,
+  "superati" : 7,
+  "falliti" : 0,
+  "errori" : 0,
+  "saltati" : 4,
+  "esecutore" : "Java: EseguiCasiFse + codice it-fse-gtw-validator",
+  "casi" : [ {
+    "id" : "FSE-001",
+    "titolo" : "PSS completo (voci in tutte le sezioni obbligatorie + esenzione): valido",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "OK",
+        "errori" : [ ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : true
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-002",
+    "titolo" : "PSS con i codici di assenza IPS in tutte le sezioni obbligatorie: valido",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "OK",
+        "errori" : [ ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : true
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-003",
+    "titolo" : "Tipo allergia DALLERGY: HL7 valido ma non censito nel gateway",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "VOCABULARY_ERROR",
+        "errori" : [ "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.1.11.19700, Codes: DALLERGY]" ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : true
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-004",
+    "titolo" : "Codice ICD-9-CM inesistente nella lista dei problemi",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "VOCABULARY_ERROR",
+        "errori" : [ "Almeno uno dei seguenti vocaboli non è censito: [CodeSystem: 2.16.840.1.113883.6.103, Codes: 000.00]" ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : true
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-005",
+    "titolo" : "Manca la sezione obbligatoria Allergie",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "SEMANTIC_ERROR",
+        "errori" : [ "ERRORE-b1| Sezione Allergie e intolleranze: la sezione DEVE essere presente.", "ERRORE-b2| Sezione Allergie e intolleranze: la sezione deve contenere l'elemento 'templateId' valorizzato con l'attributo @root='2.16.840.1.113883.2.9.10.1.4.2.1'", "ERRORE-b3| Sezione Allergie e intolleranze: la sezione DEVE contenere un elemento 'title' possibilmente valorizzato con 'Allergie e Intolleranze'", "ERRORE-b4| Sezione Allergie e intolleranze: la sezione DEVE contenere almeno un elemento 'entry'" ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : false
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-006",
+    "titolo" : "Codice fiscale del paziente di 15 caratteri",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "SEMANTIC_ERROR",
+        "errori" : [ "ERRORE-52| Il codice fiscale 'PNIMRA70A01H501' cittadino ed operatore deve essere costituito da 16 cifre [A-Z0-9]{16}" ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : false
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-007",
+    "titolo" : "title prima di code: il documento non rispetta lo schema CDA",
+    "stato" : "SUPERATO",
+    "motivo" : null,
+    "passi" : [ {
+      "operazione" : "valida_documento",
+      "superato" : true,
+      "osservato" : {
+        "esito" : "SYNTAX_ERROR",
+        "errori" : [ "ERROR: -1,-1 cvc-complex-type.2.4.a: contenuto non valido che inizia con l'elemento \"{\"urn:hl7-org:v3\":title}\". È previsto un elemento \"{\"urn:hl7-org:v3\":code}\"." ],
+        "avvisi" : [ ],
+        "vocabolario_verificato" : false
+      },
+      "dettagli" : [ ]
+    } ]
+  }, {
+    "id" : "FSE-101",
+    "titolo" : "Generazione del PSS completo dai dati: il documento deve essere valido",
+    "stato" : "SALTATO",
+    "motivo" : "operazione genera_pss: questo esecutore non ha un generatore di CDA",
+    "passi" : [ {
+      "operazione" : "genera_pss",
+      "superato" : false
+    } ]
+  }, {
+    "id" : "FSE-102",
+    "titolo" : "Generazione del PSS con i codici di assenza: il documento deve essere valido",
+    "stato" : "SALTATO",
+    "motivo" : "operazione genera_pss: questo esecutore non ha un generatore di CDA",
+    "passi" : [ {
+      "operazione" : "genera_pss",
+      "superato" : false
+    } ]
+  }, {
+    "id" : "FSE-103",
+    "titolo" : "Dati con tipo allergia non censito (DALLERGY): rifiuto locale oppure documento non valido",
+    "stato" : "SALTATO",
+    "motivo" : "operazione genera_pss: questo esecutore non ha un generatore di CDA",
+    "passi" : [ {
+      "operazione" : "genera_pss",
+      "superato" : false
+    } ]
+  }, {
+    "id" : "FSE-104",
+    "titolo" : "Dati con ICD-9-CM inesistente: il gateway lo rifiuta (vocabolari)",
+    "stato" : "SALTATO",
+    "motivo" : "operazione genera_pss: questo esecutore non ha un generatore di CDA",
+    "passi" : [ {
+      "operazione" : "genera_pss",
+      "superato" : false
+    } ]
+  } ]
+}

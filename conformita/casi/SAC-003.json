@@ -1,0 +1,45 @@
+{
+  "id": "SAC-003",
+  "famiglia": "online",
+  "titolo": "Farmaco per AIC non sostituibile con motivazione",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1 (nonSost, codMotivazione)",
+  "passi": [
+    {
+      "operazione": "invia",
+      "ricetta": {
+        "prescrittore": "${prescrittore}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice": "040440430",
+            "descrizione": "LEVETIRACETAM SAN*60CPR 500MG",
+            "non_sostituibile": true,
+            "codice_motivazione_non_sost": "4"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "codice": [
+          "0000",
+          "0001"
+        ],
+        "nre_formato": true
+      }
+    }
+  ],
+  "finale": [
+    {
+      "operazione": "annulla",
+      "nre": "${nre}"
+    }
+  ]
+}

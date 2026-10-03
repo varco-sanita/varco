@@ -1,0 +1,51 @@
+{
+  "id": "FVG-102",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, invio specialistica con RAO: codice di catalogo regionale, versioneCR, testata2 R<classe>;P<progressivo>",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 3.1 (versioneCR), par. 4.2 (codCatalogoPrescr obbligatorio per la specialistica), par. 4.2.3 (RAO: descrizioneDiagnosi e testata2); wsdl_prescritto.zip (medicinrete.insiel.it)",
+  "passi": [
+    {
+      "operazione": "codifica_fvg",
+      "servizio": "invio",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "060",
+          "codice_asl": "101",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P"
+        },
+        "tipo": "P",
+        "data_compilazione": "2026-10-01 11:00:00",
+        "descrizione_diagnosi": "1-Sospetta frattura dopo esame radiografico negativo. Paziente dolorante.",
+        "testata2": "R066;P1",
+        "classe_priorita": "U",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice": "88.39.9",
+            "descrizione": "TC DI CAVIGLIA E PIEDE",
+            "codice_catalogo": "2774",
+            "tipo_accesso": "1"
+          }
+        ]
+      },
+      "versione_cr": "1.4.4",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "testata2": "R066;P1",
+          "classePriorita": "U",
+          "tipoPrescrizione": "P",
+          "descrizioneDiagnosi": "1-Sospetta frattura dopo esame radiografico negativo. Paziente dolorante."
+        },
+        "attributi": {
+          "@prodottoCme": "VARCO-PROVA",
+          "ElencoDettagliPrescrizioni@versioneCR": "1.4.4"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+## publiccode-parser v5.4.3 -no-network publiccode.yml
+exit=0
+
+## Gruppo di controllo: softwareType non valido
+publiccode.yml:37:1: error: softwareType: softwareType must be one of the following: "standalone/mobile", "standalone/iot", "standalone/desktop", "standalone/web", "standalone/backend", "standalone/other", "addon", "library" or "configurationFiles"
+exit=1

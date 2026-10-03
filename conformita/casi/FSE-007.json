@@ -1,0 +1,18 @@
+{
+  "id": "FSE-007",
+  "famiglia": "fse",
+  "titolo": "title prima di code: il documento non rispetta lo schema CDA",
+  "riferimento": "schematron_PSS_v4.0.sch e schema CDA POCD_MT000040UV02 (it-fse-catalogs); dizionari del gateway (mongo-dump); esito come RawValidationEnum di it-fse-gtw-validator",
+  "passi": [
+    {
+      "operazione": "valida_documento",
+      "documento": "documenti/pss_07_ko_ordine_xsd.xml",
+      "atteso": {
+        "esito": "SYNTAX_ERROR",
+        "errori_contengono": [
+          "title"
+        ]
+      }
+    }
+  ]
+}

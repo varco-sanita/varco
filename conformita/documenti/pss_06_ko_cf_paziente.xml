@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <realmCode code="IT" />
+  <typeId root="2.16.840.1.113883.1.3" extension="POCD_MT000040UV02" />
+  <templateId root="2.16.840.1.113883.2.9.10.1.4.1.1" extension="1.4" />
+  <id root="2.16.840.1.113883.2.9.2.130.4.4" extension="PSS-TEST-0002" />
+  <code code="60591-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Profilo Sanitario Sintetico" />
+  <title>Profilo Sanitario Sintetico</title>
+  <effectiveTime value="20260930170000+0200" />
+  <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" codeSystemName="HL7 Confidentiality" />
+  <languageCode code="it-IT" />
+  <setId root="2.16.840.1.113883.2.9.2.130.4.4" extension="PSS-TEST-0002" />
+  <versionNumber value="1" />
+  <recordTarget>
+    <patientRole>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PNIMRA70A01H501" assigningAuthorityName="MEF" />
+      <addr use="H">
+        <country>100</country>
+        <state>130</state>
+        <county>AQ</county>
+        <city>L'Aquila</city>
+        <censusTract>066049</censusTract>
+        <postalCode>67100</postalCode>
+        <streetAddressLine>Via di Prova 1</streetAddressLine>
+      </addr>
+      <patient>
+        <name>
+          <family>Di Prova</family>
+          <given>Paziente</given>
+        </name>
+        <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 AdministrativeGender" displayName="Maschio" />
+        <birthTime value="19700101" />
+        <birthplace>
+          <place>
+            <addr>
+              <country>100</country>
+              <state>120</state>
+              <county>RM</county>
+              <city>Roma</city>
+              <censusTract>058091</censusTract>
+            </addr>
+          </place>
+        </birthplace>
+      </patient>
+    </patientRole>
+  </recordTarget>
+  <author>
+    <time value="20260930170000+0200" />
+    <assignedAuthor>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PROVAX00X00X000Y" assigningAuthorityName="MEF" />
+      <code code="MMG" codeSystem="2.16.840.1.113883.2.9.77.22.11.13" codeSystemName="assignedAuthorCode_PSSIT" displayName="Medico di Medicina Generale" />
+      <telecom use="WP" value="tel:0000000000" />
+      <telecom use="WP" value="mailto:medico.di.prova@example.invalid" />
+      <assignedPerson>
+        <name>
+          <family>Di Prova</family>
+          <given>Medico</given>
+          <prefix>Dott.</prefix>
+        </name>
+      </assignedPerson>
+    </assignedAuthor>
+  </author>
+  <custodian>
+    <assignedCustodian>
+      <representedCustodianOrganization>
+        <id root="2.16.840.1.113883.2.9.4.1.2" extension="130201" />
+        <name>ASL DI PROVA 201 (dato di test)</name>
+        <addr>
+          <country>100</country>
+          <state>130</state>
+          <city>L'Aquila</city>
+          <censusTract>066049</censusTract>
+          <streetAddressLine>Via di Prova 2</streetAddressLine>
+        </addr>
+      </representedCustodianOrganization>
+    </assignedCustodian>
+  </custodian>
+  <legalAuthenticator>
+    <time value="20260930170000+0200" />
+    <signatureCode code="S" />
+    <assignedEntity>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PROVAX00X00X000Y" assigningAuthorityName="MEF" />
+      <telecom use="WP" value="tel:0000000000" />
+      <telecom use="WP" value="mailto:medico.di.prova@example.invalid" />
+      <assignedPerson>
+        <name>
+          <family>Di Prova</family>
+          <given>Medico</given>
+          <prefix>Dott.</prefix>
+        </name>
+      </assignedPerson>
+    </assignedEntity>
+  </legalAuthenticator>
+  <documentationOf>
+    <serviceEvent>
+      <effectiveTime value="20260930170000+0200" />
+    </serviceEvent>
+  </documentationOf>
+  <component>
+    <structuredBody moodCode="EVN" classCode="DOCBODY">
+      <component typeCode="COMP">
+        <section ID="ALL">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.1" />
+          <id root="a4758743-b592-49ff-a538-d28cc60c63a7" />
+          <code code="48765-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergie, Reazioni Avverse" />
+          <title>Allergie e Intolleranze</title>
+          <text>
+            <list>
+              <item>
+                <content ID="all-1">No known allergies</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.1.1" />
+              <id root="0b947e19-7a41-460b-a92d-e701f232dece" />
+              <code nullFlavor="NA" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20260930" />
+              </effectiveTime>
+              <entryRelationship typeCode="SUBJ">
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.1.4" />
+                  <id root="4cfb1a9a-cd53-426f-93f0-e5d541305d8d" />
+                  <code code="OINT" codeSystem="2.16.840.1.113883.5.4" codeSystemName="ObservationIntoleranceType" displayName="Intolerance" />
+                  <text>
+                    <reference value="#all-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime>
+                    <low nullFlavor="UNK" />
+                  </effectiveTime>
+                  <value xsi:type="CD" code="no-known-allergies" codeSystem="2.16.840.1.113883.11.22.9" codeSystemName="Absent or Unknown Allergies" displayName="No known allergies" />
+                </observation>
+              </entryRelationship>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="TER">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.2" />
+          <id root="1582f069-7321-4702-b107-e7a411273d62" />
+          <code code="10160-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="HISTORY OF MEDICATION USE" />
+          <title>Terapie farmacologiche</title>
+          <text>
+            <list>
+              <item>
+                <content ID="ter-1">No known medications</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <substanceAdministration classCode="SBADM" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.3" />
+              <id root="bea09bd3-4067-4c50-a01c-906eacff54d9" />
+              <code code="no-known-medications" codeSystem="2.16.840.1.113883.11.22.15" codeSystemName="IPSNoMedsInfo" displayName="No known medications" />
+              <text>
+                <reference value="#ter-1" />
+              </text>
+              <consumable>
+                <manufacturedProduct>
+                  <manufacturedMaterial>
+                    <code nullFlavor="NA" />
+                  </manufacturedMaterial>
+                </manufacturedProduct>
+              </consumable>
+            </substanceAdministration>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="PRO">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.4" />
+          <id root="374348b7-e99f-4261-8a97-b294d3e83991" />
+          <code code="11450-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Lista dei Problemi" />
+          <title>Lista dei problemi</title>
+          <text>
+            <list>
+              <item>
+                <content ID="pro-1">No known problems</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.4.1" />
+              <id root="afeac352-644e-42e4-baa2-0f73abed7a67" />
+              <code nullFlavor="NA" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20260930" />
+              </effectiveTime>
+              <entryRelationship typeCode="SUBJ" inversionInd="false">
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.4.2" />
+                  <id root="afaf444a-3c19-499d-a2e7-8e0db1b6b1ba" />
+                  <code code="75326-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Problema" />
+                  <text>
+                    <reference value="#pro-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime>
+                    <low nullFlavor="UNK" />
+                  </effectiveTime>
+                  <value xsi:type="CD" code="no-known-problems" codeSystem="2.16.840.1.113883.11.22.17" codeSystemName="IPSNoProbsInfos" displayName="No known problems" />
+                </observation>
+              </entryRelationship>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="FAM">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.16" />
+          <id root="8b7d0ad0-5558-47a3-8b2a-a8e48d8c1918" />
+          <code code="10157-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Storia di malattie di membri familiari" />
+          <title>Anamnesi familiare</title>
+          <text>
+            <list>
+              <item>
+                <content ID="fam-1">No known problems</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <observation classCode="OBS" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.4" />
+              <id root="fd15e88e-04ba-41df-9404-5dec8663a6d4" />
+              <code code="75326-9" codeSystem="2.16.840.1.113883.2.9.77.22.11.9" codeSystemName="LOINC" displayName="Problema" />
+              <statusCode code="completed" />
+              <value xsi:type="CD" code="no-known-problems" codeSystem="2.16.840.1.113883.11.22.17" codeSystemName="IPSNoProbsInfos" displayName="No known problems" />
+            </observation>
+          </entry>
+        </section>
+      </component>
+    </structuredBody>
+  </component>
+</ClinicalDocument>

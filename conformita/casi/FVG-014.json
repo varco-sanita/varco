@@ -1,0 +1,21 @@
+{
+  "id": "FVG-014",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, lista degli NRE utilizzati",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.5; wsdl_prescritto.zip (medicinrete.insiel.it), interrogaNreUtilizzati (namespace senza versione). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "interroga_nre",
+      "risposta": "fvg/interroga_nre_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_contengono": [
+          "0600A0000000001"
+        ]
+      }
+    }
+  ]
+}

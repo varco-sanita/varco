@@ -1,0 +1,16 @@
+{
+  "id": "SAC-008",
+  "famiglia": "online",
+  "titolo": "Utenza inesistente: SOAP Fault 'Credenziali invalide'",
+  "riferimento": "Diagnostici.txt del kit MEF",
+  "passi": [
+    {
+      "operazione": "visualizza",
+      "credenziali": "inesistente",
+      "nre": "1300A4099999999",
+      "atteso": {
+        "fault_contiene": "Credenziali invalide"
+      }
+    }
+  ]
+}

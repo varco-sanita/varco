@@ -1,0 +1,20 @@
+{
+  "id": "FVG-011",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, secondo annullamento rifiutato (1120)",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.3. Codice 1120 come nell'ambiente di test del SAC (OFF-005). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "annulla",
+      "risposta": "fvg/annulla_rifiuto_1120.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1120",
+        "errore_bloccante": true
+      }
+    }
+  ]
+}

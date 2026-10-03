@@ -1,0 +1,2 @@
+## actionlint v1.7.7 .github/workflows/ci.yml (senza shellcheck: non installato su questa macchina)
+exit=0

@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "varco"
+version = "0.1.0"
+description = "Kit aperto per i medici di medicina generale: ricetta dematerializzata via SAC (Sistema TS) e documenti FSE 2.0"
+readme = "README.md"
+license = "EUPL-1.2"
+requires-python = ">=3.11"
+# Unica dipendenza di esercizio: RSA PKCS#1 v1.5 con certificato X.509 non è nella libreria standard.
+# Minimo 49: le versioni precedenti hanno vulnerabilità note (pip-audit, 01/10/2026: ultima correzione in 49.0.0).
+dependencies = ["cryptography>=49"]
+
+[project.optional-dependencies]
+# lxml serve solo per validare l'XML contro gli XSD ufficiali (test e suite di conformità).
+validazione = ["lxml>=4.9"]
+# FSE 2.0: validazione locale di XSD e schematron (XSLT2 -> serve Saxon, qui SaxonC-HE via saxonche)
+fse = ["lxml>=4.9", "saxonche>=12"]
+# PDF con CDA allegato a un PDF esistente, e firma PAdES
+firma = ["pyHanko>=0.20"]
+test = ["pytest>=7", "lxml>=4.9", "saxonche>=12", "pyHanko>=0.20", "pypdf>=4", "jsonschema>=4.18"]
+
+[project.scripts]
+varco-conformita = "varco.conformita.esegui:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"varco.certificati" = ["*.pem"]
+"varco.schemi" = ["*.xsd"]
+"varco.fse" = ["iso_schematron/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integrazione: chiamate reali all'ambiente di TEST del MEF (demservicetest). Attivare con VARCO_INTEGRAZIONE=1",
+    "ufficiale: usa il validatore ufficiale FSE (strumenti/validatore-ufficiale, Java 21). Attivare con JAVA_HOME e prepara.sh",
+    "senza_schemi_hl7: il test prova di proposito l'assenza degli schemi HL7 (documentazione: nessun esito viene mai cambiato)",
+    "schemi_hl7: il test usa gli schemi HL7 scaricati; se mancano PRIMA dell'esecuzione risulta SALTATO (tests/conftest.py)",
+]

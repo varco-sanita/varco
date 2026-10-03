@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://varco.invalid/conformita/schema/pss.schema.json",
+  "title": "Profilo Sanitario Sintetico (formato portabile Varco)",
+  "description": "Dati di un PSS, indipendenti dal CDA. Paziente e medico riusano Assistito e Prescrittore della ricetta (ricetta.schema.json). Ogni sezione obbligatoria (allergie, terapie, problemi, anamnesi familiare) ha O delle voci O un codice di assenza, mai tutti e due. Codici clinici scelti dal medico: nessuna logica clinica. Solo dati di test.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "paziente": {
+      "$ref": "#/$defs/paziente"
+    },
+    "autore": {
+      "$ref": "#/$defs/medico"
+    },
+    "custode": {
+      "$ref": "#/$defs/custode"
+    },
+    "id_documento": {
+      "type": "string"
+    },
+    "data": {
+      "type": "string",
+      "description": "data e ora del documento, ISO 8601 (ora italiana se senza fuso)"
+    },
+    "allergie": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allergia"
+      }
+    },
+    "allergie_assenti": {
+      "enum": [
+        "no-allergy-info",
+        "no-known-allergies",
+        "no-known-environmental-allergies",
+        "no-known-food-allergies",
+        "no-known-medication-allergies"
+      ]
+    },
+    "terapie": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/terapia"
+      }
+    },
+    "terapie_assenti": {
+      "enum": [
+        "no-known-medications",
+        "no-medication-info"
+      ]
+    },
+    "problemi": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/problema"
+      }
+    },
+    "problemi_assenti": {
+      "enum": [
+        "no-known-problems",
+        "no-problem-info"
+      ]
+    },
+    "anamnesi_familiare": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/anamnesi"
+      }
+    },
+    "anamnesi_familiare_assente": {
+      "enum": [
+        "no-known-problems",
+        "no-problem-info"
+      ]
+    },
+    "esenzioni": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/esenzione"
+      }
+    },
+    "versione": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "id_set": {
+      "type": "string",
+      "description": "extension del setId, comune a tutte le versioni; obbligatorio e diverso da id_documento se versione > 1 (ERRORE-8)"
+    },
+    "id_documento_precedente": {
+      "type": "string",
+      "description": "extension dell'id della versione sostituita (relatedDocument RPLC); obbligatorio se versione > 1 (ERRORE-9)"
+    },
+    "id_radice": {
+      "type": "string"
+    },
+    "riservatezza": {
+      "enum": [
+        "N",
+        "R",
+        "V"
+      ]
+    }
+  },
+  "required": [
+    "paziente",
+    "autore",
+    "custode",
+    "id_documento",
+    "data"
+  ],
+  "$defs": {
+    "paziente": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "assistito": {
+          "$ref": "ricetta.schema.json#/$defs/assistito"
+        },
+        "nome": {
+          "type": "string"
+        },
+        "cognome": {
+          "type": "string"
+        },
+        "sesso": {
+          "enum": [
+            "M",
+            "F",
+            "UN"
+          ]
+        },
+        "data_nascita": {
+          "type": "string",
+          "format": "date"
+        },
+        "luogo_nascita": {
+          "$ref": "#/$defs/indirizzo"
+        },
+        "residenza": {
+          "$ref": "#/$defs/indirizzo"
+        }
+      },
+      "required": [
+        "assistito",
+        "nome",
+        "cognome",
+        "sesso",
+        "data_nascita"
+      ]
+    },
+    "medico": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prescrittore": {
+          "$ref": "ricetta.schema.json#/$defs/prescrittore"
+        },
+        "nome": {
+          "type": "string"
+        },
+        "cognome": {
+          "type": "string"
+        },
+        "telefono": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "titolo": {
+          "type": "string"
+        },
+        "ruolo": {
+          "enum": [
+            "MMG",
+            "PLS"
+          ]
+        }
+      },
+      "required": [
+        "prescrittore",
+        "nome",
+        "cognome"
+      ]
+    },
+    "custode": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id_radice": {
+          "type": "string"
+        },
+        "id_estensione": {
+          "type": "string"
+        },
+        "nome": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "$ref": "#/$defs/indirizzo"
+        },
+        "telefono": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id_radice",
+        "id_estensione",
+        "nome"
+      ]
+    },
+    "indirizzo": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "comune": {
+          "type": "string"
+        },
+        "codice_istat_comune": {
+          "type": "string",
+          "pattern": "^[0-9]{6}$"
+        },
+        "via": {
+          "type": "string"
+        },
+        "cap": {
+          "type": "string"
+        },
+        "provincia": {
+          "type": "string"
+        },
+        "codice_regione": {
+          "type": "string"
+        },
+        "stato": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "comune",
+        "codice_istat_comune"
+      ]
+    },
+    "allergia": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agente": {
+          "type": "string"
+        },
+        "agente_codice": {
+          "type": "string"
+        },
+        "agente_sistema": {
+          "enum": [
+            "AIC",
+            "ALLERGENE",
+            "ATC"
+          ]
+        },
+        "tipo": {
+          "type": "string",
+          "description": "ObservationIntoleranceType come lo accetta il gateway: ['ALG', 'DINT', 'EINT', 'FINT', 'NAINT', 'OINT']. Lo schema non lo limita apposta: un caso prova il rifiuto di un tipo HL7 non censito."
+        },
+        "inizio": {
+          "type": "string",
+          "format": "date"
+        },
+        "stato": {
+          "enum": [
+            "active",
+            "completed",
+            "suspended",
+            "aborted"
+          ],
+          "description": "ActStatus HL7: active, completed (serve 'fine'), suspended, aborted (serve 'fine')"
+        },
+        "fine": {
+          "type": "string",
+          "format": "date"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "agente"
+      ]
+    },
+    "terapia": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "descrizione": {
+          "type": "string"
+        },
+        "codice_aic": {
+          "type": "string"
+        },
+        "codice_atc": {
+          "type": "string"
+        },
+        "codice_gruppo_equivalenza": {
+          "type": "string"
+        },
+        "via": {
+          "type": "string",
+          "description": "HL7 RouteOfAdministration, es. PO"
+        },
+        "inizio": {
+          "type": "string",
+          "format": "date"
+        },
+        "stato": {
+          "enum": [
+            "active",
+            "completed",
+            "suspended",
+            "aborted"
+          ],
+          "description": "ActStatus HL7: active, completed (serve 'fine'), suspended, aborted (serve 'fine')"
+        },
+        "fine": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "descrizione"
+      ]
+    },
+    "problema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codice_icd9": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "descrizione": {
+          "type": "string"
+        },
+        "inizio": {
+          "type": "string",
+          "format": "date"
+        },
+        "stato": {
+          "enum": [
+            "active",
+            "completed",
+            "suspended",
+            "aborted"
+          ],
+          "description": "ActStatus HL7: active, completed (serve 'fine'), suspended, aborted (serve 'fine')"
+        },
+        "fine": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "codice_icd9",
+        "descrizione"
+      ]
+    },
+    "anamnesi": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "parentela": {
+          "type": "string"
+        },
+        "codice_icd9": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "descrizione": {
+          "type": "string"
+        },
+        "sesso": {
+          "enum": [
+            "M",
+            "F",
+            "UN"
+          ]
+        },
+        "eta_insorgenza": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "parentela",
+        "codice_icd9",
+        "descrizione"
+      ]
+    },
+    "esenzione": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codice": {
+          "type": "string"
+        },
+        "descrizione": {
+          "type": "string"
+        },
+        "inizio": {
+          "type": "string",
+          "format": "date"
+        },
+        "stato": {
+          "enum": [
+            "active",
+            "completed",
+            "suspended",
+            "aborted"
+          ],
+          "description": "ActStatus HL7: active, completed (serve 'fine'), suspended, aborted (serve 'fine')"
+        },
+        "fine": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "codice"
+      ]
+    }
+  }
+}

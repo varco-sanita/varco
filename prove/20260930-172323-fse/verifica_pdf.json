@@ -1,0 +1,106 @@
+{
+  "sha256_cda_originale": "3b47babe550dfc6e000298c3a08a91f640662d51118895da4b5ee8419e90c2de",
+  "pdf": [
+    {
+      "pdf": "pss_01_completo.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_01_completo.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "3b47babe550dfc6e000298c3a08a91f640662d51118895da4b5ee8419e90c2de"
+      },
+      "cda_identico": true
+    },
+    {
+      "pdf": "pdf_gestionale_senza_cda.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pdf_gestionale_senza_cda.pdf",
+        "is_pdf": true,
+        "trovato": false
+      },
+      "cda_identico": false
+    },
+    {
+      "pdf": "pdf_gestionale_con_cda_iniettato.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pdf_gestionale_con_cda_iniettato.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "3b47babe550dfc6e000298c3a08a91f640662d51118895da4b5ee8419e90c2de"
+      },
+      "cda_identico": true
+    },
+    {
+      "pdf": "pss_01_completo_firmato_TEST.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_01_completo_firmato_TEST.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "3b47babe550dfc6e000298c3a08a91f640662d51118895da4b5ee8419e90c2de"
+      },
+      "cda_identico": true,
+      "firma_pyhanko": {
+        "firme": 1,
+        "integra": true,
+        "crittograficamente_valida": true,
+        "attendibile_con_il_certificato_di_test_come_radice": true,
+        "copre_tutto_il_documento": "ENTIRE_FILE",
+        "subfilter": "/ETSI.CAdES.detached",
+        "firmatario": "Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO, Organization: kit-mmg (solo test), Country: IT"
+      },
+      "pdfsig_poppler": [
+        "Digital Signature Info of: /Users/lorenzo/kit-mmg/prove/20260930-172323-fse/pss_01_completo_firmato_TEST.pdf",
+        "Signature #1:",
+        "- Signature Field Name: FirmaMedico",
+        "- Signer Certificate Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO",
+        "- Signer full Distinguished Name: CN=kit-mmg CERTIFICATO DI TEST - NON VALIDO,O=kit-mmg (solo test),C=IT",
+        "- Signing Time: Sep 30 2026 17:23:28",
+        "- Signing Hash Algorithm: SHA-256",
+        "- Signature Type: ETSI.CAdES.detached",
+        "- Signed Ranges: [0 - 18825], [23707 - 24297]",
+        "- Total document signed",
+        "- Signature Validation: Signature is Valid.",
+        "- Certificate Validation: Certificate issuer isn't Trusted."
+      ],
+      "rivalidazione_ufficiale_cda_estratto": "OK"
+    },
+    {
+      "pdf": "pdf_gestionale_con_cda_firmato_TEST.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pdf_gestionale_con_cda_firmato_TEST.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "3b47babe550dfc6e000298c3a08a91f640662d51118895da4b5ee8419e90c2de"
+      },
+      "cda_identico": true,
+      "firma_pyhanko": {
+        "firme": 1,
+        "integra": true,
+        "crittograficamente_valida": true,
+        "attendibile_con_il_certificato_di_test_come_radice": true,
+        "copre_tutto_il_documento": "ENTIRE_FILE",
+        "subfilter": "/ETSI.CAdES.detached",
+        "firmatario": "Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO, Organization: kit-mmg (solo test), Country: IT"
+      },
+      "pdfsig_poppler": [
+        "Digital Signature Info of: /Users/lorenzo/kit-mmg/prove/20260930-172323-fse/pdf_gestionale_con_cda_firmato_TEST.pdf",
+        "Signature #1:",
+        "- Signature Field Name: FirmaMedico",
+        "- Signer Certificate Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO",
+        "- Signer full Distinguished Name: CN=kit-mmg CERTIFICATO DI TEST - NON VALIDO,O=kit-mmg (solo test),C=IT",
+        "- Signing Time: Sep 30 2026 17:23:28",
+        "- Signing Hash Algorithm: SHA-256",
+        "- Signature Type: ETSI.CAdES.detached",
+        "- Signed Ranges: [0 - 7466], [12348 - 12938]",
+        "- Total document signed",
+        "- Signature Validation: Signature is Valid.",
+        "- Certificate Validation: Certificate issuer isn't Trusted."
+      ],
+      "rivalidazione_ufficiale_cda_estratto": "OK"
+    }
+  ]
+}

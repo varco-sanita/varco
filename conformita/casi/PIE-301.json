@@ -1,0 +1,17 @@
+{
+  "id": "PIE-301",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, PKCE: code_challenge S256 del vettore di prova della RFC 7636",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.1 (PKCE, code_challenge_method S256); RFC 7636, appendice B",
+  "passi": [
+    {
+      "operazione": "pkce_piemonte",
+      "code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk",
+      "atteso": {
+        "campi": {
+          "code_challenge": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
+        }
+      }
+    }
+  ]
+}

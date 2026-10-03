@@ -1,0 +1,23 @@
+{
+  "id": "PIE-010",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, RevokeAuth riuscita: info revokeStatus",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.3. Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/revoca_ok.xml",
+      "atteso": {
+        "codice": [
+          "0"
+        ],
+        "ok": true,
+        "campi": {
+          "info": {
+            "revokeStatus": "Revoca del token eseguita correttamente"
+          }
+        }
+      }
+    }
+  ]
+}

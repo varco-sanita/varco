@@ -1,0 +1,22 @@
+{
+  "id": "FVG-005",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, specialistica con codice 060120 nell'elenco errori: downgrade in ricetta rossa (MIR)",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 2.3.6 (codici 060120-060130: downgrade in rossa in automatico). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte. Questa forma NON valida contro codEsitoType (4 cifre): la specifica non dice dove arrivi il codice",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "invio",
+      "risposta": "fvg/invio_downgrade_060120.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "060120",
+        "campi": {
+          "downgrade_mir": true
+        }
+      }
+    }
+  ]
+}

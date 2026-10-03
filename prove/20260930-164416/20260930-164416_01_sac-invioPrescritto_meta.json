@@ -1,0 +1,25 @@
+{
+  "data_ora": "2026-09-30T16:44:16+02:00",
+  "servizio": "sac.invioPrescritto",
+  "url": "https://demservicetest.sanita.finanze.it/DemRicettaPrescrittoServicesWeb/services/demInvioPrescritto",
+  "intestazioni_richiesta": {
+    "Content-Type": "text/xml;charset=UTF-8",
+    "SOAPAction": "\"http://invioprescritto.wsdl.dem.sanita.finanze.it/InvioPrescritto\"",
+    "Authorization": "***",
+    "Authorization2F": "***",
+    "User-Agent": "kit-mmg/0.1 (+EUPL-1.2)"
+  },
+  "stato_http": 200,
+  "durata_s": 0.441,
+  "intestazioni_risposta": {
+    "X-Backside-Transport": "OK OK",
+    "Connection": "close",
+    "Transfer-Encoding": "chunked",
+    "Date": "Wed, 30 Sep 2026 14:44:16 GMT",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+    "Content-Type": "text/xml",
+    "Content-Language": "en-US",
+    "X-Global-Transaction-ID": "43373d406abd2040282f89bf"
+  },
+  "errore": null
+}

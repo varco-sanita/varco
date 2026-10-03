@@ -1,0 +1,225 @@
+{
+  "dichiarazione": "Scritto e verificato sulle specifiche, NON collaudato sul sistema regionale.",
+  "server": "strumenti/sist_server_finto.py su 127.0.0.1 (nessuna chiamata alla Regione Puglia)",
+  "xsd_cvp": "CVPService.xsd validato dal server su ogni richiesta",
+  "data": "2026-10-01T16:57:25+02:00",
+  "passi": [
+    {
+      "passo": "01 invio farmaceutica (chkPrescrizione + setRegistraPrescrizione)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000001",
+      "registrato": true,
+      "solo_ricetta_rossa": false,
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "02 visualizza (getPrescrizioneIdentificata, NRE + CF assistito)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000001",
+      "stato_processo": "3",
+      "stato_sar": "1",
+      "righe": 1,
+      "cda": true
+    },
+    {
+      "passo": "03 visualizza con CF assistito sbagliato (rifiuto atteso 000004)",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "000004",
+          "tipo": "C"
+        }
+      ],
+      "nre": "1600A0000000001"
+    },
+    {
+      "passo": "04 annulla (setAnnullaPrescrizione)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000001"
+    },
+    {
+      "passo": "05 secondo annullamento (rifiuto atteso 000279)",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "000279",
+          "tipo": "C"
+        }
+      ],
+      "nre": "1600A0000000001"
+    },
+    {
+      "passo": "06 invio specialistica, catalogo regionale e numSedute",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000002",
+      "registrato": true,
+      "solo_ricetta_rossa": false,
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "07 invio con anomalie del server finto (0053 C, 0051 W): niente registrazione",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "0051",
+          "tipo": "W"
+        },
+        {
+          "codice": "0053",
+          "tipo": "C"
+        }
+      ],
+      "solo_ricetta_rossa": false
+    },
+    {
+      "passo": "08 SAC non disponibile (simulato): solo IUP, ricetta rossa, CDA registrato con setId = NRE",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000003",
+      "registrato": true,
+      "solo_ricetta_rossa": true
+    },
+    {
+      "passo": "09 ricetta del sostituto con la CNS del titolare: rifiuto locale (000271)",
+      "errore": "RicettaNonValida: Ricetta non valida: l'operatore che firma e chiama (PROVAX00X00X000Y) non è il medico che prescrive (PROVAX00X00X000Z): il SIST rifiuterebbe la firma (000271)"
+    },
+    {
+      "passo": "10 invio del sostituto (codMedicoPrescrittore = sostituto, codMedicoSostituito = titolare)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000004",
+      "registrato": true,
+      "solo_ricetta_rossa": false,
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "11 CDA firmato da un altro medico: il server risponde 000271, registrazione da ripetere",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000005",
+      "registrato": false,
+      "errore_registrazione": "SOAP Fault 000271 000271: Il firmatario del documento è diverso dall'operatore che ha richiesto la registrazione.",
+      "solo_ricetta_rossa": false,
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "12 ripeti_registrazione con la firma giusta, stesso NRE, nessun nuovo controllo",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "nre": "1600A0000000005",
+      "registrato": true,
+      "solo_ricetta_rossa": false,
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "13 ricerca per periodo e CF assistito (getPrescrizioniIdentificate)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "ricette": 3
+    },
+    {
+      "passo": "14 codice applicativo sbagliato: Fault 000220",
+      "fault": "000220"
+    }
+  ],
+  "ws_security": {
+    "richieste": 18,
+    "valide": 18,
+    "dettaglio": [
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setRegistraPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "getPrescrizioneIdentificata",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "getPrescrizioneIdentificata",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setAnnullaPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setAnnullaPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setRegistraPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setRegistraPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setRegistraPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setRegistraPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "setRegistraPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "getPrescrizioniIdentificate",
+        "ws_security_valida": true,
+        "motivo": null
+      },
+      {
+        "azione": "chkPrescrizione",
+        "ws_security_valida": true,
+        "motivo": null
+      }
+    ]
+  }
+}

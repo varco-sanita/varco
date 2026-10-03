@@ -1,0 +1,61 @@
+%PDF-1.7
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Length 892 >>
+stream
+BT /F1 9 Tf 12 TL 50 800 Td
+(PROFILO SANITARIO SINTETICO) Tj T*
+(Paziente: Di Prova Paziente - CF PNIMRA70A01H501P - nato/a il 1970-01-01) Tj T*
+(Medico: Dott. Medico Di Prova - CF PROVAX00X00X000Y) Tj T*
+(Data: 2026-09-30 17:00:00 - Documento PSS-TEST-0001 versione 1) Tj T*
+() Tj T*
+(Allergie e intolleranze:) Tj T*
+(  - Amoxicillina \(ATC J01CA04\) dal 2015-03-01) Tj T*
+() Tj T*
+(Terapie farmacologiche:) Tj T*
+(  - Ramipril \(C09AA05\) dal 2020-01-10) Tj T*
+(  - LEVETIRACETAM 500MG 60 UNITA' USO ORALE \(G3B\) dal 2026-09-30) Tj T*
+() Tj T*
+(Lista dei problemi:) Tj T*
+(  - Ipertensione essenziale non specificata \(ICD-9-CM 401.9\)) Tj T*
+() Tj T*
+(Anamnesi familiare:) Tj T*
+(  - FTH: Infarto miocardico acuto \(ICD-9-CM 410.00\)) Tj T*
+() Tj T*
+(Esenzioni:) Tj T*
+(  - 031) Tj T*
+() Tj T*
+(Il documento strutturato \(CDA2 HL7 Italia\) Ë allegato a questo PDF come cda.xml.) Tj T*
+ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Title (PDF del gestionale \(TEST\)) /Producer (kit-mmg) /CreationDate (D:20260930152328Z) >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000218 00000 n 
+0000001161 00000 n 
+0000001287 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R /Info 6 0 R /ID [<0f13333e1192fb2a5cf032eef3677e2d> <0f13333e1192fb2a5cf032eef3677e2d>] >>
+startxref
+1399
+%%EOF

@@ -1,0 +1,21 @@
+{
+  "sintesi": "Nessuno ha già fatto quello che fa il kit. Abbiamo cercato su GitHub (nomi e codice), GitLab, Codeberg, l'intero catalogo di Developers Italia (552 voci) e i registri di pacchetti: non esiste una libreria aperta e viva che unisca ricetta lato medico, sistemi regionali e Fascicolo sullo stesso modello dati, con una suite di conformità. Per i certificati INPS non esiste nessun client open source; per SIRPED, SIST, SISS, Insiel e SOLE nessun codice pubblico lato medico.",
+  "a": [
+    {"nome": "ASL2-Liguria/onesys", "cosa": "Cartella per medici di famiglia e pediatri dell'ASL 2 ligure: ricetta (via SAR ligure), certificato INPS, patient summary. Applicazione monolitica, non libreria: le chiamate passano dai servizi dell'Azienda, nessun client riusabile.", "stato": "EUPL-1.2, fermo al 07/2023. Precedente pubblico da citare."}
+  ],
+  "b": [
+    {"nome": "punto-zero/umbria-sar-support", "cosa": "Specifiche ufficiali del SAR Umbria (REST, OpenAPI) lato medico, con Postman, certificati e indirizzi di test.", "stato": "Aggiornato 02/2026. Base per il prossimo modulo regionale."},
+    {"nome": "Repository FSE del Ministero", "cosa": "Validatore, dispatcher, cataloghi (già usati dal kit), gateway in container per provare l'invio senza certificati Sogei, casi di prova PSS (repo in dismissione: da salvare).", "stato": "Vivi, AGPL: solo come strumenti esterni."},
+    {"nome": "zukka77/gtwclient, vincenzo-ingenito/fse-tools", "cosa": "Strumenti FSE degli autori principali del supporto FSE del Ministero.", "stato": "Persone con cui collaborare."},
+    {"nome": "Paserconsulting/fse-helper; giosil/hl7cda2, pades, cades", "cosa": "CDA, PDF e firma PAdES/CAdES (referti, non PSS).", "stato": "MIT / Apache-2.0: riferimenti per la firma vera."},
+    {"nome": "eracle/ricetta-dematerializzata; lucasaba/DEMClient", "cosa": "Vecchie librerie PHP per la ricetta, incomplete o solo lato farmacia.", "stato": "Ferme al 2016-2017."},
+    {"nome": "Wulfgardr/mediflow; fedcal/MedBook", "cosa": "Cartelle cliniche aperte senza collegamento ai servizi pubblici.", "stato": "Vive / in progettazione: potenziali utenti del kit."},
+    {"nome": "regione-piemonte/apisan, farab-fse", "cosa": "Ricette e farmaci lato cittadino, non lato medico.", "stato": "Della Regione Piemonte: interlocutore."}
+  ],
+  "unico": [
+    "ricetta e Fascicolo sugli stessi oggetti; i sistemi regionali come varianti dello stesso contratto;",
+    "suite di conformità in JSON rieseguibile in qualsiasi linguaggio;",
+    "medico sostituto e ricette già emesse provati sull'ambiente di test del MEF; validatore ufficiale eseguito in locale;",
+    "nel catalogo Developers Italia oggi non c'è nessuna libreria per i medici di famiglia."
+  ]
+}

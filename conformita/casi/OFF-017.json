@@ -1,0 +1,26 @@
+{
+  "id": "OFF-017",
+  "famiglia": "offline",
+  "titolo": "Visualizzazione del sostituto: esito 0001 con avviso 1024 (check digit del CF di test)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1 (sostituti); Risposta reale del SAC di test, prove/20260930-171334-sostituto-nre",
+  "passi": [
+    {
+      "operazione": "leggi_visualizza",
+      "risposta": "visualizza_sostituto_avviso_1024.xml",
+      "atteso": {
+        "codice": [
+          "0001"
+        ],
+        "avvisi_codici": [
+          "1024"
+        ],
+        "nessun_bloccante": true,
+        "stato_processo": "3",
+        "campi": {
+          "cfMedico1": "PROVAX00X00X000Y",
+          "cfMedico2": "PROVAX00X00X000Z"
+        }
+      }
+    }
+  ]
+}

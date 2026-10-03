@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <realmCode code="IT" />
+  <typeId root="2.16.840.1.113883.1.3" extension="POCD_MT000040UV02" />
+  <templateId root="2.16.840.1.113883.2.9.10.1.4.1.1" extension="1.4" />
+  <id root="2.16.840.1.113883.2.9.2.130.4.4" extension="PSS-TEST-0012" />
+  <code code="60591-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Profilo Sanitario Sintetico" />
+  <title>Profilo Sanitario Sintetico</title>
+  <effectiveTime value="20260930170000+0200" />
+  <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" codeSystemName="HL7 Confidentiality" />
+  <languageCode code="it-IT" />
+  <setId root="2.16.840.1.113883.2.9.2.130.4.4" extension="PSS-TEST-0012" />
+  <versionNumber value="2" />
+  <recordTarget>
+    <patientRole>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PNIMRA70A01H501P" assigningAuthorityName="MEF" />
+      <addr use="H">
+        <country>100</country>
+        <state>130</state>
+        <county>AQ</county>
+        <city>L'Aquila</city>
+        <censusTract>066049</censusTract>
+        <postalCode>67100</postalCode>
+        <streetAddressLine>Via di Prova 1</streetAddressLine>
+      </addr>
+      <patient>
+        <name>
+          <family>Di Prova</family>
+          <given>Paziente</given>
+        </name>
+        <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 AdministrativeGender" displayName="Maschio" />
+        <birthTime value="19700101" />
+        <birthplace>
+          <place>
+            <addr>
+              <country>100</country>
+              <state>120</state>
+              <county>RM</county>
+              <city>Roma</city>
+              <censusTract>058091</censusTract>
+            </addr>
+          </place>
+        </birthplace>
+      </patient>
+    </patientRole>
+  </recordTarget>
+  <author>
+    <time value="20260930170000+0200" />
+    <assignedAuthor>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PROVAX00X00X000Y" assigningAuthorityName="MEF" />
+      <code code="MMG" codeSystem="2.16.840.1.113883.2.9.77.22.11.13" codeSystemName="assignedAuthorCode_PSSIT" displayName="Medico di Medicina Generale" />
+      <telecom use="WP" value="tel:0000000000" />
+      <telecom use="WP" value="mailto:medico.di.prova@example.invalid" />
+      <assignedPerson>
+        <name>
+          <family>Di Prova</family>
+          <given>Medico</given>
+          <prefix>Dott.</prefix>
+        </name>
+      </assignedPerson>
+    </assignedAuthor>
+  </author>
+  <custodian>
+    <assignedCustodian>
+      <representedCustodianOrganization>
+        <id root="2.16.840.1.113883.2.9.4.1.2" extension="130201" />
+        <name>ASL DI PROVA 201 (dato di test)</name>
+        <addr>
+          <country>100</country>
+          <state>130</state>
+          <city>L'Aquila</city>
+          <censusTract>066049</censusTract>
+          <streetAddressLine>Via di Prova 2</streetAddressLine>
+        </addr>
+      </representedCustodianOrganization>
+    </assignedCustodian>
+  </custodian>
+  <legalAuthenticator>
+    <time value="20260930170000+0200" />
+    <signatureCode code="S" />
+    <assignedEntity>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PROVAX00X00X000Y" assigningAuthorityName="MEF" />
+      <telecom use="WP" value="tel:0000000000" />
+      <telecom use="WP" value="mailto:medico.di.prova@example.invalid" />
+      <assignedPerson>
+        <name>
+          <family>Di Prova</family>
+          <given>Medico</given>
+          <prefix>Dott.</prefix>
+        </name>
+      </assignedPerson>
+    </assignedEntity>
+  </legalAuthenticator>
+  <documentationOf>
+    <serviceEvent>
+      <effectiveTime value="20260930170000+0200" />
+    </serviceEvent>
+  </documentationOf>
+  <component>
+    <structuredBody moodCode="EVN" classCode="DOCBODY">
+      <component typeCode="COMP">
+        <section ID="ALL">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.1" />
+          <id root="3e93cdd1-5e03-4a22-a9d0-ab7e6b4dd6ac" />
+          <code code="48765-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergie, Reazioni Avverse" />
+          <title>Allergie e Intolleranze</title>
+          <text>
+            <list>
+              <item>
+                <content ID="all-1">Amoxicillina</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.1.1" />
+              <id root="38e84a20-096e-4940-bf3a-47ce3aa66e17" />
+              <code nullFlavor="NA" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20150301" />
+              </effectiveTime>
+              <entryRelationship typeCode="SUBJ">
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.1.3" />
+                  <id root="1821bead-04cf-4652-bc9f-8be35eb71dcc" />
+                  <code code="52473-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergia o causa della reazione" />
+                  <text>
+                    <reference value="#all-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime>
+                    <low value="20150301" />
+                  </effectiveTime>
+                  <value xsi:type="CD" code="ALG" codeSystem="2.16.840.1.113883.1.11.19700" codeSystemName="ObservationIntoleranceType" />
+                  <participant typeCode="CSM">
+                    <participantRole classCode="MANU">
+                      <playingEntity classCode="MMAT">
+                        <code code="J01CA04" codeSystem="2.16.840.1.113883.6.73" codeSystemName="ATC" displayName="Amoxicillina">
+                          <originalText>
+                            <reference value="#all-1" />
+                          </originalText>
+                        </code>
+                      </playingEntity>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </entryRelationship>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="TER">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.2" />
+          <id root="694e46c2-e25f-46f3-a108-83783fc8f4bc" />
+          <code code="10160-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="HISTORY OF MEDICATION USE" />
+          <title>Terapie farmacologiche</title>
+          <text>
+            <list>
+              <item>
+                <content ID="ter-1">Ramipril</content>
+              </item>
+              <item>
+                <content ID="ter-2">LEVETIRACETAM 500MG 60 UNITA' USO ORALE</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <substanceAdministration classCode="SBADM" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.1" />
+              <id root="468b7a5e-8e0c-42e6-9f2f-0b815cd96d85" />
+              <text>
+                <reference value="#ter-1" />
+              </text>
+              <statusCode code="active" />
+              <effectiveTime xsi:type="IVL_TS">
+                <low value="20200110" />
+              </effectiveTime>
+              <routeCode code="PO" codeSystem="2.16.840.1.113883.5.112" codeSystemName="HL7 RouteOfAdministration" />
+              <consumable>
+                <manufacturedProduct classCode="MANU">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.2" />
+                  <manufacturedMaterial>
+                    <templateId root="2.16.840.1.113883.10.22.4.3" />
+                    <code code="C09AA05" codeSystem="2.16.840.1.113883.6.73" codeSystemName="ATC" displayName="Ramipril">
+                      <originalText>
+                        <reference value="#ter-1" />
+                      </originalText>
+                    </code>
+                  </manufacturedMaterial>
+                </manufacturedProduct>
+              </consumable>
+            </substanceAdministration>
+          </entry>
+          <entry>
+            <substanceAdministration classCode="SBADM" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.1" />
+              <id root="cbc0d753-1a13-40b8-8b3d-d4ecebfd67d7" />
+              <text>
+                <reference value="#ter-2" />
+              </text>
+              <statusCode code="active" />
+              <effectiveTime xsi:type="IVL_TS">
+                <low value="20260930" />
+              </effectiveTime>
+              <routeCode code="PO" codeSystem="2.16.840.1.113883.5.112" codeSystemName="HL7 RouteOfAdministration" />
+              <consumable>
+                <manufacturedProduct classCode="MANU">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.2" />
+                  <manufacturedMaterial>
+                    <templateId root="2.16.840.1.113883.10.22.4.3" />
+                    <code code="G3B" codeSystem="2.16.840.1.113883.2.9.6.1.51" codeSystemName="GE" displayName="LEVETIRACETAM 500MG 60 UNITA' USO ORALE">
+                      <originalText>
+                        <reference value="#ter-2" />
+                      </originalText>
+                    </code>
+                  </manufacturedMaterial>
+                </manufacturedProduct>
+              </consumable>
+            </substanceAdministration>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="PRO">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.4" />
+          <id root="7b845ce5-50fd-4e57-8e99-d27f4ad44843" />
+          <code code="11450-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Lista dei Problemi" />
+          <title>Lista dei problemi</title>
+          <text>
+            <list>
+              <item>
+                <content ID="pro-1">Ipertensione essenziale non specificata (401.9)</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.4.1" />
+              <id root="072ab720-fb56-4674-ab74-84e666b42494" />
+              <code nullFlavor="NA" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20200110" />
+              </effectiveTime>
+              <entryRelationship typeCode="SUBJ" inversionInd="false">
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.4.2" />
+                  <id root="b78b560c-ff3e-4d36-8a3e-d88ea8ce5159" />
+                  <code code="75326-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Problema" />
+                  <text>
+                    <reference value="#pro-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime>
+                    <low value="20200110" />
+                  </effectiveTime>
+                  <value xsi:type="CD" code="401.9" codeSystem="2.16.840.1.113883.6.103" codeSystemName="ICD-9-CM" displayName="Ipertensione essenziale non specificata">
+                    <originalText>
+                      <reference value="#pro-1" />
+                    </originalText>
+                  </value>
+                </observation>
+              </entryRelationship>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="FAM">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.16" />
+          <id root="d372af3e-8a86-4002-a400-5de0b30e96fa" />
+          <code code="10157-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Storia di malattie di membri familiari" />
+          <title>Anamnesi familiare</title>
+          <text>
+            <list>
+              <item>
+                <content ID="fam-1">FTH: Infarto miocardico acuto (410.00)</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <organizer classCode="CLUSTER" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.1" />
+              <id root="da39df6e-4af7-46a2-8fb3-fae11828a2a8" />
+              <code code="10157-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Storia di malattie di membri familiari" />
+              <statusCode code="completed" />
+              <subject typeCode="SBJ">
+                <relatedSubject classCode="PRS">
+                  <code code="FTH" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode" />
+                  <subject>
+                    <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 AdministrativeGender" displayName="Maschio" />
+                  </subject>
+                </relatedSubject>
+              </subject>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.2" />
+                  <id root="abd791c1-71d5-472f-aa90-621e8aa94273" />
+                  <code code="52797-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosi codice ICD" />
+                  <text>
+                    <reference value="#fam-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime nullFlavor="UNK" />
+                  <value xsi:type="CD" code="410.00" codeSystem="2.16.840.1.113883.6.103" codeSystemName="ICD-9-CM" displayName="Infarto miocardico acuto">
+                    <originalText>
+                      <reference value="#fam-1" />
+                    </originalText>
+                  </value>
+                  <entryRelationship typeCode="SUBJ">
+                    <observation classCode="OBS" moodCode="EVN">
+                      <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.3" />
+                      <code code="35267-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Età diagnosi patologia" />
+                      <statusCode code="completed" />
+                      <value xsi:type="PQ" value="60" unit="a" />
+                    </observation>
+                  </entryRelationship>
+                </observation>
+              </component>
+            </organizer>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="ESE">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.17" />
+          <id root="a651f64a-c98c-4f60-97d8-e73b9440d0f7" />
+          <code code="57827-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Motivo di esenzione dal co-pagamento" />
+          <title>Esenzioni</title>
+          <text>
+            <list>
+              <item>
+                <content ID="ese-1">Esenzione 031</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.17.1" />
+              <id root="5d8670a5-6ad9-4e9d-910b-d3a8a7de3dd8" />
+              <code code="031" codeSystem="2.16.840.1.113883.2.9.6.1.22" codeSystemName="Esenzioni" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20200201" />
+              </effectiveTime>
+            </act>
+          </entry>
+        </section>
+      </component>
+    </structuredBody>
+  </component>
+</ClinicalDocument>

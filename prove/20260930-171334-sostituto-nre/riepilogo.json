@@ -1,0 +1,517 @@
+{
+  "generato": "2026-09-30T17:13:34+02:00",
+  "ambiente": "https://demservicetest.sanita.finanze.it",
+  "titolare": "PROVAX00X00X000Y",
+  "sostituto": "PROVAX00X00X000Z",
+  "posizione_titolare": {
+    "regione": "130",
+    "asl": "201",
+    "specializzazione": "F"
+  },
+  "assistito_test": "PNIMRA70A01H501P",
+  "passi": [
+    {
+      "passo": "S-1 invio del SOSTITUTO (cfMedico1=titolare, cfMedico2=sostituto, credenziali e pincode del sostituto)",
+      "ora": "2026-09-30T17:13:35+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294846",
+      "codice_autenticazione": "300920261713351440000050622839"
+    },
+    {
+      "passo": "S-2 visualizza come sostituto (cfMedico=sostituto)",
+      "ora": "2026-09-30T17:13:35+02:00",
+      "codice_esito": "0001",
+      "messaggi": [
+        {
+          "codice": "1024",
+          "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+          "tipo": "Avviso"
+        },
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294846",
+      "codice_autenticazione": "300920261713351440000050622839",
+      "stato_processo": "3",
+      "cfMedico1": "PROVAX00X00X000Y",
+      "cfMedico2": "PROVAX00X00X000Z"
+    },
+    {
+      "passo": "S-3 visualizza come titolare (cfMedico=titolare, credenziali del titolare)",
+      "ora": "2026-09-30T17:13:36+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294846",
+      "codice_autenticazione": "300920261713351440000050622839",
+      "stato_processo": "3",
+      "cfMedico1": "PROVAX00X00X000Y",
+      "cfMedico2": "PROVAX00X00X000Z"
+    },
+    {
+      "passo": "S-4 annulla come TITOLARE (la specifica lo vieta: atteso rifiuto)",
+      "ora": "2026-09-30T17:13:37+02:00",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "1125",
+          "testo": "Visualizzazione non consentita - cf medico non valido, diverso da quello associato NRE",
+          "tipo": "Bloccante"
+        }
+      ],
+      "nre": "1300A4019294846"
+    },
+    {
+      "passo": "S-5 controllo locale: cfMedico2 valorizzato con credenziali del titolare (rifiuto locale, nessuna chiamata)",
+      "ora": "2026-09-30T17:13:37+02:00",
+      "errore": "RicettaNonValida('Ricetta non valida: con il sostituto (PROVAX00X00X000Z) in cfMedico2 servono le sue credenziali, non quelle di PROVAX00X00X000Y')"
+    },
+    {
+      "passo": "S-6 stessa richiesta mandata al SAC senza controlli locali (credenziali titolare, cfMedico2=sostituto)",
+      "ora": "2026-09-30T17:13:38+02:00",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "1212",
+          "testo": "Il campo cfMedico2 deve coincidere con il CF dell'utente inviante",
+          "tipo": "Bloccante"
+        }
+      ]
+    },
+    {
+      "passo": "N-0 invio del titolare (serve un NRE di oggi da cercare)",
+      "ora": "2026-09-30T17:13:40+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294847",
+      "codice_autenticazione": "300920261713401010000050622840"
+    },
+    {
+      "passo": "N-1 interroga NRE puntuale (titolare)",
+      "ora": "2026-09-30T17:13:45+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "ricette": [
+        {
+          "nre": "1300A4019294847",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 17:13:38",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261713401010000050622840"
+        }
+      ]
+    },
+    {
+      "passo": "N-2 interroga per intervallo di date di oggi, tipo F (titolare)",
+      "ora": "2026-09-30T17:13:47+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "ricette": [
+        {
+          "nre": "1300A4019294835",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 04:46:34",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261647054800000050622804"
+        },
+        {
+          "nre": "1300A4019294840",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 04:48:50",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261648512210000050622816"
+        },
+        {
+          "nre": "1300A4019294823",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 10:47:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261048353380000050622422"
+        },
+        {
+          "nre": "1300A4019294824",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 11:22:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261123321940000050622457"
+        },
+        {
+          "nre": "1300A4019294825",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 11:22:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261123324350000050622458"
+        },
+        {
+          "nre": "1300A4019294826",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 11:26:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261127115620000050622461"
+        },
+        {
+          "nre": "1300A4019294827",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 11:26:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261127118050000050622462"
+        },
+        {
+          "nre": "1300A4019294828",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 11:29:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261130033060000050622464"
+        },
+        {
+          "nre": "1300A4019294829",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 15:07:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261512212600000050622600"
+        },
+        {
+          "nre": "1300A4019294830",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 15:07:00",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261512215190000050622601"
+        },
+        {
+          "nre": "1300A4019294831",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:42:08",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261642092340000050622779"
+        },
+        {
+          "nre": "1300A4019294833",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:44:16",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261644168700000050622782"
+        },
+        {
+          "nre": "1300A4019294836",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:47:15",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261647159170000050622805"
+        },
+        {
+          "nre": "1300A4019294838",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:47:20",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261647218100000050622808"
+        },
+        {
+          "nre": "1300A4019294839",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:47:22",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261647239380000050622810"
+        },
+        {
+          "nre": "1300A4019294841",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:49:58",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261649591250000050622818"
+        },
+        {
+          "nre": "1300A4019294843",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:52:44",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261652450120000050622821"
+        },
+        {
+          "nre": "1300A4019294844",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 16:56:50",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261656507700000050622825"
+        },
+        {
+          "nre": "1300A4019294846",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 17:13:34",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261713351440000050622839"
+        },
+        {
+          "nre": "1300A4019294847",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 17:13:38",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261713401010000050622840"
+        }
+      ]
+    },
+    {
+      "passo": "N-3 interroga per date + CF assistito (titolare)",
+      "ora": "2026-09-30T17:13:51+02:00",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "1153",
+          "testo": "Ricerca - Il tipo prescrizione è un campo obbligatorio",
+          "tipo": "Bloccante"
+        }
+      ],
+      "ricette": []
+    },
+    {
+      "passo": "N-4 interroga NRE inesistente (atteso rifiuto o lista vuota)",
+      "ora": "2026-09-30T17:13:51+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "ricette": []
+    },
+    {
+      "passo": "N-5 interroga l'NRE del sostituto, come sostituto (cfMedico=sostituto)",
+      "ora": "2026-09-30T17:13:56+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "ricette": []
+    },
+    {
+      "passo": "N-6 interroga l'NRE del sostituto, come titolare",
+      "ora": "2026-09-30T17:13:56+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "ricette": [
+        {
+          "nre": "1300A4019294846",
+          "cf_medico": "PROVAX00X00X000Y",
+          "tipo": "F",
+          "data_compilazione": "2026-09-30 17:13:34",
+          "cf_assistito": null,
+          "provenienza": "0",
+          "lotto": "1300A40",
+          "codice_autenticazione": "300920261713351440000050622839"
+        }
+      ]
+    },
+    {
+      "passo": "N-7 controllo locale: né NRE né date (rifiuto locale, nessuna chiamata)",
+      "ora": "2026-09-30T17:13:56+02:00",
+      "errore": "RicettaNonValida('Ricetta non valida: senza NRE puntuale servono entrambe le date (dal, al)')"
+    },
+    {
+      "passo": "Z annulla 1300A4019294846 (cfMedico=PROVAX00X00X000Z)",
+      "ora": "2026-09-30T17:13:57+02:00",
+      "codice_esito": "0001",
+      "messaggi": [
+        {
+          "codice": "1024",
+          "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+          "tipo": "Avviso"
+        },
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294846"
+    },
+    {
+      "passo": "Z annulla 1300A4019294847 (cfMedico=PROVAX00X00X000Y)",
+      "ora": "2026-09-30T17:13:58+02:00",
+      "codice_esito": "0000",
+      "messaggi": [
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294847"
+    },
+    {
+      "passo": "Z visualizza la ricetta del sostituto dopo l'annullamento (atteso stato 4)",
+      "ora": "2026-09-30T17:13:59+02:00",
+      "codice_esito": "0001",
+      "messaggi": [
+        {
+          "codice": "1024",
+          "testo": "Il check digit del Codice Fiscale del campo cfMedico risulta errato",
+          "tipo": "Avviso"
+        },
+        {
+          "codice": "0000",
+          "testo": "Operazione eseguita correttamente",
+          "tipo": null
+        }
+      ],
+      "nre": "1300A4019294846",
+      "codice_autenticazione": "300920261713351440000050622839",
+      "stato_processo": "4",
+      "cfMedico1": "PROVAX00X00X000Y",
+      "cfMedico2": "PROVAX00X00X000Z"
+    }
+  ],
+  "file": [
+    "20260930-171335_01_sac-invioPrescritto_richiesta.xml",
+    "20260930-171335_01_sac-invioPrescritto_risposta.xml",
+    "20260930-171335_01_sac-invioPrescritto_meta.json",
+    "20260930-171335_02_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-171335_02_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-171335_02_sac-visualizzaPrescritto_meta.json",
+    "20260930-171336_03_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-171336_03_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-171336_03_sac-visualizzaPrescritto_meta.json",
+    "20260930-171337_04_sac-annullaPrescritto_richiesta.xml",
+    "20260930-171337_04_sac-annullaPrescritto_risposta.xml",
+    "20260930-171337_04_sac-annullaPrescritto_meta.json",
+    "20260930-171338_05_sac-invioPrescritto_richiesta.xml",
+    "20260930-171338_05_sac-invioPrescritto_risposta.xml",
+    "20260930-171338_05_sac-invioPrescritto_meta.json",
+    "20260930-171340_06_sac-invioPrescritto_richiesta.xml",
+    "20260930-171340_06_sac-invioPrescritto_risposta.xml",
+    "20260930-171340_06_sac-invioPrescritto_meta.json",
+    "20260930-171345_07_sac-interrogaNreUtilizzati_richiesta.xml",
+    "20260930-171345_07_sac-interrogaNreUtilizzati_risposta.xml",
+    "20260930-171345_07_sac-interrogaNreUtilizzati_meta.json",
+    "20260930-171347_08_sac-interrogaNreUtilizzati_richiesta.xml",
+    "20260930-171347_08_sac-interrogaNreUtilizzati_risposta.xml",
+    "20260930-171347_08_sac-interrogaNreUtilizzati_meta.json",
+    "20260930-171351_09_sac-interrogaNreUtilizzati_richiesta.xml",
+    "20260930-171351_09_sac-interrogaNreUtilizzati_risposta.xml",
+    "20260930-171351_09_sac-interrogaNreUtilizzati_meta.json",
+    "20260930-171351_10_sac-interrogaNreUtilizzati_richiesta.xml",
+    "20260930-171351_10_sac-interrogaNreUtilizzati_risposta.xml",
+    "20260930-171351_10_sac-interrogaNreUtilizzati_meta.json",
+    "20260930-171356_11_sac-interrogaNreUtilizzati_richiesta.xml",
+    "20260930-171356_11_sac-interrogaNreUtilizzati_risposta.xml",
+    "20260930-171356_11_sac-interrogaNreUtilizzati_meta.json",
+    "20260930-171356_12_sac-interrogaNreUtilizzati_richiesta.xml",
+    "20260930-171356_12_sac-interrogaNreUtilizzati_risposta.xml",
+    "20260930-171356_12_sac-interrogaNreUtilizzati_meta.json",
+    "20260930-171357_13_sac-annullaPrescritto_richiesta.xml",
+    "20260930-171357_13_sac-annullaPrescritto_risposta.xml",
+    "20260930-171357_13_sac-annullaPrescritto_meta.json",
+    "20260930-171358_14_sac-annullaPrescritto_richiesta.xml",
+    "20260930-171358_14_sac-annullaPrescritto_risposta.xml",
+    "20260930-171358_14_sac-annullaPrescritto_meta.json",
+    "20260930-171359_15_sac-visualizzaPrescritto_richiesta.xml",
+    "20260930-171359_15_sac-visualizzaPrescritto_risposta.xml",
+    "20260930-171359_15_sac-visualizzaPrescritto_meta.json"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "PIE-206",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, modalità OAuth2 con il JWT di un altro medico: rifiuto locale",
+  "riferimento": "Piano dei test SIRPED-TES-01 V02, par. 3.2: «in ambiente di produzione sarà attivo il controllo di corrispondenza tra il codice fiscale del medico prescrittore e il codice fiscale del medico che ha ottenuto il token jwt»",
+  "passi": [
+    {
+      "operazione": "intestazioni_piemonte",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "servizio": "invio",
+      "modalita": "oauth2",
+      "cf_medico": "PROVAX00X00X000Y",
+      "jwt_payload": {
+        "sub": "PROVAX00X00X000Z",
+        "exp": 4102444800,
+        "userData": {
+          "cfutente": "PROVAX00X00X000Z",
+          "idSessione": "3f2504e0-4f89-41d3-9a0c-0305e82c3301"
+        },
+        "scope": "prescrizione"
+      },
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

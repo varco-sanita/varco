@@ -1,0 +1,33 @@
+{
+  "id": "PIE-203",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth: solo Basic RUPAR (l'Id-Sessione non c'è ancora), SOAPAction del WSDL A2F",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 3 («servizio autenticato con credenziale RUPAR assegnata all'utente (basic authentication)») e 4.2; kit A2F del Sistema TS ver. 20250902 (sts-a2f-service.v0.1.xsd, sts-a2f-service-data-type.v0.1.xsd), che REL-STC-01 par. 4.2 dichiara identico per SIRPED (soapAction .../create)",
+  "passi": [
+    {
+      "operazione": "intestazioni_piemonte",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "servizio": "crea_id_sessione",
+      "modalita": "mail",
+      "credenziali": {
+        "utente": "rupar-prova",
+        "password": "password-di-prova",
+        "pincode": "1234567890",
+        "cf": "PROVAX00X00X000Y"
+      },
+      "atteso": {
+        "intestazioni": {
+          "Authorization": "Basic cnVwYXItcHJvdmE6cGFzc3dvcmQtZGktcHJvdmE=",
+          "SOAPAction": "\"http://wsdl.auth.a2f.sts.sanita.finanze.it/create\""
+        },
+        "assenti": [
+          "X-idSessione",
+          "X-OAuth2-Authorization"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "FVG-008",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, visualizzazione di una ricetta del sostituto: cfMedico2",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.4 (cfMedico titolare o sostituto). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "visualizza",
+      "risposta": "fvg/visualizza_sostituto.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "campi": {
+          "cfMedico1": "PROVAX00X00X000Y",
+          "cfMedico2": "PROVAX00X00X000Z"
+        }
+      }
+    }
+  ]
+}

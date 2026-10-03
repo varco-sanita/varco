@@ -1,0 +1,21 @@
+{
+  "id": "SAC-015",
+  "famiglia": "online",
+  "titolo": "Lista NRE: NRE inesistente = 0000 e lista vuota",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4",
+  "passi": [
+    {
+      "operazione": "interroga_nre",
+      "criteri": {
+        "codice_regione": "${regione}",
+        "nre": "1300A4099999999"
+      },
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_numero": 0
+      }
+    }
+  ]
+}

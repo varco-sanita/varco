@@ -1,0 +1,27 @@
+{
+  "id": "FVG-001",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, invio riuscito: NRE, codice di autenticazione, nessun downgrade",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.2 (InvioPrescrittoRicevuta). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "invio",
+      "risposta": "fvg/invio_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre_formato": true,
+        "nre": "0600A0000000001",
+        "presenti": [
+          "codice_autenticazione"
+        ],
+        "nessun_bloccante": true,
+        "campi": {
+          "downgrade_mir": false
+        }
+      }
+    }
+  ]
+}

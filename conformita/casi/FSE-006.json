@@ -1,0 +1,18 @@
+{
+  "id": "FSE-006",
+  "famiglia": "fse",
+  "titolo": "Codice fiscale del paziente di 15 caratteri",
+  "riferimento": "schematron_PSS_v4.0.sch e schema CDA POCD_MT000040UV02 (it-fse-catalogs); dizionari del gateway (mongo-dump); esito come RawValidationEnum di it-fse-gtw-validator",
+  "passi": [
+    {
+      "operazione": "valida_documento",
+      "documento": "documenti/pss_06_ko_cf_paziente.xml",
+      "atteso": {
+        "esito": "SEMANTIC_ERROR",
+        "errori_contengono": [
+          "ERRORE-52|"
+        ]
+      }
+    }
+  ]
+}

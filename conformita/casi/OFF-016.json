@@ -1,0 +1,18 @@
+{
+  "id": "OFF-016",
+  "famiglia": "offline",
+  "titolo": "Lista NRE: NRE inesistente = esito 0000 e lista vuota (non un errore)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4; Risposta reale del SAC di test, prove/20260930-171334-sostituto-nre",
+  "passi": [
+    {
+      "operazione": "leggi_interroga_nre",
+      "risposta": "interroga_nre_inesistente_vuoto.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_numero": 0
+      }
+    }
+  ]
+}

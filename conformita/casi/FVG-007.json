@@ -1,0 +1,24 @@
+{
+  "id": "FVG-007",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, visualizzazione: stato 3, una riga",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.4 (VisualizzaPrescrittoRicevuta). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "visualizza",
+      "risposta": "fvg/visualizza_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre": "0600A0000000001",
+        "stato_processo": "3",
+        "righe": 1,
+        "campi": {
+          "cfMedico1": "PROVAX00X00X000Y"
+        }
+      }
+    }
+  ]
+}

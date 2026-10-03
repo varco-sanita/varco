@@ -1,0 +1,15 @@
+{
+  "id": "PIE-303",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, PKCE: code_verifier con caratteri non ammessi ('+', '/'): rifiuto locale",
+  "riferimento": "RFC 7636, par. 4.1 (caratteri non riservati A-Z a-z 0-9 - . _ ~)",
+  "passi": [
+    {
+      "operazione": "pkce_piemonte",
+      "code_verifier": "dBjftJeZ4CVP+mB92K27uhbUJU1p1r/wW1gFWFOEjXk",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

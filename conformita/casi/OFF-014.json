@@ -1,0 +1,22 @@
+{
+  "id": "OFF-014",
+  "famiglia": "offline",
+  "titolo": "Lettura lista NRE per intervallo di date: più ricette",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4; Risposta reale del SAC di test, prove/20260930-171334-sostituto-nre",
+  "passi": [
+    {
+      "operazione": "leggi_interroga_nre",
+      "risposta": "interroga_nre_intervallo.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_almeno": 20,
+        "ricette_contengono": [
+          "1300A4019294846",
+          "1300A4019294847"
+        ]
+      }
+    }
+  ]
+}

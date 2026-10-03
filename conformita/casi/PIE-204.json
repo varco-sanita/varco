@@ -1,0 +1,26 @@
+{
+  "id": "PIE-204",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, modalità mail senza Id-Sessione: rifiuto locale prima di chiamare",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.5 (X-idSessione obbligatorio); piano dei test SIRPED-TES-01 V02, A2F-MAIL-INV-N-03 (il SAR lo rifiuterebbe)",
+  "passi": [
+    {
+      "operazione": "intestazioni_piemonte",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "servizio": "invio",
+      "modalita": "mail",
+      "credenziali": {
+        "utente": "rupar-prova",
+        "password": "password-di-prova",
+        "pincode": "1234567890",
+        "cf": "PROVAX00X00X000Y"
+      },
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

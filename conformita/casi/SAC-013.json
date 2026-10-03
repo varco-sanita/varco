@@ -1,0 +1,76 @@
+{
+  "id": "SAC-013",
+  "famiglia": "online",
+  "titolo": "Lista NRE utilizzati: ricerca puntuale e per intervallo trovano la ricetta appena inviata",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4",
+  "passi": [
+    {
+      "operazione": "invia",
+      "ricetta": {
+        "prescrittore": "${prescrittore}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "LEVETIRACETAM 500MG 60 UNITA' USO ORALE"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "codice": [
+          "0000",
+          "0001"
+        ],
+        "nre_formato": true
+      }
+    },
+    {
+      "operazione": "interroga_nre",
+      "criteri": {
+        "codice_regione": "${regione}",
+        "nre": "${nre}"
+      },
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_numero": 1,
+        "ricette_contengono": [
+          "${nre}"
+        ]
+      }
+    },
+    {
+      "operazione": "interroga_nre",
+      "criteri": {
+        "codice_regione": "${regione}",
+        "tipo": "F",
+        "dal": "${oggi_inizio}",
+        "al": "${oggi_fine}"
+      },
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_contengono": [
+          "${nre}"
+        ]
+      }
+    }
+  ],
+  "finale": [
+    {
+      "operazione": "annulla",
+      "nre": "${nre}"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "OFF-020",
+  "famiglia": "offline",
+  "titolo": "Codifica InterrogaNreUtilRichiesta per intervallo: valida contro l'XSD, date di 19 caratteri",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4; InterrogaNreUtilRichiesta.xsd v1.2 (dataOraType: 19 caratteri)",
+  "passi": [
+    {
+      "operazione": "codifica_interroga_nre",
+      "criteri": {
+        "codice_regione": "${regione}",
+        "tipo": "F",
+        "dal": "2026-09-30 00:00:00",
+        "al": "2026-09-30 23:59:59"
+      },
+      "cf_medico": "${medico_cf}",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "codRegione": "130",
+          "tipoPrescr": "F",
+          "dataCompilazioneRicettaDal": "2026-09-30 00:00:00",
+          "dataCompilazioneRicettaAl": "2026-09-30 23:59:59",
+          "cfMedico": "PROVAX00X00X000Y"
+        },
+        "tag_assenti": [
+          "nre",
+          "codLotto",
+          "cfAssistito"
+        ]
+      }
+    }
+  ]
+}

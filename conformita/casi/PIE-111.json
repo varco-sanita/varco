@@ -1,0 +1,26 @@
+{
+  "id": "PIE-111",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth con codSsa: presente e valido",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.1-4.2.3 (userId RUPAR, identificativo P cifrato, codRegione 010, contesto RICETTA-DEM, applicazione, infoAggiuntive APP); kit A2F del Sistema TS ver. 20250902 (sts-a2f-service.v0.1.xsd, sts-a2f-service-data-type.v0.1.xsd), che REL-STC-01 par. 4.2 dichiara identico per SIRPED (codSsa «opzionale»; codSsaType 5-6 caratteri)",
+  "passi": [
+    {
+      "operazione": "codifica_piemonte",
+      "servizio": "crea_id_sessione",
+      "utente_rupar": "rupar-prova",
+      "cf_utente": "PROVAX00X00X000Y",
+      "codice_asl": "301",
+      "codice_ssa": "000000",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "codSsa": "000000"
+        }
+      }
+    }
+  ]
+}

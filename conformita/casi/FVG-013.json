@@ -1,0 +1,18 @@
+{
+  "id": "FVG-013",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, verifica della posizione del sostituto: non abilitato",
+  "riferimento": "wsdl_prescritto.zip (medicinrete.insiel.it), gestoreAutorizzazioni/v1.0. Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "verifica_sostituto",
+      "risposta": "fvg/verifica_sostituto_non_abilitato.xml",
+      "atteso": {
+        "campi": {
+          "abilitato": false
+        }
+      }
+    }
+  ]
+}

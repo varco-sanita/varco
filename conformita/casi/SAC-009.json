@@ -1,0 +1,40 @@
+{
+  "id": "SAC-009",
+  "famiglia": "online",
+  "titolo": "Violazione di schema (quantità a due cifre): SOAP Fault di validazione",
+  "riferimento": "TipiDati.xsd (integerType = una cifra)",
+  "passi": [
+    {
+      "operazione": "invia",
+      "valida_localmente": false,
+      "ricetta": {
+        "prescrittore": "${prescrittore}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 12,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "LEVETIRACETAM 500MG 60 UNITA' USO ORALE"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "fault_contiene": "quantita"
+      }
+    }
+  ],
+  "finale": [
+    {
+      "operazione": "annulla",
+      "nre": "${nre}"
+    }
+  ]
+}

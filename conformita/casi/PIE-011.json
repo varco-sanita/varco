@@ -1,0 +1,24 @@
+{
+  "id": "PIE-011",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, RevokeAuth di un Id-Sessione già revocato: errore e lastRevokePreviousDate",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.3 (lastRevokePreviousDate «valorizzato se si tenta di revocare un Id-Sessione già revocato»); piano dei test, A2F-MAIL-IDSES_REV-N-02. Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/revoca_gia_revocato.xml",
+      "atteso": {
+        "codice": [
+          "1"
+        ],
+        "ok": false,
+        "errore_bloccante": true,
+        "campi": {
+          "info": {
+            "lastRevokePreviousDate": "30/05/2025 20:51:07"
+          }
+        }
+      }
+    }
+  ]
+}

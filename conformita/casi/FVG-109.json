@@ -1,0 +1,27 @@
+{
+  "id": "FVG-109",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, verifica della posizione del sostituto (GestoreAutorizzazioni)",
+  "riferimento": "wsdl_prescritto.zip (medicinrete.insiel.it), VerificaPosizioneMedicoSostitutoRichiesta-v1.0.xsd",
+  "passi": [
+    {
+      "operazione": "codifica_fvg",
+      "servizio": "verifica_sostituto",
+      "cf_titolare": "PROVAX00X00X000Y",
+      "cf_sostituto": "PROVAX00X00X000Z",
+      "codice_asl": "101",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "cfMedicoTitolare": "PROVAX00X00X000Y",
+          "cfMedicoSostituto": "PROVAX00X00X000Z",
+          "codASLAo": "101"
+        },
+        "attributi": {
+          "@prodottoCme": "VARCO-PROVA"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "FVG-004",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, invio accolto con avviso (0001, tipoErrore W)",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.2 (tipoErrore E/W: i warning non causano scarto). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "invio",
+      "risposta": "fvg/invio_avviso_0001.xml",
+      "atteso": {
+        "codice": [
+          "0001"
+        ],
+        "avvisi_codici": [
+          "1024"
+        ],
+        "nessun_bloccante": true
+      }
+    }
+  ]
+}

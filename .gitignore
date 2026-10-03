@@ -1,0 +1,39 @@
+# .gitignore di Varco
+# Regola: nel repository pubblico va solo materiale nostro o di terzi che possiamo
+# redistribuire (elenco in docs/TERZE_PARTI.md). Il resto si scarica dalla fonte.
+
+# --- Materiale di terzi NON redistribuito -------------------------------------------
+# Specifiche e kit di sviluppo MEF (con le utenze di test), codice AGPL-3.0 del gateway
+# FSE, dump e documenti del Ministero: si scaricano e si verificano con
+#   python strumenti/scarica_specifiche.py
+/specifiche/
+
+# Banco del validatore ufficiale: classi compilate contro il codice AGPL del gateway.
+# Si rigenerano con strumenti/validatore-ufficiale/prepara.sh, non si distribuiscono.
+/strumenti/validatore-ufficiale/classi/
+
+# --- Dati personali e segreti: MAI nel repository ------------------------------------
+# credenziali vere (il modello è config.esempio.toml)
+config.toml
+*.toml.local
+.env
+.env.*
+# certificati e chiavi del medico (firma, autenticazione)
+*.p12
+*.pfx
+*.key
+*.jks
+# registrazioni locali del trasporto (RegistratoreFile): fuori da prove/
+/registrazioni/
+*.non-verificato
+
+# --- Ambiente e artefatti di build ------------------------------------------------
+.venv/
+venv*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+/build/
+/dist/
+*.egg-info/
+.DS_Store

@@ -1,0 +1,18 @@
+{
+  "id": "OFF-004",
+  "famiglia": "offline",
+  "titolo": "Lettura annullamento riuscito",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.2",
+  "passi": [
+    {
+      "operazione": "leggi_annulla",
+      "risposta": "annulla_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre": "1300A4019294833"
+      }
+    }
+  ]
+}

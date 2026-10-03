@@ -1,0 +1,20 @@
+{
+  "id": "FVG-015",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, verifica del sostituto con un errore: il contenitore è ElencoErrori, non ElencoErroriRicette",
+  "riferimento": "wsdl_prescritto.zip (medicinrete.insiel.it), VerificaPosizioneMedicoSostitutoRicevuta-v1.0.xsd (elemento ElencoErrori). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md)",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "verifica_sostituto",
+      "risposta": "fvg/verifica_sostituto_errore.xml",
+      "atteso": {
+        "errore_codice": "1212",
+        "errore_bloccante": true,
+        "campi": {
+          "abilitato": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "PIE-110",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth: campi regionali, valida contro lo XSD A2F, codiceStruttura e opzioni omessi",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.1-4.2.3 (userId RUPAR, identificativo P cifrato, codRegione 010, contesto RICETTA-DEM, applicazione, infoAggiuntive APP); kit A2F del Sistema TS ver. 20250902 (sts-a2f-service.v0.1.xsd, sts-a2f-service-data-type.v0.1.xsd), che REL-STC-01 par. 4.2 dichiara identico per SIRPED",
+  "passi": [
+    {
+      "operazione": "codifica_piemonte",
+      "servizio": "crea_id_sessione",
+      "utente_rupar": "rupar-prova",
+      "cf_utente": "PROVAX00X00X000Y",
+      "codice_asl": "301",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "userId": "rupar-prova",
+          "cfUtente": "PROVAX00X00X000Y",
+          "codRegione": "010",
+          "codAslAo": "301",
+          "contesto": "RICETTA-DEM",
+          "applicazione": "prescrizione"
+        },
+        "tag_assenti": [
+          "codiceStruttura",
+          "opzioni",
+          "codSsa",
+          "token"
+        ],
+        "testi": {
+          "identificativo/tipo": "P",
+          "identificativo/valore": "CIFRATO==",
+          "infoAggiuntive/opzione/chiave": "APP",
+          "infoAggiuntive/opzione/valore": "VARCO_301"
+        }
+      }
+    }
+  ]
+}

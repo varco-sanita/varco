@@ -1,0 +1,59 @@
+{
+  "id": "FVG-101",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, invio farmaceutica: valida contro lo XSD FVG, prodottoCme, pinCode vuoto, facoltativi vuoti assenti",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 3.1 (prodottoCme), par. 4.2 (pincode non utilizzato, CF dell'assistito cifrato); wsdl_prescritto.zip (medicinrete.insiel.it), InvioPrescrittoRichiesta-v1.0.xsd (tipoRic, nre, classePriorita: un tag vuoto non è valido)",
+  "passi": [
+    {
+      "operazione": "codifica_fvg",
+      "servizio": "invio",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "060",
+          "codice_asl": "101",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P",
+          "provincia": "UD",
+          "asl": "101"
+        },
+        "tipo": "F",
+        "data_compilazione": "2026-10-01 11:00:00",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "GRUPPO DI PROVA"
+          }
+        ]
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "cfMedico1": "PROVAX00X00X000Y",
+          "codRegione": "060",
+          "codASLAo": "101",
+          "codiceAss": "CIFRATO==",
+          "tipoPrescrizione": "F",
+          "dataCompilazione": "2026-10-01 11:00:00",
+          "tipoVisita": "A"
+        },
+        "tag_assenti": [
+          "cfMedico2",
+          "nre",
+          "tipoRic",
+          "classePriorita",
+          "indicazionePrescr",
+          "altro",
+          "codStruttura"
+        ],
+        "attributi": {
+          "@prodottoCme": "VARCO-PROVA"
+        }
+      }
+    }
+  ]
+}

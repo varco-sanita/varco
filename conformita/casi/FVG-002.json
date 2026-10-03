@@ -1,0 +1,24 @@
+{
+  "id": "FVG-002",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, farmaco in DPC: comunicazione 0196",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.2 (farmaci erogati in DPC: ElencoComunicazioni con codice 0196). Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "invio",
+      "risposta": "fvg/invio_ok_dpc_0196.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "comunicazioni_presenti": [
+          "0196"
+        ],
+        "presenti": [
+          "codice_autenticazione"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "PIE-004",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth rifiutata (gestionale non censito): codEsito 1, errore bloccante",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.4 (codEsito 0/1, errore con tipo, codice, descrizione); piano dei test SIRPED-TES-01 V02, A2F-MAIL-IDSES-N-02. Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/crea_gestionale_ignoto.xml",
+      "atteso": {
+        "codice": [
+          "1"
+        ],
+        "ok": false,
+        "errore_codice": "9998",
+        "errore_bloccante": true,
+        "campi": {
+          "id_sessione_di_test": null
+        }
+      }
+    }
+  ]
+}

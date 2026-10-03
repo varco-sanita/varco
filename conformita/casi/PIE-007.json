@@ -1,0 +1,20 @@
+{
+  "id": "PIE-007",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CheckToken: Id-Sessione valido (stato 0)",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.2 (infoToken: 0 valido, 1 revocato, 2 scaduto). Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/verifica_valido.xml",
+      "atteso": {
+        "codice": [
+          "0"
+        ],
+        "campi": {
+          "stato_token": 0
+        }
+      }
+    }
+  ]
+}

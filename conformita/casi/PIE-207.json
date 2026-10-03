@@ -1,0 +1,27 @@
+{
+  "id": "PIE-207",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, modalità mail con un Id-Sessione che non è un UUID: rifiuto locale",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2 (Id-Sessione = UUID)",
+  "passi": [
+    {
+      "operazione": "intestazioni_piemonte",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "servizio": "visualizza",
+      "modalita": "mail",
+      "credenziali": {
+        "utente": "rupar-prova",
+        "password": "password-di-prova",
+        "pincode": "1234567890",
+        "cf": "PROVAX00X00X000Y"
+      },
+      "id_sessione": "12345",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

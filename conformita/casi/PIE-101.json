@@ -1,0 +1,49 @@
+{
+  "id": "PIE-101",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, invio farmaceutica in modalità mail: tracciato del SAC, pincode e CF cifrati, valida contro gli XSD del MEF",
+  "riferimento": "Regione Piemonte, RE-SRS-SAR Cartelle cliniche MMG/PLS V05 dell'08/05/2018, par. 4.4.1 (InvioPrescritto «in analogia al SAC», pincode RUPAR e CF dell'assistito cifrati col certificato della Regione); XSD del kit MEF; Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.6 (esempio con i namespace del MEF)",
+  "passi": [
+    {
+      "operazione": "codifica_piemonte",
+      "servizio": "invio",
+      "modalita": "mail",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "010",
+          "codice_asl": "301",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P",
+          "provincia": "TO",
+          "asl": "301"
+        },
+        "tipo": "F",
+        "data_compilazione": "2026-10-01 11:00:00",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "GRUPPO DI PROVA"
+          }
+        ]
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "CIFRATO==",
+          "cfMedico1": "PROVAX00X00X000Y",
+          "codRegione": "010",
+          "codASLAo": "301",
+          "codiceAss": "CIFRATO==",
+          "tipoPrescrizione": "F"
+        },
+        "tag_assenti": [
+          "statoEstero"
+        ]
+      }
+    }
+  ]
+}

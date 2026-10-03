@@ -1,0 +1,143 @@
+{
+  "dichiarazione": "Scritto e verificato sulle specifiche, NON collaudato sul sistema regionale.",
+  "server": "strumenti/fvg_server_finto.py su 127.0.0.1, HTTPS con mutua autenticazione (nessuna chiamata alla Regione FVG né a Insiel)",
+  "xsd_fvg": "XSD FVG validati dal server su ogni richiesta",
+  "data": "2026-10-01T17:47:59+02:00",
+  "passi": [
+    {
+      "passo": "01 invio farmaceutica (InvioPrescritto, mTLS con la carta del titolare)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "nre": "0600A0000000001",
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "02 visualizza (VisualizzaPrescritto)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "nre": "0600A0000000001",
+      "stato_processo": "3",
+      "codice_autenticazione": "presente",
+      "righe": 1
+    },
+    {
+      "passo": "03 annulla (AnnullaPrescritto)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "nre": "0600A0000000001"
+    },
+    {
+      "passo": "04 secondo annullamento (rifiuto atteso 1120)",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "1120",
+          "tipo": "E"
+        }
+      ],
+      "comunicazioni": [],
+      "nre": "0600A0000000001"
+    },
+    {
+      "passo": "05 invio specialistica: catalogo regionale, versioneCR, RAO in testata2",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "nre": "0600A0000000002",
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "06 farmaco in DPC: comunicazione 0196",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [
+        "0196"
+      ],
+      "nre": "0600A0000000003",
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "07 codice di downgrade nell'elenco errori: ricetta rossa MIR (par. 2.3.6)",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "060120",
+          "tipo": "E"
+        }
+      ],
+      "comunicazioni": [],
+      "downgrade_mir": true
+    },
+    {
+      "passo": "08 codice di downgrade come SOAP Fault: ricetta rossa MIR (par. 2.3.6)",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "060125",
+          "tipo": "E"
+        }
+      ],
+      "comunicazioni": [],
+      "downgrade_mir": true
+    },
+    {
+      "passo": "09 ricetta del sostituto con la carta del titolare: rifiuto locale",
+      "errore": "RicettaNonValida: Ricetta non valida: il medico autenticato (PROVAX00X00X000Y) non è quello che prescrive (PROVAX00X00X000Z): con il sostituto invia il sostituto, con la sua carta"
+    },
+    {
+      "passo": "10 invio del sostituto (cfMedico1 titolare, cfMedico2 sostituto, carta del sostituto)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "nre": "0600A0000000004",
+      "codice_autenticazione": "presente"
+    },
+    {
+      "passo": "11 il titolare prova ad annullare la ricetta del sostituto (rifiuto atteso 1125)",
+      "codice_esito": "9999",
+      "messaggi": [
+        {
+          "codice": "1125",
+          "tipo": "E"
+        }
+      ],
+      "comunicazioni": [],
+      "nre": "0600A0000000004"
+    },
+    {
+      "passo": "12 il sostituto annulla la sua ricetta",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "nre": "0600A0000000004"
+    },
+    {
+      "passo": "13 VerificaPosizioneMedicoSostituto (GestoreAutorizzazioni)",
+      "abilitato": true
+    },
+    {
+      "passo": "14 lista NRE utilizzati (endpoint del server finto: in FVG non è pubblicato)",
+      "codice_esito": "0000",
+      "messaggi": [],
+      "comunicazioni": [],
+      "ricette": 3
+    },
+    {
+      "passo": "15 senza certificato client: la mutua autenticazione non si chiude",
+      "errore": "ErroreTrasporto: Errore di rete verso 127.0.0.1: [SSL: TLSV13_ALERT_CERTIFICATE_REQUIRED] tlsv13 alert certificate required (_ssl.c:2713)"
+    },
+    {
+      "passo": "16 carta di un altro medico nel contesto TLS: il server rifiuta",
+      "errore": "ErroreSOAP: SOAP Fault [soapenv:Server] il certificato è di PROVAX00X00X000Z, invia PROVAX00X00X000Y (HTTP 500)"
+    },
+    {
+      "passo": "17 prodottoCme non accreditato: il server rifiuta",
+      "errore": "ErroreSOAP: SOAP Fault [soapenv:Server] prodotto non accreditato: 'NON-ACCREDITATO' (HTTP 500)"
+    }
+  ],
+  "richieste_ricevute_dal_server": 15,
+  "richieste_con_certificato_client": 15
+}

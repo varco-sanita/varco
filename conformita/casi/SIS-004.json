@@ -1,0 +1,21 @@
+{
+  "id": "SIS-004",
+  "famiglia": "sist",
+  "titolo": "SIST, SAC non disponibile: solo IUP, senza codice di autenticazione = ricetta rossa",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), javadoc chkPrescrizione («In presenza del solo campo IUP il prescrittore dovrà stampare il prescritto su ricetta rossa») e Appendice A. Risposta SINTETICA scritta sullo schema CVPService.xsd (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST disponibile",
+  "passi": [
+    {
+      "operazione": "leggi_sist_chk",
+      "risposta": "sist/chk_solo_iup.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre": "1600A0000000001",
+        "campi": {
+          "solo_ricetta_rossa": true
+        }
+      }
+    }
+  ]
+}

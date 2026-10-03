@@ -1,0 +1,268 @@
+{
+  "pdf": [
+    {
+      "pdf": "pss_01_completo.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_01_completo.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7"
+      },
+      "sha256_atteso": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7",
+      "sha256_kit": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "coerente": true
+      }
+    },
+    {
+      "pdf": "pdf_gestionale_senza_cda.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pdf_gestionale_senza_cda.pdf",
+        "is_pdf": true,
+        "trovato": false
+      },
+      "sha256_atteso": null,
+      "sha256_kit": null,
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "cda": null,
+        "coerente": null
+      }
+    },
+    {
+      "pdf": "pdf_gestionale_con_cda_iniettato.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pdf_gestionale_con_cda_iniettato.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7"
+      },
+      "sha256_atteso": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7",
+      "sha256_kit": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "coerente": true
+      }
+    },
+    {
+      "pdf": "pss_09_v2.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_09_v2.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 16167,
+        "sha256": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635"
+      },
+      "sha256_atteso": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "sha256_kit": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "coerente": true
+      }
+    },
+    {
+      "pdf": "pss_09_v2_sostituito.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_09_v2_sostituito.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 16167,
+        "sha256": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635"
+      },
+      "sha256_atteso": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "sha256_kit": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "coerente": true
+      }
+    },
+    {
+      "pdf": "pss_pieno.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_pieno.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 18656,
+        "sha256": "bc312a0f4012f0fdbd4ab5dde308ad8347984e2d8c1f0759245da088a407abc7"
+      },
+      "sha256_atteso": "bc312a0f4012f0fdbd4ab5dde308ad8347984e2d8c1f0759245da088a407abc7",
+      "sha256_kit": "bc312a0f4012f0fdbd4ab5dde308ad8347984e2d8c1f0759245da088a407abc7",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-PIENO-V3",
+          "3"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-PIENO-V3",
+          "3"
+        ],
+        "coerente": true
+      }
+    },
+    {
+      "pdf": "pss_01_completo_firmato_TEST.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_01_completo_firmato_TEST.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 15905,
+        "sha256": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7"
+      },
+      "sha256_atteso": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7",
+      "sha256_kit": "13750eb43cddcc457f41357a4285683a30ee137bbb5314912a79b33b168114a7",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001",
+          "1"
+        ],
+        "coerente": true
+      },
+      "firma_pyhanko": {
+        "firme": 1,
+        "integra": true,
+        "crittograficamente_valida": true,
+        "attendibile_con_il_certificato_di_test_come_radice": true,
+        "copre_tutto_il_documento": "ENTIRE_FILE",
+        "subfilter": "/ETSI.CAdES.detached",
+        "firmatario": "Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO, Organization: kit-mmg (solo test), Country: IT"
+      }
+    },
+    {
+      "pdf": "pss_09_v2_firmato_TEST.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_09_v2_firmato_TEST.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 16167,
+        "sha256": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635"
+      },
+      "sha256_atteso": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "sha256_kit": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "coerente": true
+      },
+      "firma_pyhanko": {
+        "firme": 1,
+        "integra": true,
+        "crittograficamente_valida": true,
+        "attendibile_con_il_certificato_di_test_come_radice": true,
+        "copre_tutto_il_documento": "ENTIRE_FILE",
+        "subfilter": "/ETSI.CAdES.detached",
+        "firmatario": "Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO, Organization: kit-mmg (solo test), Country: IT"
+      }
+    },
+    {
+      "pdf": "pss_09_v2_sostituito_firmato_TEST.pdf",
+      "estrazione_dispatcher_ufficiale": {
+        "file": "pss_09_v2_sostituito_firmato_TEST.pdf",
+        "is_pdf": true,
+        "trovato": true,
+        "lunghezza": 16167,
+        "sha256": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635"
+      },
+      "sha256_atteso": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "sha256_kit": "73da28035b439451d324ec9c4c62fef91a4871979fd286f4081df32fc3103635",
+      "kit_uguale_dispatcher": true,
+      "dispatcher_uguale_atteso": true,
+      "testo_visibile_e_cda": {
+        "testo_visibile": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "cda": [
+          "2.16.840.1.113883.2.9.2.130.4.4",
+          "PSS-TEST-0001-V2",
+          "2"
+        ],
+        "coerente": true
+      },
+      "firma_pyhanko": {
+        "firme": 1,
+        "integra": true,
+        "crittograficamente_valida": true,
+        "attendibile_con_il_certificato_di_test_come_radice": true,
+        "copre_tutto_il_documento": "ENTIRE_FILE",
+        "subfilter": "/ETSI.CAdES.detached",
+        "firmatario": "Common Name: kit-mmg CERTIFICATO DI TEST - NON VALIDO, Organization: kit-mmg (solo test), Country: IT"
+      }
+    }
+  ]
+}

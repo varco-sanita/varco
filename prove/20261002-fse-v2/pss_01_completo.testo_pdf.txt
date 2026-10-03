@@ -1,0 +1,25 @@
+PROFILO SANITARIO SINTETICO
+Documento 2.16.840.1.113883.2.9.2.130.4.4 / PSS-TEST-0001 - versione 1 - insieme (setId)
+PSS-TEST-0001
+Data: 2026-09-30 17:00:00 - riservatezza normale (N)
+Paziente: Di Prova Paziente - CF PNIMRA70A01H501P - sesso M - data di nascita 1970-01-01
+  luogo di nascita: Roma (RM) ISTAT comune 058091 regione 120 Stato 100
+  residenza: Via di Prova 1 67100 L'Aquila (AQ) ISTAT comune 066049 regione 130 Stato 100
+Medico (MMG): Dott. Medico Di Prova - CF PROVAX00X00X000Y - tel. 0000000000 - email
+medico.di.prova@example.invalid
+Custode: ASL DI PROVA 201 (dato di test) - id 2.16.840.1.113883.2.9.4.1.2 / 130201 - tel. non
+indicato - indirizzo: Via di Prova 2 L'Aquila ISTAT comune 066049 regione 130 Stato 100
+Allergie e intolleranze:
+  - Amoxicillina (ATC J01CA04) - tipo ALG - inizio 2015-03-01 - stato: attivo (active)
+Terapie farmacologiche:
+  - Ramipril (ATC C09AA05) - via PO - inizio 2020-01-10 - stato: attivo (active)
+  - LEVETIRACETAM 500MG 60 UNITA' USO ORALE (GE G3B) - via PO - inizio 2026-09-30 - stato:
+attivo (active)
+Lista dei problemi:
+  - Ipertensione essenziale non specificata (ICD-9-CM 401.9) - inizio 2020-01-10 - stato:
+attivo (active)
+Anamnesi familiare:
+  - FTH (sesso M): Infarto miocardico acuto (ICD-9-CM 410.00) - età di insorgenza 60 anni
+Esenzioni:
+  - 031 - inizio 2020-02-01 - stato: attivo (active)
+Il documento strutturato (CDA2 HL7 Italia) è allegato a questo PDF come cda.xml.

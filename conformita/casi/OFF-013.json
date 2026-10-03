@@ -1,0 +1,24 @@
+{
+  "id": "OFF-013",
+  "famiglia": "offline",
+  "titolo": "Lettura lista NRE utilizzati (ricerca puntuale)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4; Risposta reale del SAC di test, prove/20260930-171334-sostituto-nre",
+  "passi": [
+    {
+      "operazione": "leggi_interroga_nre",
+      "risposta": "interroga_nre_puntuale.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "ricette_numero": 1,
+        "ricette_contengono": [
+          "1300A4019294847"
+        ],
+        "comunicazioni_presenti": [
+          "0400"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "SIS-002",
+  "famiglia": "sist",
+  "titolo": "SIST, controllo riuscito con un'anomalia W (Warning): ok con avvisi",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), javadoc cvp.vo.Anomalia (codCriticita C/W) e Appendice A, codice 0023. Risposta SINTETICA scritta sullo schema CVPService.xsd (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST disponibile",
+  "passi": [
+    {
+      "operazione": "leggi_sist_chk",
+      "risposta": "sist/chk_ok_avviso_0023.xml",
+      "atteso": {
+        "codice": [
+          "0001"
+        ],
+        "avvisi_codici": [
+          "0023"
+        ],
+        "nessun_bloccante": true,
+        "presenti": [
+          "nre",
+          "codice_autenticazione"
+        ]
+      }
+    }
+  ]
+}

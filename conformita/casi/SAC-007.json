@@ -1,0 +1,48 @@
+{
+  "id": "SAC-007",
+  "famiglia": "online",
+  "titolo": "Regola lato SAC: ASL del medico non valida (1020)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1",
+  "passi": [
+    {
+      "operazione": "invia",
+      "valida_localmente": false,
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "${medico_cf}",
+          "codice_regione": "130",
+          "codice_asl": "999",
+          "codice_specializzazione": "F"
+        },
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "LEVETIRACETAM 500MG 60 UNITA' USO ORALE"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1020"
+      }
+    }
+  ],
+  "finale": [
+    {
+      "operazione": "annulla",
+      "nre": "${nre}"
+    }
+  ]
+}

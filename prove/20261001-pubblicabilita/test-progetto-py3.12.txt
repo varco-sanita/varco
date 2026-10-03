@@ -1,0 +1,2 @@
+## Albero completo del progetto (con specifiche/), Python 3.12
+261 passed, 9 skipped in 2.94s

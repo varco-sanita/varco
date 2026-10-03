@@ -1,0 +1,22 @@
+{
+  "id": "SIS-003",
+  "famiglia": "sist",
+  "titolo": "SIST, controllo rifiutato: anomalia C (Critical) bloccante e avviso W insieme, niente NRE",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), javadoc cvp.vo.Anomalia; codici 0007 (esenzione non specificata) e 0051 (nota AIFA). Risposta SINTETICA scritta sullo schema CVPService.xsd (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST disponibile",
+  "passi": [
+    {
+      "operazione": "leggi_sist_chk",
+      "risposta": "sist/chk_rifiuto_0007_0051.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "0007",
+        "errore_bloccante": true,
+        "avvisi_codici": [
+          "0051"
+        ]
+      }
+    }
+  ]
+}

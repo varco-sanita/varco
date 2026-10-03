@@ -1,0 +1,19 @@
+{
+  "id": "SIS-005",
+  "famiglia": "sist",
+  "titolo": "SIST, anomalia 0184: il SAC ha rifiutato, il SIST riporta gli errori del MEF nel testo",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), Appendice codici anomalia: 0184 «Elenco delle anomalie bloccanti restituite dai servizi telematici MEF». Risposta SINTETICA scritta sullo schema CVPService.xsd (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST disponibile",
+  "passi": [
+    {
+      "operazione": "leggi_sist_chk",
+      "risposta": "sist/chk_rifiuto_0184_sac.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "0184",
+        "errore_bloccante": true
+      }
+    }
+  ]
+}

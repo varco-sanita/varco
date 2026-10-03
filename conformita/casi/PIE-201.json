@@ -1,0 +1,36 @@
+{
+  "id": "PIE-201",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, modalità mail: Basic RUPAR, X-idSessione Bearer, X-Gestionale, SOAPAction del MEF",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.1.1 e 4.2.5 (tabella degli header: X-idSessione «secondo l'Auth Schema Bearer», X-Gestionale «codice del gestionale richiedente seguito da _XXX»)",
+  "passi": [
+    {
+      "operazione": "intestazioni_piemonte",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "servizio": "invio",
+      "modalita": "mail",
+      "credenziali": {
+        "utente": "rupar-prova",
+        "password": "password-di-prova",
+        "pincode": "1234567890",
+        "cf": "PROVAX00X00X000Y"
+      },
+      "id_sessione": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+      "atteso": {
+        "intestazioni": {
+          "Authorization": "Basic cnVwYXItcHJvdmE6cGFzc3dvcmQtZGktcHJvdmE=",
+          "X-idSessione": "Bearer 3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+          "X-Gestionale": "VARCO_301",
+          "SOAPAction": "\"http://invioprescritto.wsdl.dem.sanita.finanze.it/InvioPrescritto\""
+        },
+        "assenti": [
+          "X-OAuth2-Authorization",
+          "Authorization2F"
+        ]
+      }
+    }
+  ]
+}

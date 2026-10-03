@@ -1,0 +1,15 @@
+{
+  "id": "OFF-009",
+  "famiglia": "offline",
+  "titolo": "Riconoscimento SOAP Fault di credenziali invalide",
+  "riferimento": "Diagnostici.txt del kit MEF",
+  "passi": [
+    {
+      "operazione": "leggi_visualizza",
+      "risposta": "fault_credenziali.xml",
+      "atteso": {
+        "fault_contiene": "Credenziali invalide"
+      }
+    }
+  ]
+}

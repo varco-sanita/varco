@@ -1,0 +1,528 @@
+%PDF-1.7
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /Names << /EmbeddedFiles << /Names [(cda.xml) 7 0 R] >> >> /AF [7 0 R] >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Length 1759 >>
+stream
+BT /F1 9 Tf 12 TL 50 800 Td
+(PROFILO SANITARIO SINTETICO) Tj T*
+(Documento 2.16.840.1.113883.2.9.2.130.4.4 / PSS-TEST-0001 - versione 1 - insieme \(setId\)) Tj T*
+(PSS-TEST-0001) Tj T*
+(Data: 2026-09-30 17:00:00 - riservatezza normale \(N\)) Tj T*
+(Paziente: Di Prova Paziente - CF PNIMRA70A01H501P - sesso M - data di nascita 1970-01-01) Tj T*
+(  luogo di nascita: Roma \(RM\) ISTAT comune 058091 regione 120 Stato 100) Tj T*
+(  residenza: Via di Prova 1 67100 L'Aquila \(AQ\) ISTAT comune 066049 regione 130 Stato 100) Tj T*
+(Medico \(MMG\): Dott. Medico Di Prova - CF PROVAX00X00X000Y - tel. 0000000000 - email) Tj T*
+(medico.di.prova@example.invalid) Tj T*
+(Custode: ASL DI PROVA 201 \(dato di test\) - id 2.16.840.1.113883.2.9.4.1.2 / 130201 - tel. non) Tj T*
+(indicato - indirizzo: Via di Prova 2 L'Aquila ISTAT comune 066049 regione 130 Stato 100) Tj T*
+() Tj T*
+(Allergie e intolleranze:) Tj T*
+(  - Amoxicillina \(ATC J01CA04\) - tipo ALG - inizio 2015-03-01 - stato: attivo \(active\)) Tj T*
+() Tj T*
+(Terapie farmacologiche:) Tj T*
+(  - Ramipril \(ATC C09AA05\) - via PO - inizio 2020-01-10 - stato: attivo \(active\)) Tj T*
+(  - LEVETIRACETAM 500MG 60 UNITA' USO ORALE \(GE G3B\) - via PO - inizio 2026-09-30 - stato:) Tj T*
+(attivo \(active\)) Tj T*
+() Tj T*
+(Lista dei problemi:) Tj T*
+(  - Ipertensione essenziale non specificata \(ICD-9-CM 401.9\) - inizio 2020-01-10 - stato:) Tj T*
+(attivo \(active\)) Tj T*
+() Tj T*
+(Anamnesi familiare:) Tj T*
+(  - FTH \(sesso M\): Infarto miocardico acuto \(ICD-9-CM 410.00\) - et‡ di insorgenza 60 anni) Tj T*
+() Tj T*
+(Esenzioni:) Tj T*
+(  - 031 - inizio 2020-02-01 - stato: attivo \(active\)) Tj T*
+() Tj T*
+(Il documento strutturato \(CDA2 HL7 Italia\) Ë allegato a questo PDF come cda.xml.) Tj T*
+ET
+
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Type /EmbeddedFile /Subtype /text#2Fxml /Length 15905 /Params << /Size 15905 /ModDate (D:20261001234058Z) /CheckSum <ce5ef3bea26bfa34e3a07f693452fec8> >> >>
+stream
+<?xml version='1.0' encoding='utf-8'?>
+<ClinicalDocument xmlns="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <realmCode code="IT" />
+  <typeId root="2.16.840.1.113883.1.3" extension="POCD_MT000040UV02" />
+  <templateId root="2.16.840.1.113883.2.9.10.1.4.1.1" extension="1.4" />
+  <id root="2.16.840.1.113883.2.9.2.130.4.4" extension="PSS-TEST-0001" />
+  <code code="60591-5" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Profilo Sanitario Sintetico" />
+  <title>Profilo Sanitario Sintetico</title>
+  <effectiveTime value="20260930170000+0200" />
+  <confidentialityCode code="N" codeSystem="2.16.840.1.113883.5.25" codeSystemName="HL7 Confidentiality" />
+  <languageCode code="it-IT" />
+  <setId root="2.16.840.1.113883.2.9.2.130.4.4" extension="PSS-TEST-0001" />
+  <versionNumber value="1" />
+  <recordTarget>
+    <patientRole>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PNIMRA70A01H501P" assigningAuthorityName="MEF" />
+      <addr use="H">
+        <country>100</country>
+        <state>130</state>
+        <county>AQ</county>
+        <city>L'Aquila</city>
+        <censusTract>066049</censusTract>
+        <postalCode>67100</postalCode>
+        <streetAddressLine>Via di Prova 1</streetAddressLine>
+      </addr>
+      <patient>
+        <name>
+          <family>Di Prova</family>
+          <given>Paziente</given>
+        </name>
+        <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 AdministrativeGender" displayName="Maschio" />
+        <birthTime value="19700101" />
+        <birthplace>
+          <place>
+            <addr>
+              <country>100</country>
+              <state>120</state>
+              <county>RM</county>
+              <city>Roma</city>
+              <censusTract>058091</censusTract>
+            </addr>
+          </place>
+        </birthplace>
+      </patient>
+    </patientRole>
+  </recordTarget>
+  <author>
+    <time value="20260930170000+0200" />
+    <assignedAuthor>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PROVAX00X00X000Y" assigningAuthorityName="MEF" />
+      <code code="MMG" codeSystem="2.16.840.1.113883.2.9.77.22.11.13" codeSystemName="assignedAuthorCode_PSSIT" displayName="Medico di Medicina Generale" />
+      <telecom use="WP" value="tel:0000000000" />
+      <telecom use="WP" value="mailto:medico.di.prova@example.invalid" />
+      <assignedPerson>
+        <name>
+          <family>Di Prova</family>
+          <given>Medico</given>
+          <prefix>Dott.</prefix>
+        </name>
+      </assignedPerson>
+    </assignedAuthor>
+  </author>
+  <custodian>
+    <assignedCustodian>
+      <representedCustodianOrganization>
+        <id root="2.16.840.1.113883.2.9.4.1.2" extension="130201" />
+        <name>ASL DI PROVA 201 (dato di test)</name>
+        <addr>
+          <country>100</country>
+          <state>130</state>
+          <city>L'Aquila</city>
+          <censusTract>066049</censusTract>
+          <streetAddressLine>Via di Prova 2</streetAddressLine>
+        </addr>
+      </representedCustodianOrganization>
+    </assignedCustodian>
+  </custodian>
+  <legalAuthenticator>
+    <time value="20260930170000+0200" />
+    <signatureCode code="S" />
+    <assignedEntity>
+      <id root="2.16.840.1.113883.2.9.4.3.2" extension="PROVAX00X00X000Y" assigningAuthorityName="MEF" />
+      <telecom use="WP" value="tel:0000000000" />
+      <telecom use="WP" value="mailto:medico.di.prova@example.invalid" />
+      <assignedPerson>
+        <name>
+          <family>Di Prova</family>
+          <given>Medico</given>
+          <prefix>Dott.</prefix>
+        </name>
+      </assignedPerson>
+    </assignedEntity>
+  </legalAuthenticator>
+  <documentationOf>
+    <serviceEvent>
+      <effectiveTime value="20260930170000+0200" />
+    </serviceEvent>
+  </documentationOf>
+  <component>
+    <structuredBody moodCode="EVN" classCode="DOCBODY">
+      <component typeCode="COMP">
+        <section ID="ALL">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.1" />
+          <id root="ef4b6ebf-8634-4c86-bc39-71411914cd86" />
+          <code code="48765-2" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergie, Reazioni Avverse" />
+          <title>Allergie e Intolleranze</title>
+          <text>
+            <list>
+              <item>
+                <content ID="all-1">Amoxicillina</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.1.1" />
+              <id root="4cc57710-c97b-4ca2-a3f9-6466693c896e" />
+              <code nullFlavor="NA" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20150301" />
+              </effectiveTime>
+              <entryRelationship typeCode="SUBJ">
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.1.3" />
+                  <id root="bed1e846-a71c-4787-a653-a06f261b9192" />
+                  <code code="52473-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Allergia o causa della reazione" />
+                  <text>
+                    <reference value="#all-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime>
+                    <low value="20150301" />
+                  </effectiveTime>
+                  <value xsi:type="CD" code="ALG" codeSystem="2.16.840.1.113883.1.11.19700" codeSystemName="ObservationIntoleranceType" />
+                  <participant typeCode="CSM">
+                    <participantRole classCode="MANU">
+                      <playingEntity classCode="MMAT">
+                        <code code="J01CA04" codeSystem="2.16.840.1.113883.6.73" codeSystemName="ATC" displayName="Amoxicillina">
+                          <originalText>
+                            <reference value="#all-1" />
+                          </originalText>
+                        </code>
+                      </playingEntity>
+                    </participantRole>
+                  </participant>
+                </observation>
+              </entryRelationship>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="TER">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.2" />
+          <id root="041aa881-d813-4cb6-b4ad-344cd5387a94" />
+          <code code="10160-0" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="HISTORY OF MEDICATION USE" />
+          <title>Terapie farmacologiche</title>
+          <text>
+            <list>
+              <item>
+                <content ID="ter-1">Ramipril</content>
+              </item>
+              <item>
+                <content ID="ter-2">LEVETIRACETAM 500MG 60 UNITA' USO ORALE</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <substanceAdministration classCode="SBADM" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.1" />
+              <id root="e7919bd5-56d6-4036-95bb-84fc65d40106" />
+              <text>
+                <reference value="#ter-1" />
+              </text>
+              <statusCode code="active" />
+              <effectiveTime xsi:type="IVL_TS">
+                <low value="20200110" />
+              </effectiveTime>
+              <routeCode code="PO" codeSystem="2.16.840.1.113883.5.112" codeSystemName="HL7 RouteOfAdministration" />
+              <consumable>
+                <manufacturedProduct classCode="MANU">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.2" />
+                  <manufacturedMaterial>
+                    <templateId root="2.16.840.1.113883.10.22.4.3" />
+                    <code code="C09AA05" codeSystem="2.16.840.1.113883.6.73" codeSystemName="ATC" displayName="Ramipril">
+                      <originalText>
+                        <reference value="#ter-1" />
+                      </originalText>
+                    </code>
+                  </manufacturedMaterial>
+                </manufacturedProduct>
+              </consumable>
+            </substanceAdministration>
+          </entry>
+          <entry>
+            <substanceAdministration classCode="SBADM" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.1" />
+              <id root="f263c2f2-d0f4-4ee0-bd67-ca9b9499ec4a" />
+              <text>
+                <reference value="#ter-2" />
+              </text>
+              <statusCode code="active" />
+              <effectiveTime xsi:type="IVL_TS">
+                <low value="20260930" />
+              </effectiveTime>
+              <routeCode code="PO" codeSystem="2.16.840.1.113883.5.112" codeSystemName="HL7 RouteOfAdministration" />
+              <consumable>
+                <manufacturedProduct classCode="MANU">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.2.2" />
+                  <manufacturedMaterial>
+                    <templateId root="2.16.840.1.113883.10.22.4.3" />
+                    <code code="G3B" codeSystem="2.16.840.1.113883.2.9.6.1.51" codeSystemName="GE" displayName="LEVETIRACETAM 500MG 60 UNITA' USO ORALE">
+                      <originalText>
+                        <reference value="#ter-2" />
+                      </originalText>
+                    </code>
+                  </manufacturedMaterial>
+                </manufacturedProduct>
+              </consumable>
+            </substanceAdministration>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="PRO">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.4" />
+          <id root="ca61ac1e-b021-4df0-933c-9bb3c365dbdd" />
+          <code code="11450-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Lista dei Problemi" />
+          <title>Lista dei problemi</title>
+          <text>
+            <list>
+              <item>
+                <content ID="pro-1">Ipertensione essenziale non specificata (401.9)</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.4.1" />
+              <id root="0a802703-bf05-4f24-b5af-ec9a4b0cd930" />
+              <code nullFlavor="NA" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20200110" />
+              </effectiveTime>
+              <entryRelationship typeCode="SUBJ" inversionInd="false">
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.4.2" />
+                  <id root="ad9f8b4d-bbe1-4382-a385-66b99f1f8b5f" />
+                  <code code="75326-9" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Problema" />
+                  <text>
+                    <reference value="#pro-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime>
+                    <low value="20200110" />
+                  </effectiveTime>
+                  <value xsi:type="CD" code="401.9" codeSystem="2.16.840.1.113883.6.103" codeSystemName="ICD-9-CM" displayName="Ipertensione essenziale non specificata">
+                    <originalText>
+                      <reference value="#pro-1" />
+                    </originalText>
+                  </value>
+                </observation>
+              </entryRelationship>
+            </act>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="FAM">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.16" />
+          <id root="36d3cb4c-80f6-45a9-982a-563e036fcd26" />
+          <code code="10157-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Storia di malattie di membri familiari" />
+          <title>Anamnesi familiare</title>
+          <text>
+            <list>
+              <item>
+                <content ID="fam-1">FTH: Infarto miocardico acuto (410.00)</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <organizer classCode="CLUSTER" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.1" />
+              <id root="d1c092bf-24db-460e-8bbc-8a5326867b60" />
+              <code code="10157-6" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Storia di malattie di membri familiari" />
+              <statusCode code="completed" />
+              <subject typeCode="SBJ">
+                <relatedSubject classCode="PRS">
+                  <code code="FTH" codeSystem="2.16.840.1.113883.5.111" codeSystemName="RoleCode" />
+                  <subject>
+                    <administrativeGenderCode code="M" codeSystem="2.16.840.1.113883.5.1" codeSystemName="HL7 AdministrativeGender" displayName="Maschio" />
+                  </subject>
+                </relatedSubject>
+              </subject>
+              <component>
+                <observation classCode="OBS" moodCode="EVN">
+                  <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.2" />
+                  <id root="93de5239-3068-474b-88c8-7f8cd44cf7ce" />
+                  <code code="52797-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Diagnosi codice ICD" />
+                  <text>
+                    <reference value="#fam-1" />
+                  </text>
+                  <statusCode code="completed" />
+                  <effectiveTime nullFlavor="UNK" />
+                  <value xsi:type="CD" code="410.00" codeSystem="2.16.840.1.113883.6.103" codeSystemName="ICD-9-CM" displayName="Infarto miocardico acuto">
+                    <originalText>
+                      <reference value="#fam-1" />
+                    </originalText>
+                  </value>
+                  <entryRelationship typeCode="SUBJ">
+                    <observation classCode="OBS" moodCode="EVN">
+                      <templateId root="2.16.840.1.113883.2.9.10.1.4.3.16.3" />
+                      <code code="35267-4" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Et√† diagnosi patologia" />
+                      <statusCode code="completed" />
+                      <value xsi:type="PQ" value="60" unit="a" />
+                    </observation>
+                  </entryRelationship>
+                </observation>
+              </component>
+            </organizer>
+          </entry>
+        </section>
+      </component>
+      <component typeCode="COMP">
+        <section ID="ESE">
+          <templateId root="2.16.840.1.113883.2.9.10.1.4.2.17" />
+          <id root="d522bb19-e336-4a8b-bbd8-fda27d688fc9" />
+          <code code="57827-8" codeSystem="2.16.840.1.113883.6.1" codeSystemName="LOINC" displayName="Motivo di esenzione dal co-pagamento" />
+          <title>Esenzioni</title>
+          <text>
+            <list>
+              <item>
+                <content ID="ese-1">Esenzione 031</content>
+              </item>
+            </list>
+          </text>
+          <entry>
+            <act classCode="ACT" moodCode="EVN">
+              <templateId root="2.16.840.1.113883.2.9.10.1.4.3.17.1" />
+              <id root="2f60da55-95d1-4c02-b310-d0879ef3c475" />
+              <code code="031" codeSystem="2.16.840.1.113883.2.9.6.1.22" codeSystemName="Esenzioni" />
+              <statusCode code="active" />
+              <effectiveTime>
+                <low value="20200201" />
+              </effectiveTime>
+            </act>
+          </entry>
+        </section>
+      </component>
+    </structuredBody>
+  </component>
+</ClinicalDocument>
+endstream
+endobj
+7 0 obj
+<< /Type /Filespec /F (cda.xml) /UF (cda.xml) /Desc (CDA2) /AFRelationship /Source /EF << /F 6 0 R /UF 6 0 R >> >>
+endobj
+8 0 obj
+<< /Title (Profilo Sanitario Sintetico \(TEST\)) /Producer (kit-mmg) /CreationDate (D:20261001234058Z) >>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000015 00000 n 
+0000000135 00000 n 
+0000000192 00000 n 
+0000000289 00000 n 
+0000002100 00000 n 
+0000002226 00000 n 
+0000018325 00000 n 
+0000018455 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R /Info 8 0 R /ID [<a35a5166f1498b7c537ba5ce387646d5> <a35a5166f1498b7c537ba5ce387646d5>] >>
+startxref
+18576
+%%EOF
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+/Names <<
+/EmbeddedFiles <<
+/Names [ (cda\056xml) 7 0 R ]
+>>
+>>
+/AF [ 7 0 R ]
+/AcroForm 10 0 R
+/Extensions <<
+/ESIC <<
+/Type /DeveloperExtensions
+/BaseVersion /1.7
+/ExtensionLevel 1
+>>
+>>
+>>
+endobj
+5 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [ 0 0 595 842 ]
+/Resources <<
+/Font <<
+/F1 3 0 R
+>>
+>>
+/Contents 4 0 R
+/Annots [ 11 0 R ]
+>>
+endobj
+8 0 obj
+<<
+/Title (Profilo Sanitario Sintetico \050TEST\051)
+/Producer (kit\055mmg\073 pyHanko 0\05637\0560)
+/CreationDate (D\07220261001234058Z)
+/ModDate (D\07220261002014100\05302\04700\047)
+>>
+endobj
+10 0 obj
+<<
+/Fields [ 11 0 R ]
+/SigFlags 3
+>>
+endobj
+11 0 obj
+<<
+/FT /Sig
+/T (FirmaMedico)
+/Type /Annot
+/Subtype /Widget
+/F 132
+/Rect [ 0 0 0 0 ]
+/P 5 0 R
+/V 12 0 R
+>>
+endobj
+12 0 obj
+<<
+/Contents <3082065706092A864886F70D010702A082064830820644020101310F300D06096086480165030402010500300B06092A864886F70D010701A08203713082036D30820255A00302010202146F797BAF206546AFA37B48C586624320707F4EAD300D06092A864886F70D01010B0500305E310B3009060355040613024954311C301A060355040A0C136B69742D6D6D672028736F6C6F2074657374293131302F06035504030C286B69742D6D6D6720434552544946494341544F2044492054455354202D204E4F4E2056414C49444F301E170D3236313030313233333535395A170D3236313033313233343035395A305E310B3009060355040613024954311C301A060355040A0C136B69742D6D6D672028736F6C6F2074657374293131302F06035504030C286B69742D6D6D6720434552544946494341544F2044492054455354202D204E4F4E2056414C49444F30820122300D06092A864886F70D01010105000382010F003082010A0282010100B39ED18A230E81ADCF8F360029F7929D872AA4E2100FFBF1C3129AF22081ED7290D8354DD3E2E2BA1E7BD8A351046ABAB41FA43282703CE1D30AD3C35F4F728E52AFA0504BBB3CBA67F17D6AB61C4A21490634DFC9B7BF6F1C7CD8DB34FCA9451E1C23F999F9BB253EDB853ECF3C097B4DECC1D50753E2952F5AB59DB4BE3879D64745BEB413E8A330EAD7EB3971ED2744914D0EEE7EE676C7EAF0D575CAEFDC27D772258CE5727E73249FC2F77074862361AC1329019F6ACAC279AD51853FA9916B9C92DE6A82218425C0AE439AFFB91A2DC34D5416453CEEA6002E90215B8762AE55AA426F177591DDEE4FB871E68A1A21C48EA63DBECD19965F9975707B990203010001A3233021300F0603551D130101FF040530030101FF300E0603551D0F0101FF0404030202C4300D06092A864886F70D01010B050003820101008A73776A01D06E223A2E6A79C11987ED84ACE6F74DC46B064A1401C310670C09EEB86894D5B63503BC1D36D8281A4B6A2C0BF216FB8EB65F62CD8E163671B932CA73F74B4BB29470FBBA284EEDB5A77D360FECB89F3202AA838117D86559DDCF898014D7266989A36DE9112A1693B7DD183CECE9085A8884C93BC591820BE21A445CFBDF4E22F3CDABE4FC2B43A39933743A4595A0D28782A1452DD31450061631182F1F61B1CE72626DCBE99D008116AFA534C512F45BFD618FA8DC2C41E75C9B294D57719475F20644AD1C9544E0BE379144609D91E9D41AF938847973F4D4BB5A99F1350BEAC1370FA8B14306F12080AD83D437B5331F39BD3773C1C36528318202AA308202A60201013076305E310B3009060355040613024954311C301A060355040A0C136B69742D6D6D672028736F6C6F2074657374293131302F06035504030C286B69742D6D6D6720434552544946494341544F2044492054455354202D204E4F4E2056414C49444F02146F797BAF206546AFA37B48C586624320707F4EAD300D06096086480165030402010500A0820105301806092A864886F70D010903310B06092A864886F70D010701302F06092A864886F70D010904312204201D3704689FCCB7338BBCA9E62CEE3E026E191773A77AC4F5941963EA288D96533081B7060B2A864886F70D010910022F3181A73081A43081A130819E0420D811537C04C50CB0BDBDC424843F7E6D6E92675150F216AFE98A15E37B767C23307A3062A460305E310B3009060355040613024954311C301A060355040A0C136B69742D6D6D672028736F6C6F2074657374293131302F06035504030C286B69742D6D6D6720434552544946494341544F2044492054455354202D204E4F4E2056414C49444F02146F797BAF206546AFA37B48C586624320707F4EAD300D06092A864886F70D01010B0500048201002DC4617209407E00E0E6318FE292AD18AE636AC1521F4E62A8DD74323A9AC196AF15C8F80E7AA0B36AE7D330C1E673259496AEECA37F5C67BC6BA3904CDB03236FF4B76E767D826633C68F80FA7E8E76C004DDC05297E9A79DD340B9EA0AFD3C53509354540B24F9F3C2416BBE3BAD76C6CDCC78A4A8FF43671FA123CFC97FF3F4DF4942C8BB2DF8835B2609AC4DBC95282273FB45B414DFBB1442A68DA6A0C006A06F74EB2BD47D716E801750731401E100F5E1F4DB8D0DDFE0D19C5DE0201297C19E4BC2453421C1E5FBFFFF7A936EDE1ACB95ED9881211FAB44E88A41EAD1356F325455B30E19F274CFCA32E744D05704920EE687AEFD4A589679E8706483000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000>
+/ByteRange [0 19693 24575 590]                                           
+/Type /Sig
+/Filter /Adobe.PPKLite
+/SubFilter /ETSI.CAdES.detached
+/M (D\07220261002014100\05302\04700\047)
+/Reason (Firma di TEST con certificato autofirmato\072 nessun valore legale)
+>>
+endobj
+xref
+0 2
+0000000000 65535 f 
+0000018909 00000 n 
+5 1
+0000019146 00000 n 
+8 1
+0000019293 00000 n 
+10 3
+0000019496 00000 n 
+0000019549 00000 n 
+0000019671 00000 n 
+trailer
+<<
+/Size 13
+/Root 1 0 R
+/Info 8 0 R
+/ID [ <a35a5166f1498b7c537ba5ce387646d5> <6b9b62968d6ed0a025ac7db1de677dd1> ]
+/Prev 18576
+>>
+startxref
+24844
+%%EOF

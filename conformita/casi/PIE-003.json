@@ -1,0 +1,21 @@
+{
+  "id": "PIE-003",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth: un 'token' nelle comunicazioni senza Working-mode=TEST non si usa",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.1: token, permessi e scadenza sono restituiti «solamente nell'ambiente di TEST», insieme a Working-mode=TEST. Il kit non prende l'Id-Sessione da una risposta che non si dichiara di test. Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/crea_token_senza_working_mode.xml",
+      "atteso": {
+        "codice": [
+          "0"
+        ],
+        "campi": {
+          "ambiente_test": false,
+          "id_sessione_di_test": null
+        }
+      }
+    }
+  ]
+}

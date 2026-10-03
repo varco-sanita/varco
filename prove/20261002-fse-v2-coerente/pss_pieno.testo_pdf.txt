@@ -1,0 +1,31 @@
+PROFILO SANITARIO SINTETICO
+Documento 2.16.840.1.113883.2.9.2.130.4.4 / PSS-PIENO-V3 - versione 3 - insieme (setId)
+PSS-PIENO
+Sostituisce il documento PSS-PIENO-V2
+Data: 2026-09-30 17:00:00 - riservatezza riservato (R)
+Paziente: Cognomepaziente Nomepaziente - CF PNIMRA70A01H501P - sesso F - data di nascita
+1970-01-01
+  luogo di nascita: Roma (RM) ISTAT comune 058091 regione 120 Stato 100
+  residenza: Via Sentinella 7 24121 Bergamo (BG) ISTAT comune 016024 regione 030 Stato 100
+Medico (PLS): Dott.ssa Nomemedico Cognomemedico - CF PROVAX00X00X000Y - tel. 0351234567 - email
+sentinella@example.invalid
+Custode: ASL DI PROVA 201 (dato di test) - id 2.16.840.1.113883.2.9.4.1.2 / 130201 - tel.
+0359876543 - indirizzo: Via di Prova 2 L'Aquila ISTAT comune 066049 regione 130 Stato 100
+Allergie e intolleranze:
+  - Amoxicillina (ATC J01CA04) - tipo ALG - inizio 2015-03-01 - stato: concluso (completed),
+fine 2019-06-30 - note: ANNOTAZIONE_TEST_DA_NON_PERDERE
+  - Polline di betulla (agente non codificato) - tipo non indicato - inizio non noto - stato:
+sospeso (suspended)
+Terapie farmacologiche:
+  - Farmaco TEST (AIC 012345678, ATC B01AB05) - via SQ - inizio 2020-01-01 - stato: concluso
+(completed), fine 2025-01-01
+  - Altro farmaco (GE G3B) - via PO - inizio non noto - stato: interrotto (aborted), fine
+2024-02-02
+Lista dei problemi:
+  - Ipertensione essenziale non specificata (ICD-9-CM 401.9) - inizio 2018-05-05 - stato:
+concluso (completed), fine 2021-07-07
+Anamnesi familiare:
+  - MTH (sesso F): Infarto miocardico acuto (ICD-9-CM 410.00) - età di insorgenza 67 anni
+Esenzioni:
+  - 031 Ipertensione (descrizione di test) - inizio 2020-02-01 - stato: sospeso (suspended)
+Il documento strutturato (CDA2 HL7 Italia) è allegato a questo PDF come cda.xml.

@@ -1,0 +1,31 @@
+{
+  "id": "PIE-211",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, modalità OAuth2 con un JWT che non concede lo scope «prescrizione»: rifiuto locale",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.1 e 4.3.1, p. 29-30 (scope = permessi effettivamente concessi; senza «prescrizione» SIRPED rifiuta le prescrizioni)",
+  "passi": [
+    {
+      "operazione": "intestazioni_piemonte",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "servizio": "invio",
+      "modalita": "oauth2",
+      "cf_medico": "PROVAX00X00X000Y",
+      "jwt_payload": {
+        "sub": "PROVAX00X00X000Y",
+        "exp": 4102444800,
+        "aud": "VARCO_301",
+        "scope": "visualizzazione",
+        "userData": {
+          "cfutente": "PROVAX00X00X000Y",
+          "idSessione": "3f2504e0-4f89-41d3-9a0c-0305e82c3301"
+        }
+      },
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

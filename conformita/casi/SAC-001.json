@@ -1,0 +1,75 @@
+{
+  "id": "SAC-001",
+  "famiglia": "online",
+  "titolo": "Ciclo completo farmaceutica: invio, visualizza (3), annulla, visualizza (4)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1-4.2.3 e cap. 7",
+  "passi": [
+    {
+      "operazione": "invia",
+      "ricetta": {
+        "prescrittore": "${prescrittore}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "LEVETIRACETAM 500MG 60 UNITA' USO ORALE"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "codice": [
+          "0000",
+          "0001"
+        ],
+        "nre_formato": true,
+        "presenti": [
+          "codice_autenticazione",
+          "data_inserimento"
+        ],
+        "comunicazioni_presenti": [
+          "0199",
+          "0198"
+        ]
+      }
+    },
+    {
+      "operazione": "visualizza",
+      "nre": "${nre}",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "stato_processo": "3",
+        "righe": 1
+      }
+    },
+    {
+      "operazione": "annulla",
+      "nre": "${nre}",
+      "atteso": {
+        "codice": [
+          "0000"
+        ]
+      }
+    },
+    {
+      "operazione": "visualizza",
+      "nre": "${nre}",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "stato_processo": "4"
+      }
+    }
+  ]
+}

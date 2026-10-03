@@ -1,0 +1,136 @@
+# publiccode.yml di Varco (standard: https://yml.publiccode.tools/)
+# Validato in locale con publiccode-parser-go v5.4.3:
+#   publiccode-parser -no-network publiccode.yml
+#
+# I valori marcati «DA COMPLETARE» non si conoscono ancora. Non sono stati
+# inventati. Il repository varco-sanita/varco su GitHub non è ancora
+# pubblicato: finché non lo è, il parser si usa con -no-network.
+
+publiccodeYmlVersion: "0"
+
+name: varco
+
+url: "https://github.com/varco-sanita/varco"
+
+landingURL: "https://github.com/varco-sanita/varco"
+
+softwareVersion: "0.1.0"
+
+releaseDate: "2026-10-03"
+
+# Verificato solo su macOS (Python 3.11+, sola libreria standard più
+# cryptography). DA COMPLETARE dopo una prova su linux e windows.
+platforms:
+  - mac
+
+categories:
+  - it-development
+  - document-management
+  - e-signature
+
+developmentStatus: development
+
+softwareType: library
+
+intendedAudience:
+  scope:
+    - healthcare
+  countries:
+    - IT
+
+description:
+  it:
+    localisedName: Varco
+    shortDescription: >-
+      Libreria aperta per i medici di medicina generale: ricetta
+      dematerializzata via SAC del Sistema TS e Profilo Sanitario Sintetico
+      FSE 2.0.
+    longDescription: >
+      Varco permette a qualsiasi programma di parlare direttamente con i
+      servizi pubblici della sanità, senza passare per un gestionale
+      commerciale. Implementa una volta sola, in chiaro, le specifiche
+      pubbliche del Sistema Tessera Sanitaria (MEF) e del Fascicolo
+      Sanitario Elettronico 2.0.
+
+
+      Il modulo ricetta, dalla parte del medico prescrittore, invia al SAC la
+      ricetta farmaceutica e specialistica, la visualizza, la annulla,
+      gestisce il medico sostituto e la lista degli NRE utilizzati. È stato
+      provato contro l'ambiente di TEST del MEF con le utenze pubbliche del
+      kit di sviluppo; le chiamate verso la produzione sono bloccate in
+      codice.
+
+
+      Il modulo FSE genera il Profilo Sanitario Sintetico in CDA2 HL7 Italia
+      a partire dagli stessi oggetti della ricetta, lo valida con il codice
+      del validatore ufficiale del gateway (XSD, schematron PSS v4.0,
+      vocabolari) eseguito in locale, lo allega a un PDF e lo firma PAdES.
+      L'invio al gateway FSE non è ancora implementato.
+
+
+      Il nome: un varco è un'apertura in una barriera. Varco non abbatte i
+      cancelli dei sistemi pubblici, apre un passaggio uguale per tutti.
+
+
+      Varco comprende una suite di conformità pubblica: casi in JSON con uno
+      schema che li specifica, rieseguibili contro qualunque implementazione
+      in qualunque linguaggio. Non contiene supporto clinico: i controlli
+      locali sono solo di forma.
+    # DA COMPLETARE: URL della documentazione pubblicata (oggi README.md e
+    # docs/ARCHITETTURA.md nel repository).
+    # documentation: ""
+    features:
+      - Invio della ricetta dematerializzata farmaceutica e specialistica al SAC
+      - Visualizzazione e annullamento della ricetta
+      - Medico sostituto e lista degli NRE utilizzati
+      - Cifratura di codice fiscale e pincode con il certificato SanitelCF
+      - Profilo Sanitario Sintetico FSE 2.0 in CDA2 HL7 Italia
+      - Validazione con il codice del validatore ufficiale del gateway FSE
+      - PDF con CDA allegato e firma PAdES
+      - Suite di conformità pubblica in JSON, indipendente dal linguaggio
+      - Blocco delle chiamate verso gli ambienti di produzione
+
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Lorenzo Nannicini
+  # organisation non si usa: richiede l'URI di un ente, e l'autore è un privato.
+
+maintenance:
+  type: internal
+  # Nessuna email: domande e proposte passano dalle issue del repository, le
+  # vulnerabilità SOLO dalla segnalazione privata di GitHub (Security
+  # Advisories): https://github.com/varco-sanita/varco/security/advisories/new
+  # (SECURITY.md).
+  contacts:
+    - name: Lorenzo Nannicini
+
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - it
+
+dependsOn:
+  open:
+    - name: Python
+      versionMin: "3.11"
+    - name: cryptography
+      versionMin: "49"
+    - name: lxml
+      versionMin: "4.9"
+      optional: true
+    - name: SaxonC-HE (saxonche)
+      versionMin: "12"
+      optional: true
+    - name: pyHanko
+      versionMin: "0.20"
+      optional: true
+    - name: OpenJDK (solo per il validatore ufficiale FSE)
+      version: "21"
+      optional: true
+
+# Estensione italiana «IT:» volutamente assente: nello standard v0.7 è
+# deprecata per intero (conforme, piattaforme, riuso) e sostituita da
+# «supports» e «organisation». Non si usa «organisation»: richiede l'URI di
+# un ente, e l'autore è un privato (quindi niente codiceIPA).
+# DA COMPLETARE, solo dopo una verifica formale: «supports» (per esempio
+# alias:gdpr). Oggi Varco non dichiara nessuna conformità.

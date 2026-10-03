@@ -1,0 +1,15 @@
+{
+  "id": "FSE-103",
+  "famiglia": "fse",
+  "titolo": "Dati con tipo allergia non censito (DALLERGY): rifiuto locale oppure documento non valido",
+  "riferimento": "schematron_PSS_v4.0.sch e schema CDA POCD_MT000040UV02 (it-fse-catalogs); dizionari del gateway (mongo-dump); esito come RawValidationEnum di it-fse-gtw-validator",
+  "passi": [
+    {
+      "operazione": "genera_pss",
+      "dati": "dati/pss_03_ko_tipo_allergia.json",
+      "atteso": {
+        "valido": false
+      }
+    }
+  ]
+}

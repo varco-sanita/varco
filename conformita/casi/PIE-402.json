@@ -1,0 +1,19 @@
+{
+  "id": "PIE-402",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, JWT col payload alterato (altro medico) e la firma originale: firma NON valida",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.2 (formato dell'access_token: sub, aud, userData.cfutente, userData.idSessione, scope) e 4.3.3 (JWKS, una sola chiave RSA, kid «rel-oauth2-key»). JWT e JWKS SINTETICI (conformita/risposte/piemonte/LEGGIMI.md)",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_jwt",
+      "token": "piemonte/jwt_alterato.txt",
+      "jwks": "piemonte/jwks.json",
+      "atteso": {
+        "campi": {
+          "firma_valida": false,
+          "sub": "PROVAX00X00X000Z"
+        }
+      }
+    }
+  ]
+}

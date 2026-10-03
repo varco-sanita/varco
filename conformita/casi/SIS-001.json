@@ -1,0 +1,32 @@
+{
+  "id": "SIS-001",
+  "famiglia": "sist",
+  "titolo": "SIST, controllo riuscito: NRE (IUP), codice di autenticazione e nome del medico",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), javadoc CVPPortType.chkPrescrizione e Appendice A (Emettere prescrizione su promemoria). Risposta SINTETICA scritta sullo schema CVPService.xsd (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST disponibile",
+  "passi": [
+    {
+      "operazione": "leggi_sist_chk",
+      "risposta": "sist/chk_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre_formato": true,
+        "nre": "1600A0000000001",
+        "presenti": [
+          "codice_autenticazione"
+        ],
+        "comunicazioni_presenti": [
+          "0199",
+          "0198"
+        ],
+        "nessun_bloccante": true,
+        "campi": {
+          "cognome_medico": "PRO",
+          "nome_medico": "VA",
+          "solo_ricetta_rossa": false
+        }
+      }
+    }
+  ]
+}

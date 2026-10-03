@@ -1,0 +1,10 @@
+# Esempio di file credenziali per Credenziali.da_file("config.toml").
+# NON mettere mai questo file, compilato, dentro un archivio condiviso.
+# Per l'ambiente di TEST i valori stanno nel kit pubblico MEF
+# (Servizi Prescrittore/PosizioniTestMedico.xlsx).
+
+[credenziali]
+utente = ""      # id utenza Sistema TS (per il medico: il suo codice fiscale)
+password = ""
+pincode = ""     # in chiaro: il kit lo cifra con SanitelCF a ogni chiamata
+# cf_medico = "" # solo se diverso dall'utente

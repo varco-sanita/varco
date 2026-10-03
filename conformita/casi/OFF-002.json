@@ -1,0 +1,23 @@
+{
+  "id": "OFF-002",
+  "famiglia": "offline",
+  "titolo": "Lettura visualizzazione di ricetta da erogare (stato 3)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.3 e cap. 7",
+  "passi": [
+    {
+      "operazione": "leggi_visualizza",
+      "risposta": "visualizza_stato3.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "stato_processo": "3",
+        "righe": 1,
+        "nre": "1300A4019294833",
+        "presenti": [
+          "codice_autenticazione"
+        ]
+      }
+    }
+  ]
+}

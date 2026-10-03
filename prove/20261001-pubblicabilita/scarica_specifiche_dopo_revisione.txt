@@ -1,0 +1,12 @@
+[mef] 20260708_Specifiche_tecniche_ricetta_dematerializzata_prescrizione.pdf: ok (scaricato e verificato)
+[mef] 20241205_Specifiche_stampa_promemoria.pdf: ok (scaricato e verificato)
+[mef] kit_prescrittore.zip: ok (scaricato e verificato); scompattato in kit/
+[fse-validatore] fse/mongo-dump/config_data.json: ok (scaricato e verificato)
+[fse-validatore] fse/mongo-dump/dictionary.json.gzip: ok (scaricato e verificato)
+[fse-validatore] fse/mongo-dump/schema.json.gzip: ok (scaricato e verificato)
+[fse-validatore] fse/mongo-dump/schematron.json.gzip: ok (scaricato e verificato)
+[fse-validatore] fse/mongo-dump/terminology.json.gzip: ok (scaricato e verificato)
+[fse-validatore] fse/it-fse-gtw-validator@fdf3854b57a8: ok (scaricato, commit verificato)
+[fse-validatore] fse/it-fse-gtw-dispatcher@9cc8aa794a17: ok (scaricato, commit verificato)
+
+TUTTO VERIFICATO (gruppi: fse-validatore, mef)

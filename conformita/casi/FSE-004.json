@@ -1,0 +1,19 @@
+{
+  "id": "FSE-004",
+  "famiglia": "fse",
+  "titolo": "Codice ICD-9-CM inesistente nella lista dei problemi",
+  "riferimento": "schematron_PSS_v4.0.sch e schema CDA POCD_MT000040UV02 (it-fse-catalogs); dizionari del gateway (mongo-dump); esito come RawValidationEnum di it-fse-gtw-validator",
+  "passi": [
+    {
+      "operazione": "valida_documento",
+      "documento": "documenti/pss_04_ko_vocabolario_icd9.xml",
+      "atteso": {
+        "esito": "VOCABULARY_ERROR",
+        "errori_contengono": [
+          "2.16.840.1.113883.6.103",
+          "000.00"
+        ]
+      }
+    }
+  ]
+}

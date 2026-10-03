@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<soapenv:Envelope xmlns:ftip="http://tipodati.xsd.dem.sanita.fvg.it-v1.0" xmlns:fvis="http://visualizzaprescrittorichiesta.xsd.dem.sanita.fvg.it-v1.0" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header /><soapenv:Body><fvis:VisualizzaPrescrittoRichiesta ftip:prodottoCme="NON-ACCREDITATO"><fvis:pinCode /><fvis:nre>[REDATTO:nre:6c194b5134]</fvis:nre><fvis:cfMedico>[REDATTO:cf:d6d5e39266]</fvis:cfMedico></fvis:VisualizzaPrescrittoRichiesta></soapenv:Body></soapenv:Envelope>

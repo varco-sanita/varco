@@ -1,0 +1,26 @@
+{
+  "id": "PIE-105",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, lista degli NRE utilizzati in modalità OAuth2: pinCode vuoto, codRegione 010",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.6 (interroga nre utilizzati tra i servizi coinvolti); RE-SRS-SAR V05, par. 4.4.4; XSD del kit MEF",
+  "passi": [
+    {
+      "operazione": "codifica_piemonte",
+      "servizio": "interroga_nre",
+      "modalita": "oauth2",
+      "cf_medico": "PROVAX00X00X000Y",
+      "criteri": {
+        "codice_regione": "010",
+        "nre": "0100A0000000001"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "codRegione": "010",
+          "nre": "0100A0000000001"
+        }
+      }
+    }
+  ]
+}

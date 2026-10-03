@@ -1,0 +1,49 @@
+{
+  "id": "SIS-103",
+  "famiglia": "sist",
+  "titolo": "SIST, sostituzione: prescrive il sostituto (codMedicoPrescrittore), il titolare va in codMedicoSostituito",
+  "riferimento": "Specifiche di integrazione SIST v4.03.27 (Regione Puglia, InnovaPuglia), javadoc chkPrescrizione (codMedicoSostituito: codice del medico titolare sostituito)",
+  "passi": [
+    {
+      "operazione": "codifica_sist_chk",
+      "ricetta": {
+        "prescrittore": {
+          "codice_fiscale": "PROVAX00X00X000Y",
+          "codice_regione": "160",
+          "codice_asl": "114",
+          "codice_specializzazione": "F",
+          "codice_fiscale_sostituto": "PROVAX00X00X000Z"
+        },
+        "assistito": {
+          "codice_fiscale": "PNIMRA70A01H501P",
+          "asl": "114",
+          "codice_regione": "160",
+          "provincia": "BA"
+        },
+        "tipo": "F",
+        "data_compilazione": "2026-10-01 11:00:00",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice": "034298051",
+            "descrizione": "FARMACO DI PROVA",
+            "codice_gruppo_equivalenza": "02D",
+            "descrizione_gruppo_equivalenza": "GRUPPO DI PROVA",
+            "nota_aifa": "1"
+          }
+        ]
+      },
+      "codici_regionali": {
+        "PROVAX00X00X000Y": "000001",
+        "PROVAX00X00X000Z": "000002"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "codMedicoPrescrittore": "000002",
+          "codMedicoSostituito": "000001"
+        }
+      }
+    }
+  ]
+}

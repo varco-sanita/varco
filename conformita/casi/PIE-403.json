@@ -1,0 +1,18 @@
+{
+  "id": "PIE-403",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, JWKS col modulo nel campo «v» (come nella tabella della specifica): la firma si verifica lo stesso",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.3: la tabella chiama il modulo «v», l'esempio e la RFC 7517 «n». JWT e JWKS SINTETICI",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_jwt",
+      "token": "piemonte/jwt_valido.txt",
+      "jwks": "piemonte/jwks_campo_v.json",
+      "atteso": {
+        "campi": {
+          "firma_valida": true
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "PIE-012",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, errore nella forma dell'esempio della specifica (<errore> senza <errori>): il lettore lo trova lo stesso",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.4: l'esempio mostra <a:errore> direttamente, lo XSD A2F vuole il contenitore <errori>. Busta SINTETICA che riproduce l'esempio: NON valida contro lo XSD, apposta.",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/crea_errore_forma_esempio.xml",
+      "atteso": {
+        "codice": [
+          "1"
+        ],
+        "ok": false,
+        "errore_codice": "9998",
+        "errore_bloccante": true
+      }
+    }
+  ]
+}

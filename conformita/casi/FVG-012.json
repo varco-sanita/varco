@@ -1,0 +1,20 @@
+{
+  "id": "FVG-012",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, verifica della posizione del sostituto: abilitato",
+  "riferimento": "wsdl_prescritto.zip (medicinrete.insiel.it), gestoreAutorizzazioni/v1.0 (VerificaPosizioneMedicoSostitutoRicevuta, isAbilitato). Servizio non descritto nel documento, solo nel WSDL. Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "verifica_sostituto",
+      "risposta": "fvg/verifica_sostituto_abilitato.xml",
+      "atteso": {
+        "campi": {
+          "abilitato": true,
+          "cfMedico1": "PROVAX00X00X000Y",
+          "cfMedico2": "PROVAX00X00X000Z"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "OFF-006",
+  "famiglia": "offline",
+  "titolo": "Lettura rifiuto: NRE inesistente (errore 5005)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.3",
+  "passi": [
+    {
+      "operazione": "leggi_visualizza",
+      "risposta": "visualizza_nre_inesistente_5005.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "5005",
+        "errore_bloccante": true
+      }
+    }
+  ]
+}

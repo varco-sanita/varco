@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+<env:Body>
+<env:Fault>
+<faultcode>env:Client</faultcode>
+<faultstring>cvc-simple-type 1: element {http://tipodati.xsd.dem.sanita.finanze.it}quantita is not a valid instance of type {http://tipodati.xsd.dem.sanita.finanze.it}integerType. Value is '12'</faultstring></env:Fault></env:Body></env:Envelope>

@@ -1,0 +1,2 @@
+## Albero completo, Python 3.14 (.venv del progetto)
+261 passed, 9 skipped in 3.18s

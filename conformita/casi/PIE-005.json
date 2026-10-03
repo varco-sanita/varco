@@ -1,0 +1,28 @@
+{
+  "id": "PIE-005",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth con un avviso (tipo W): esito positivo, nessun bloccante",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.4: «W : Warnig → Un avviso gestito che non causa un errore». Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/crea_avviso.xml",
+      "atteso": {
+        "codice": [
+          "0"
+        ],
+        "ok": true,
+        "nessun_bloccante": true,
+        "campi": {
+          "errori": [
+            {
+              "codice": "0001",
+              "tipo": "W",
+              "bloccante": false
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

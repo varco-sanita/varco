@@ -1,0 +1,17 @@
+## Checkout pulito (solo file non esclusi da .gitignore), Python 3.12.12, KITMMG_INTEGRAZIONE non impostata
+.....s................................................                   [100%]
+=========================== short test summary info ============================
+SKIPPED [6] tests/integrazione/test_sac_ambiente_test.py: test di integrazione: impostare KITMMG_INTEGRAZIONE=1
+SKIPPED [3] tests/ufficiale/test_fse_validatore_ufficiale.py: validatore ufficiale FSE non pronto: strumenti/validatore-ufficiale/prepara.sh e JAVA_HOME
+SKIPPED [1] tests/unit/test_kit_e_conformita.py:9: kit MEF non presente in <scratch>/checkout/specifiche/kit/kit-ricetta-dematerializzata-datamatrix
+SKIPPED [1] tests/unit/test_kit_e_conformita.py:14: kit MEF non presente in <scratch>/checkout/specifiche/kit/kit-ricetta-dematerializzata-datamatrix
+SKIPPED [1] tests/unit/test_kit_e_conformita.py:20: kit MEF non presente in <scratch>/checkout/specifiche/kit/kit-ricetta-dematerializzata-datamatrix
+SKIPPED [1] tests/unit/test_licenze.py:61: copie dei repository AGPL non presenti (strumenti/scarica_specifiche.py)
+SKIPPED [1] tests/unit/test_sostituto_nre.py:57: kit MEF non presente in <scratch>/checkout/specifiche/kit/kit-ricetta-dematerializzata-datamatrix
+256 passed, 14 skipped in 3.09s
+## conformita offline
+exit=0
+Totale 21: superati 21, falliti 0, errori 0, saltati 0
+## conformita fse (validatore locale)
+exit=0
+Totale 11: superati 8, falliti 0, errori 0, saltati 3

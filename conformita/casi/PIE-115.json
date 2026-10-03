@@ -1,0 +1,34 @@
+{
+  "id": "PIE-115",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CheckToken: token, contesto, APP; applicazione omessa",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.2 (applicazione «Non valorizzare»); kit A2F del Sistema TS ver. 20250902 (sts-a2f-service.v0.1.xsd, sts-a2f-service-data-type.v0.1.xsd), che REL-STC-01 par. 4.2 dichiara identico per SIRPED",
+  "passi": [
+    {
+      "operazione": "codifica_piemonte",
+      "servizio": "verifica_id_sessione",
+      "utente_rupar": "rupar-prova",
+      "cf_utente": "PROVAX00X00X000Y",
+      "id_sessione": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+      "gestionale": {
+        "codice": "VARCO",
+        "azienda": "301"
+      },
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "token": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+          "contesto": "RICETTA-DEM",
+          "cfUtente": "PROVAX00X00X000Y"
+        },
+        "tag_assenti": [
+          "applicazione",
+          "codRegione"
+        ],
+        "testi": {
+          "infoAggiuntive/opzione/valore": "VARCO_301"
+        }
+      }
+    }
+  ]
+}

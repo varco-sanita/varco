@@ -1,0 +1,49 @@
+{
+  "id": "SAC-002",
+  "famiglia": "online",
+  "titolo": "Invio specialistica con classe di priorità e codice catalogo",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1",
+  "passi": [
+    {
+      "operazione": "invia",
+      "ricetta": {
+        "prescrittore": "${prescrittore}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "P",
+        "classe_priorita": "P",
+        "descrizione_diagnosi": "CONTROLLO (dato di test)",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice": "99.97.2",
+            "descrizione": "TRATTAMENTI PER APPLICAZIONE DI PROTESI RIMOVIBILE",
+            "codice_catalogo": "A099972"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "codice": [
+          "0000",
+          "0001"
+        ],
+        "nre_formato": true,
+        "presenti": [
+          "codice_autenticazione"
+        ]
+      }
+    }
+  ],
+  "finale": [
+    {
+      "operazione": "annulla",
+      "nre": "${nre}"
+    }
+  ]
+}

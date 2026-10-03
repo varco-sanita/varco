@@ -1,0 +1,18 @@
+{
+  "id": "OFF-008",
+  "famiglia": "offline",
+  "titolo": "Lettura rifiuto: ASL del medico non valida (errore 1020)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1",
+  "passi": [
+    {
+      "operazione": "leggi_invio",
+      "risposta": "invio_rifiuto_1020.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1020"
+      }
+    }
+  ]
+}

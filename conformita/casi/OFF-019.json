@@ -1,0 +1,19 @@
+{
+  "id": "OFF-019",
+  "famiglia": "offline",
+  "titolo": "Invio con cfMedico2 diverso dall'utente inviante: rifiuto 1212",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1 (sostituti, CASO 2); Risposta reale del SAC di test, prove/20260930-171334-sostituto-nre",
+  "passi": [
+    {
+      "operazione": "leggi_invio",
+      "risposta": "invio_cfmedico2_non_inviante_1212.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1212",
+        "errore_bloccante": true
+      }
+    }
+  ]
+}

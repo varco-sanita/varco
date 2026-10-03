@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<soapenv:Envelope xmlns:fann="http://annullaprescrittorichiesta.xsd.dem.sanita.fvg.it-v1.0" xmlns:ftip="http://tipodati.xsd.dem.sanita.fvg.it-v1.0" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header /><soapenv:Body><fann:AnnullaPrescrittoRichiesta ftip:prodottoCme="KITMMG-PROVA"><fann:pinCode /><fann:nre>[REDATTO:nre:0073aedbce]</fann:nre><fann:cfMedico>[REDATTO:cf:d6d5e39266]</fann:cfMedico></fann:AnnullaPrescrittoRichiesta></soapenv:Body></soapenv:Envelope>

@@ -1,0 +1,20 @@
+{
+  "data_ora": "2026-10-01T17:48:06+02:00",
+  "servizio": "fvg.gestore_autorizzazioni",
+  "modalita": "redatta",
+  "url": "https://127.0.0.1:54624/SARWs/GestoreAutorizzazioniSecure",
+  "intestazioni_richiesta": {
+    "Content-Type": "text/xml;charset=UTF-8",
+    "SOAPAction": "\"\"",
+    "User-Agent": "KITMMG-PROVA/0.1 MACOS/15.0 [REDATTO:postazione:0ab73b1b85]"
+  },
+  "stato_http": 200,
+  "durata_s": 0.008,
+  "intestazioni_risposta": {
+    "Server": "SARFVGFinto/0.1 Python/3.14.7",
+    "Date": "Thu, 01 Oct 2026 15:48:06 GMT",
+    "Content-Type": "text/xml;charset=UTF-8",
+    "Content-Length": "569"
+  },
+  "errore": null
+}

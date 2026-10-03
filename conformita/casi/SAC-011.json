@@ -1,0 +1,45 @@
+{
+  "id": "SAC-011",
+  "famiglia": "online",
+  "titolo": "Sostituto indicato ma credenziali del titolare: il SAC rifiuta (1212)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1 (sostituti, CASO 2: le credenziali di invio sono quelle del sostituto)",
+  "passi": [
+    {
+      "operazione": "invia",
+      "credenziali": "kit",
+      "valida_localmente": false,
+      "ricetta": {
+        "prescrittore": "${prescrittore_con_sostituto}",
+        "assistito": {
+          "codice_fiscale": "${assistito_cf}",
+          "provincia": "AQ",
+          "asl": "201"
+        },
+        "tipo": "F",
+        "righe": [
+          {
+            "quantita": 1,
+            "codice_gruppo_equivalenza": "G3B",
+            "descrizione_gruppo_equivalenza": "LEVETIRACETAM 500MG 60 UNITA' USO ORALE"
+          }
+        ]
+      },
+      "salva": {
+        "nre": "nre"
+      },
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1212"
+      }
+    }
+  ],
+  "finale": [
+    {
+      "operazione": "annulla",
+      "credenziali": "kit",
+      "nre": "${nre}"
+    }
+  ]
+}

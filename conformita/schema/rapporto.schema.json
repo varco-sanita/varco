@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://varco.invalid/conformita/schema/rapporto.schema.json",
+  "title": "Rapporto di esecuzione della suite di conformità",
+  "description": "Quello che un esecutore restituisce. Chi dichiara un'integrazione allega questo file; chiunque può rieseguire i casi e confrontare.",
+  "type": "object",
+  "required": [
+    "totale",
+    "superati",
+    "falliti",
+    "errori",
+    "saltati",
+    "casi"
+  ],
+  "properties": {
+    "totale": {
+      "type": "integer"
+    },
+    "superati": {
+      "type": "integer"
+    },
+    "falliti": {
+      "type": "integer"
+    },
+    "errori": {
+      "type": "integer"
+    },
+    "saltati": {
+      "type": "integer"
+    },
+    "casi": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "stato"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "titolo": {
+            "type": "string"
+          },
+          "stato": {
+            "enum": [
+              "SUPERATO",
+              "FALLITO",
+              "SALTATO",
+              "ERRORE"
+            ]
+          },
+          "motivo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "passi": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "operazione": {
+                  "type": "string"
+                },
+                "superato": {
+                  "type": "boolean"
+                },
+                "dettagli": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "osservato": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

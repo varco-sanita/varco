@@ -1,0 +1,23 @@
+{
+  "id": "PIE-103",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, visualizzazione in modalità OAuth2: pinCode vuoto",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.6; RE-SRS-SAR V05, par. 4.4.5; XSD del kit MEF",
+  "passi": [
+    {
+      "operazione": "codifica_piemonte",
+      "servizio": "visualizza",
+      "modalita": "oauth2",
+      "nre": "0100A0000000001",
+      "cf_medico": "PROVAX00X00X000Y",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "nre": "0100A0000000001",
+          "cfMedico": "PROVAX00X00X000Y"
+        }
+      }
+    }
+  ]
+}

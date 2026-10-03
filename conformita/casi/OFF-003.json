@@ -1,0 +1,18 @@
+{
+  "id": "OFF-003",
+  "famiglia": "offline",
+  "titolo": "Lettura visualizzazione di ricetta annullata (stato 4)",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), cap. 7",
+  "passi": [
+    {
+      "operazione": "leggi_visualizza",
+      "risposta": "visualizza_stato4.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "stato_processo": "4"
+      }
+    }
+  ]
+}

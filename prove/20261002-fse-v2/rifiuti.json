@@ -1,0 +1,38 @@
+[
+  {
+    "caso": "terapia senza via (prima: routeCode PO inventato)",
+    "rifiutato": true,
+    "problemi": [
+      "terapia 1: via di somministrazione obbligatoria (codice HL7 RouteOfAdministration, ERRORE-b112 non ammette nullFlavor): il kit non la deduce"
+    ]
+  },
+  {
+    "caso": "terapia senza stato (prima: active inventato)",
+    "rifiutato": true,
+    "problemi": [
+      "terapia 1: stato obbligatorio (active, completed, suspended, aborted): il kit non lo deduce"
+    ]
+  },
+  {
+    "caso": "data di nascita sconosciuta (prima: birthTime UNK, SEMANTIC_ERROR)",
+    "rifiutato": true,
+    "problemi": [
+      "paziente: data di nascita obbligatoria (ERRORE-17 vuole birthTime/@value; nullFlavor UNK è respinto dal validatore ufficiale)"
+    ]
+  },
+  {
+    "caso": "versione 2 senza id_set e id_documento_precedente (prima: SEMANTIC_ERROR)",
+    "rifiutato": true,
+    "problemi": [
+      "versione 2: serve id_set, l'identificativo comune a tutte le versioni (ERRORE-8)",
+      "versione 2: serve id_documento_precedente, l'id della versione sostituita (relatedDocument RPLC, ERRORE-9)"
+    ]
+  },
+  {
+    "caso": "iniezione su PDF che ha già cda.xml",
+    "rifiutato": true,
+    "problemi": [
+      "il PDF contiene già 1 allegato/i CDA (cda.xml): aggiungerne un altro renderebbe ambiguo quale CDA acquisisce il gateway. Usare inietta_cda(..., sostituisci=True) per sostituirlo."
+    ]
+  }
+]

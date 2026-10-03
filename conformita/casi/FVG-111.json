@@ -1,0 +1,23 @@
+{
+  "id": "FVG-111",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, lista degli NRE con un lotto non riconducibile a codLotto (cifre): rifiuto locale",
+  "riferimento": "wsdl_prescritto.zip (medicinrete.insiel.it), TipiDatiInterrogaNreUtilizzati.xsd (codLottoType [0-9]{1,7})",
+  "passi": [
+    {
+      "operazione": "codifica_fvg",
+      "servizio": "interroga_nre",
+      "criteri": {
+        "codice_regione": "060",
+        "codice_lotto": "0600A0ABCDEFG",
+        "tipo": "F",
+        "dal": "2026-10-01 00:00:00",
+        "al": "2026-10-01 23:59:59"
+      },
+      "cf_medico": "PROVAX00X00X000Y",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

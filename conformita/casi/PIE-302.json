@@ -1,0 +1,15 @@
+{
+  "id": "PIE-302",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, PKCE: code_verifier di 42 caratteri (sotto il minimo): rifiuto locale",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.1 («la stringa deve avere una lunghezza compresa tra 43 e 128 caratteri»); RFC 7636, par. 4.1. L'esempio in shell della specifica produce spesso verifier più corti (docs/SAR_PIEMONTE.md, sez. 7)",
+  "passi": [
+    {
+      "operazione": "pkce_piemonte",
+      "code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjX",
+      "atteso": {
+        "rifiuto_locale": true
+      }
+    }
+  ]
+}

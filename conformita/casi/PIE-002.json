@@ -1,0 +1,23 @@
+{
+  "id": "PIE-002",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth in produzione: l'Id-Sessione arriva solo per mail, la risposta non lo porta",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 3.1 e 4.2.1 (comunicazioni «valorizzata solo in ambiente di TEST»). Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/crea_ok_produzione.xml",
+      "atteso": {
+        "codice": [
+          "0"
+        ],
+        "ok": true,
+        "campi": {
+          "ambiente_test": false,
+          "id_sessione_di_test": null,
+          "permessi": []
+        }
+      }
+    }
+  ]
+}

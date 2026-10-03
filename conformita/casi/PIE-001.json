@@ -1,0 +1,30 @@
+{
+  "id": "PIE-001",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, CreateAuth in ambiente di TEST: Id-Sessione, permessi e scadenza nelle comunicazioni",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.2.1 (V04: in TEST l'Id-Sessione torna nella risposta, sezione comunicazioni). Risposta SINTETICA (conformita/risposte/piemonte/LEGGIMI.md): la specifica non pubblica risposte",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_a2f",
+      "risposta": "piemonte/crea_ok_test.xml",
+      "atteso": {
+        "codice": [
+          "0"
+        ],
+        "ok": true,
+        "nessun_bloccante": true,
+        "campi": {
+          "ambiente_test": true,
+          "id_sessione_di_test": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+          "permessi": [
+            "prescrizione"
+          ],
+          "fine_validita": "01/10/2026 19:00:00",
+          "info": {
+            "emailStatus": "Email con token inviata con successo al notificatore regionale"
+          }
+        }
+      }
+    }
+  ]
+}

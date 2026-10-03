@@ -1,0 +1,17 @@
+SUPERATO  FSE-001  PSS completo (voci in tutte le sezioni obbligatorie + esenzione): valido
+SUPERATO  FSE-002  PSS con i codici di assenza IPS in tutte le sezioni obbligatorie: valido
+SUPERATO  FSE-003  Tipo allergia DALLERGY: HL7 valido ma non censito nel gateway
+SUPERATO  FSE-004  Codice ICD-9-CM inesistente nella lista dei problemi
+SUPERATO  FSE-005  Manca la sezione obbligatoria Allergie
+SUPERATO  FSE-006  Codice fiscale del paziente di 15 caratteri
+SUPERATO  FSE-007  title prima di code: il documento non rispetta lo schema CDA
+SALTATO   FSE-101  Generazione del PSS completo dai dati: il documento deve essere valido
+          motivo: operazione genera_pss: questo esecutore non ha un generatore di CDA
+SALTATO   FSE-102  Generazione del PSS con i codici di assenza: il documento deve essere valido
+          motivo: operazione genera_pss: questo esecutore non ha un generatore di CDA
+SALTATO   FSE-103  Dati con tipo allergia non censito (DALLERGY): rifiuto locale oppure documento non valido
+          motivo: operazione genera_pss: questo esecutore non ha un generatore di CDA
+SALTATO   FSE-104  Dati con ICD-9-CM inesistente: il gateway lo rifiuta (vocabolari)
+          motivo: operazione genera_pss: questo esecutore non ha un generatore di CDA
+
+Totale 11: superati 7, falliti 0, errori 0, saltati 4

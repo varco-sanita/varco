@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://varco.invalid/conformita/schema/ricetta.schema.json",
+  "title": "Ricetta dematerializzata (formato portabile Varco)",
+  "description": "Modello della ricetta indipendente dal canale. I nomi sono quelli del modello del kit; la corrispondenza con i tag del SAC è nella specifica MEF (par. 4.2.1) e nel codec di riferimento (src/varco/ricetta/xml_sac.py). Il CF dell'assistito è IN CHIARO: lo cifra l'implementazione al momento dell'invio. Solo dati di test.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "prescrittore": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/prescrittore"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\$\\{[a-zA-Z_][a-zA-Z0-9_]*\\}$"
+        }
+      ]
+    },
+    "assistito": {
+      "$ref": "#/$defs/assistito"
+    },
+    "tipo": {
+      "enum": [
+        "F",
+        "P"
+      ],
+      "description": "F farmaceutica, P specialistica"
+    },
+    "righe": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/riga"
+      }
+    },
+    "tipo_visita": {
+      "enum": [
+        "A",
+        "D"
+      ]
+    },
+    "data_compilazione": {
+      "type": "string",
+      "description": "data e ora ISO 8601 (AAAA-MM-GGThh:mm:ss) o 'AAAA-MM-GG hh:mm:ss'"
+    },
+    "non_esente": {
+      "type": "boolean"
+    },
+    "codice_esenzione": {
+      "type": "string"
+    },
+    "esente_reddito": {
+      "type": "boolean"
+    },
+    "codice_diagnosi": {
+      "type": "string"
+    },
+    "descrizione_diagnosi": {
+      "type": "string"
+    },
+    "classe_priorita": {
+      "enum": [
+        "U",
+        "B",
+        "D",
+        "P"
+      ]
+    },
+    "indicazione": {
+      "type": "string"
+    },
+    "altro": {
+      "type": "string"
+    },
+    "ricetta_interna": {
+      "type": "boolean"
+    },
+    "disposizioni_regionali": {
+      "type": "string"
+    },
+    "testata1": {
+      "type": "string"
+    },
+    "testata2": {
+      "type": "string"
+    },
+    "nre": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "prescrittore",
+    "assistito",
+    "tipo",
+    "righe"
+  ],
+  "$defs": {
+    "prescrittore": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codice_fiscale": {
+          "type": "string"
+        },
+        "codice_regione": {
+          "type": "string"
+        },
+        "codice_asl": {
+          "type": "string"
+        },
+        "codice_specializzazione": {
+          "type": "string"
+        },
+        "codice_struttura": {
+          "type": "string"
+        },
+        "codice_fiscale_sostituto": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "codice_fiscale",
+        "codice_regione",
+        "codice_asl",
+        "codice_specializzazione"
+      ]
+    },
+    "assistito": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codice_fiscale": {
+          "type": "string"
+        },
+        "cognome_nome": {
+          "type": "string"
+        },
+        "indirizzo": {
+          "type": "string"
+        },
+        "provincia": {
+          "type": "string"
+        },
+        "asl": {
+          "type": "string"
+        },
+        "codice_regione": {
+          "type": "string",
+          "pattern": "^[0-9]{3}$",
+          "description": "Regione dell'ASL di residenza (3 cifre). Il SAC non la usa; il SIST pugliese la usa per il codice nazionale dell'ASL (regione + ASL)."
+        },
+        "oscura_dati": {
+          "type": "boolean"
+        },
+        "tipo_ricetta": {
+          "type": "string"
+        },
+        "stato_estero": {
+          "type": "string"
+        },
+        "istituzione_competente": {
+          "type": "string"
+        },
+        "num_ident_personale": {
+          "type": "string"
+        },
+        "num_ident_tessera": {
+          "type": "string"
+        },
+        "data_nascita_estero": {
+          "type": "string"
+        },
+        "data_scadenza_tessera": {
+          "type": "string"
+        },
+        "num_tessera_sasn": {
+          "type": "string"
+        },
+        "societa_navigazione": {
+          "type": "string"
+        }
+      }
+    },
+    "riga": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "quantita": {
+          "type": "integer"
+        },
+        "codice": {
+          "type": "string"
+        },
+        "descrizione": {
+          "type": "string"
+        },
+        "codice_gruppo_equivalenza": {
+          "type": "string"
+        },
+        "descrizione_gruppo_equivalenza": {
+          "type": "string"
+        },
+        "non_sostituibile": {
+          "type": "boolean"
+        },
+        "codice_motivazione_non_sost": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "note_prestazione": {
+          "type": "string"
+        },
+        "nota_aifa": {
+          "type": "string"
+        },
+        "codice_catalogo": {
+          "type": "string"
+        },
+        "tipo_accesso": {
+          "type": "string"
+        },
+        "numero_nota": {
+          "type": "string"
+        },
+        "condizione_erogabilita": {
+          "type": "string"
+        },
+        "appropriatezza": {
+          "type": "string"
+        },
+        "patologia": {
+          "type": "string"
+        },
+        "num_sedute": {
+          "type": "integer"
+        },
+        "prescrizione1": {
+          "type": "string"
+        },
+        "prescrizione2": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "quantita"
+      ]
+    }
+  }
+}

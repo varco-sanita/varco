@@ -1,0 +1,323 @@
+{
+  "descrizione": "Materiale di terzi che il kit NON redistribuisce: si scarica dalla fonte ufficiale con strumenti/scarica_specifiche.py e si verifica (sha256 per i file, commit per i repository git). Hash e commit sono quelli delle copie usate per scrivere e collaudare il kit (30/09/2026). Elenco completo e licenze: docs/TERZE_PARTI.md.",
+  "gruppi": {
+    "mef": "Sistema TS (MEF): specifiche e kit di sviluppo prescrittore. Serve per i test di integrazione e le prove (utenze di test).",
+    "fse-validatore": "Codice ufficiale del gateway FSE 2.0 (AGPL-3.0) e dump dei dizionari: serve solo al banco strumenti/validatore-ufficiale.",
+    "fse-riferimento": "Documentazione, esempi e casi di accreditamento del FSE 2.0: consultazione e test del validatore ufficiale.",
+    "sist": "Regione Puglia, SIST di InnovaPuglia (SAR): specifiche di integrazione v4.03.27 del 16/09/2026 (docx, WSDL, XSD, javadoc, specifiche ed esempi dei CDA). Serve ai test del modulo SIST (XSD ufficiali, esempi). Gli esempi contengono nomi e codici fiscali: restano fuori dal repository.",
+    "fvg": "Regione Friuli-Venezia Giulia, SAR di Insiel: specifiche Idof-dem-AT-01 dell'11/02/2026 (PDF, «Documento a libera circolazione», © Insiel tutti i diritti riservati) e WSDL/XSD dei servizi in collaudo (wsdl_prescritto.zip). Serve ai test del modulo FVG (XSD, esempi). NON comprende ISAD-FSE-SPT-02-2025 (FSE regionale): porta «Documento a circolazione limitata» e non si scarica (docs/TERZE_PARTI.md).",
+    "piemonte": "Regione Piemonte, SIRPED (SAR gestito dal CSI Piemonte): specifiche dell'autenticazione forte REL-STC-01 V04 del 02/03/2026, YAML dei servizi Id-Sessione OAuth2, processo, richiesta, piano dei test e attestati dell'autocertificazione (gennaio-febbraio 2026), requisiti di integrazione per le cartelle MMG/PLS V05 (2018) e piano dei test V02 (2016), tutti «Uso: Esterno» e scaricabili senza login da servizi.regione.piemonte.it; allegato tecnico dell'avviso CSI AP26_003; kit A2F del Sistema TS (WSDL e XSD di CreateAuth/CheckToken/RevokeAuth, che REL-STC-01 par. 4.2 dichiara identici per SIRPED). Serve ai test del modulo Piemonte (XSD A2F) e alla documentazione. Il kit A2F contiene utenze e pincode di test del MEF: restano fuori dal repository.",
+    "cda-xsd": "Schemi XSD del CDA R2 (HL7) nella versione del gateway FSE 2.0 (ministero-salute/it-fse-catalogs, schema/POCD_MT000040UV02/, commit 141be7f0) e schematron del PSS v4.0 (stesso repository e commit, schematron/). Servono a ValidatoreLocale (validazione XSD e schematron del PSS) e sono nei gruppi di default dello script. Lo schematron traduce la guida PSS di HL7 Italia, «All Rights Reserved», senza licenza. Copyright Health Level Seven: 4 file hanno una licenza nell'intestazione (BSD per datatypes*, EPL-1.0 per POCD_MT000040UV02.xsd), gli altri no e la HL7 IP Policy non autorizza un non membro a ridistribuirli: si scaricano dalla fonte (docs/TERZE_PARTI.md)."
+  },
+  "file": [
+    {
+      "gruppo": "mef",
+      "destinazione": "20260708_Specifiche_tecniche_ricetta_dematerializzata_prescrizione.pdf",
+      "url": "https://sistemats1.sanita.finanze.it/portale/documents/20182/81804/20260708_Specifiche%20tecniche%20ricetta%20dematerializzata%20-%20prescrizione/6ed04c7b-471c-a133-0de1-2525abb195b5",
+      "sha256": "899fd56e4cb53cebcd0ebf4a7ffe160fcb52ab5accef09dd2ba800389c51e3a1"
+    },
+    {
+      "gruppo": "mef",
+      "destinazione": "20241205_Specifiche_stampa_promemoria.pdf",
+      "url": "https://sistemats1.sanita.finanze.it/portale/documents/20182/81804/20241205_Specifiche%20tecniche%20per%20la%20stampa%20del%20promemoria/a1c50b09-c73f-26da-c19c-d4906d2d441e",
+      "sha256": "a50686088e85e69c86537c3d7c305e107a1311f3d7e493558f92b55c98c91d55"
+    },
+    {
+      "gruppo": "mef",
+      "destinazione": "kit_prescrittore.zip",
+      "url": "https://sistemats1.sanita.finanze.it/portale/documents/20182/0/Kit%20per%20lo%20sviluppo%20-%20Ricetta%20elettronica%20-%20Prescrittore/ff233439-bbd7-ad2b-6977-f3d01591c454",
+      "sha256": "deb416227ee87b202cf56aeadec1e720d2638d4afcd278739b7733f792fe4496",
+      "scompatta_in": "kit"
+    },
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/mongo-dump/config_data.json",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/mongo-dump/config_data.json",
+      "sha256": "3debd8aadb44a47b5156591f83b87bf011d52a7e340ae3abb4efe1a413546ddc"
+    },
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/mongo-dump/dictionary.json.gzip",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/mongo-dump/dictionary.json.gzip",
+      "sha256": "8155fdec2796597caab0c74dabd2ac3481edf739c1879f226b1e7a0b7d05d071"
+    },
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/mongo-dump/schema.json.gzip",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/mongo-dump/schema.json.gzip",
+      "sha256": "eefdbfcfc5a1457e99e130fae6f935233851c83e5c0b79d435b179f7f8bca933"
+    },
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/mongo-dump/schematron.json.gzip",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/mongo-dump/schematron.json.gzip",
+      "sha256": "73a7cfe26a991643a5a95420e5fedd3378aade6f3d33c0fe8bbd9cd427b039ed"
+    },
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/mongo-dump/terminology.json.gzip",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/mongo-dump/terminology.json.gzip",
+      "sha256": "ccd0cdb3fde165a18616c633e97b4c0390c6069ed87ebd6406d649646f8604de"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/README.md",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/README.md",
+      "sha256": "0acd805e84dfa8577774683c0ac4e1b555c9181cac8198b5e9651fe14f4482f7"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/accreditamento-checklist_V9.0.0.xlsx",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/accreditamento-checklist_V9.0.0.xlsx",
+      "sha256": "8627c8738c5ad51aa6068665970ac94096587890b883f2a79446defb778e9008"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/casi di test PSS.docx",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/Validazione/8-Profilo%20Sanitario%20Sintetico/casi%20di%20test%20PSS.docx",
+      "sha256": "bb7bb1dfb732de4372a4718a188061135d5ab55bf764cd187846f7f2e89a4054"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/CDA2_Profilo_Sanitario_Sintetico_OK.xlsx",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/Validazione/8-Profilo%20Sanitario%20Sintetico/CDA2_Profilo_Sanitario_Sintetico_OK.xlsx",
+      "sha256": "64b6897e3de13d3ee848baea9a7f6987f5f6272bfaa2c34e9829762838b984ee"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/CDA2_Profilo_Sanitario_Sintetico_KO.xlsx",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/Validazione/8-Profilo%20Sanitario%20Sintetico/CDA2_Profilo_Sanitario_Sintetico_KO.xlsx",
+      "sha256": "e97d0315451e630da3a078e6124277920b21cf71207e5bc3fb7fd09a52f8c03f"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/PSS476.xml",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/Validazione/Documenti%20XML%20Casi%20OK/8%20-%20Casi%20OK%20Profilo%20Sanitario%20Sintetico/PSS476.xml",
+      "sha256": "7b54299d5ad7e87ca7d5569e98adac2d687d3e9432fd4d015194e733a2adaabd"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/accreditamento/PSS477.xml",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-accreditamento/d937255fd7e9c079c5641c537da17fe98a2f2259/Test%20Case/Validazione/Documenti%20XML%20Casi%20OK/8%20-%20Casi%20OK%20Profilo%20Sanitario%20Sintetico/PSS477.xml",
+      "sha256": "79141b74b78c9fe1a2f83c42f87e21244c9aa22f4358ea2a93081a15e07fc566"
+    },
+    {
+      "gruppo": "sist",
+      "destinazione": "sist/specifiche_SIST_4.03.27.zip",
+      "url": "https://sist.sanita.puglia.it/documents/76427961/0/specifiche+SIST+4.02.27/3a32e54e-7fb6-4e32-a23d-94b35468b07d",
+      "sha256": "0c20810629ec0f20607c4855611b2c405f265e4b70f9b13b408f595e776c1bf6",
+      "scompatta_in": "sist",
+      "nota": "Sulla pagina https://sist.sanita.puglia.it/en/specifiche-integrazione il link si chiama «v. 4.03.27 del 16/09/2026», ma il file servito si chiama «specifiche SIST 4.02.27.zip»: il contenuto è la 4.03.27 (docx «Specifiche di integrazione SIST_4_03_27», storia delle revisioni fino a 4.03.27)."
+    },
+    {
+      "gruppo": "fvg",
+      "destinazione": "fvg/IDOF-DEM-00001-AT-16-01_v1.0.pdf",
+      "url": "https://medicinrete.insiel.it/allegati/IDOF-DEM-00001-AT-16-01_v1.0.pdf",
+      "sha256": "dfcd9f747e061ba1023f305ff6ff003187996f95290e6d6e3435bce1c56cf13f",
+      "nota": "Copertina: Idof-dem-AT-01, 11 febbraio 2026, «Documento a libera circolazione». L'esempio di User-Agent al par. 3.1 riporta un codice fiscale con carattere di controllo corretto e un MAC address: il kit non li copia."
+    },
+    {
+      "gruppo": "fvg",
+      "destinazione": "fvg/wsdl_prescritto.zip",
+      "url": "https://medicinrete.insiel.it/allegati/wsdl_prescritto.zip",
+      "sha256": "aeb3c048ca58db9bafec8dd274d8dce78536a9c2295b6dc6063f89e8e5dda224",
+      "scompatta_in": "fvg/wsdl",
+      "nota": "Il documento cita http://medicinrete.insiel.it/allegati/wsdl_prescritto.zip: il server risponde 301 verso https, stesso file. XSD datati 30/09/2020, WSDL 17/03/2021. La cartella da passare alla suite è fvg/wsdl/sar."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/REL-STC-01-V04.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/3354/download?attachment=",
+      "sha256": "058bfe96dc27cad37c317859d88a32f2bbf382ed642451f5cb47f1125ba906b4",
+      "nota": "REL-STC-01 V04 del 02/03/2026, «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», Uso: Esterno. L'indagine preliminare citava la V02 del 10/12/2025 (salutepiemonte.it): superata."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/api-docs_idsessione.yaml",
+      "url": "https://servizi.regione.piemonte.it/media/3249/download?attachment=",
+      "sha256": "49f0b4461a33a8a3821ff8ff4690640cf8cde6d07f6796b1a21fc5bcb3d1b262",
+      "nota": "OpenAPI 3.1 di /sessionid/verify e /sessionid/revoke (aggiornato al 22/10/2025). servers.url = https://tbd/reloauthserver: host non pubblicato."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/SIRPED-01-V01-processo-autocertificazione.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/3303/download?attachment=",
+      "sha256": "8689d64240bb521852dc1ad63d3011e2d07295f0728ed38aa98f1679f30b6029",
+      "nota": "Processo per l'autocertificazione dei gestionali all'autenticazione multi-fattore, V01 del 30/01/2026."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/SIRPED-01-V01-richiesta-autocertificazione.xlsx",
+      "url": "https://servizi.regione.piemonte.it/media/3358/download?attachment=",
+      "sha256": "c8bdf95ee0ac5da7430a25b7f12bf1dce94b243361dc0fb7a6312228deab2529",
+      "nota": "Modulo di richiesta dell'autocertificazione (30/01/2026): gestionale, fornitore, funzioni, modalità, mail o URL di callback."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/SIRPED-TES-01-V02-piano-test-mfa.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/3334/download?attachment=",
+      "sha256": "01065821a8d22604497aaa7308b3b4aec3dbfe3a312a2883df526e7169b185c2",
+      "nota": "Piano dei test per l'autenticazione multifattore ai servizi di prescrizione, V02 del 24/02/2026 (esiste anche in .doc: stesso contenuto, non scaricato)."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/SIRPED-01-V01-attestato-mail.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/3307/download?attachment=",
+      "sha256": "5ba3a1532edb8487a88b25c1d272f12644a564b7d9bfd11d44f0b47c8138fff3",
+      "nota": "Attestato di conformità, modalità Id-Sessione con mail certificata, servizi di prescrizione (30/01/2026)."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/SIRPED-01-V01-attestato-oauth2.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/3308/download?attachment=",
+      "sha256": "6a92ee5573a62112a68a9dbc28302166897a3a1495167f00b055005e3c6d6cee",
+      "nota": "Attestato di conformità, modalità Id-Sessione con protocollo OAuth2, servizi di prescrizione (30/01/2026)."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/RE-SRS-SAR-MMG-PLS-V05.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/1019/download",
+      "sha256": "433b32737f6fabaaac8d6479603cace7584f0df2f6e6fd83eb93bb6467bfc356",
+      "nota": "Specifiche dei requisiti di integrazione SAR - Cartelle cliniche MMG/PLS, V05 dell'08/05/2018, uso: Esterno."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/RE-TES-01-SAR-CC-V02.pdf",
+      "url": "https://servizi.regione.piemonte.it/media/1036/download?attachment=",
+      "sha256": "00646d0c2b476538ae8ad5abcdeebdaea01254a3c281c85d1eee38b8411a41bb",
+      "nota": "Piano dei test SAR - Cartelle cliniche MMG/PLS, V02 del 24/10/2016 (139 codici di test distinti contati sul testo estratto: lotti, DM, DPCM, stampa)."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/AP26_003_A01.pdf",
+      "url": "https://www.csipiemonte.it/sites/default/files/inline_download/indagini_di_mercato/2026/AP26_003/AP26_003_A01_Specifiche%20tecniche%20servizio_e_%20Allegato_CCE_MMG_PLS%20-%20SIAP_def_.pdf",
+      "sha256": "57dd5df68a730cbc68f81988b6d531729fccf96a28b91829dc46ed4459647647",
+      "nota": "Avviso CSI AP26_003, Allegato 1 «Specifiche tecniche del servizio» (flusso SIAP dalle cartelle MMG/PLS «già certificate per l'integrazione con il sistema SIRPED»). Solo documentazione: non serve al codice."
+    },
+    {
+      "gruppo": "piemonte",
+      "destinazione": "piemonte/kit-a2f-sistemats-20250902.zip",
+      "url": "https://sistemats1.sanita.finanze.it/portale/documents/d/guest/kit-per-lo-sviluppo-a2f-sistemats-ver-20250902",
+      "sha256": "caa1c6f9c6c3d304f8cd4d12c6ea3fea8ff983e61fbaced1c20cba64e7da9dd3",
+      "scompatta_in": "piemonte/a2f",
+      "nota": "Kit per lo sviluppo A2F del Sistema TS, ver. 20250902 (pagina «Documenti e specifiche tecniche» del portale TS). La cartella da passare alla suite è «piemonte/a2f/Kit per lo sviluppo - A2F SistemaTS - ver. 20250902/wsdl». Contiene utenze e pincode di test del MEF: non entrano nel repository. L'esempio del manuale riporta un CF con carattere di controllo corretto: il kit non lo copia."
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/CDA.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/CDA.xsd",
+      "sha256": "096473d85ac35d710e1eb4e7635d6d0eb5b59e597a77fb0ce0300a57c2638143"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/datatypes-base.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/datatypes-base.xsd",
+      "sha256": "d27310c006014d303e1f5e1f94aac0060368a8f87710b81b9f5095a9f6c17d01"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/datatypes-rX-cs.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/datatypes-rX-cs.xsd",
+      "sha256": "116a525eb4893f1bfc16287b5575c9522e270da908a936d9285aed8266097b60"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/datatypes.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/datatypes.xsd",
+      "sha256": "00f0257241787cd1ecedac8993501d99c2c01023bfb35b1d9b1b7418b3aa172b"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/infrastructureRoot.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/infrastructureRoot.xsd",
+      "sha256": "0a648e01c7b29a367403a0c4d61afe001cf18afb00cac0c49ada754d93c66eb6"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/labExtension_1.2_gen.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/labExtension_1.2_gen.xsd",
+      "sha256": "c612e50211d0c201964e85784ddaab1b402b705f7a0d6a63b3699fec6bc20b6b"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/NarrativeBlock.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/NarrativeBlock.xsd",
+      "sha256": "4505247c907dc7907bfad2f31b7ec33232dd4fe3aa05bd6448e6452d027c2809"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/pharmExtension.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/pharmExtension.xsd",
+      "sha256": "c3cb9c7d82fcab54218111dc82b9e8a9d559028dcf8207c09d81933af470188f"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/POCD_MT000040UV02.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/POCD_MT000040UV02.xsd",
+      "sha256": "692b40a4ae7b73b9b95f65836e139872885d04abab8a0caa1637f0a538591f9a"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/sdtcExtension.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/sdtcExtension.xsd",
+      "sha256": "1ed50342e8f7fc0f32bea0410c6ae751b49f846a804bb0a99f1e55c27197a073"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/cda-xsd/voc.xsd",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schema/POCD_MT000040UV02/voc.xsd",
+      "sha256": "6f4cd8a02b89f4dcd2e8b451e7bb74cab4c09d205e05a2252385f1d00e05985a"
+    },
+    {
+      "gruppo": "cda-xsd",
+      "destinazione": "fse/schematron/schematron_PSS_v4.0.sch",
+      "url": "https://raw.githubusercontent.com/ministero-salute/it-fse-catalogs/141be7f0a1c75f4a0a07f979da48a83471d07ef4/schematron/schematron_PSS_v4.0.sch",
+      "sha256": "ef4f3711771e33f89fea0301d32e9875fb155a372916d480fdcc3db937ed1acb",
+      "nota": "Schematron del Profilo Sanitario Sintetico v4.0, lo stesso che il gateway FSE 2.0 carica nel suo database. Traduce la guida PSS di HL7 Italia («Copyright 2024 by HL7 Italia. All Rights Reserved»), senza licenza: non si ridistribuisce (docs/TERZE_PARTI.md)."
+    }
+  ],
+  "git": [
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/it-fse-gtw-validator",
+      "repository": "https://github.com/ministero-salute/it-fse-gtw-validator.git",
+      "commit": "fdf3854b57a8ea45d85a08519d541698e853c845"
+    },
+    {
+      "gruppo": "fse-validatore",
+      "destinazione": "fse/it-fse-gtw-dispatcher",
+      "repository": "https://github.com/ministero-salute/it-fse-gtw-dispatcher.git",
+      "commit": "9cc8aa794a170ba3133763fc94b89ba7127305bf"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/it-fse-catalogs",
+      "repository": "https://github.com/ministero-salute/it-fse-catalogs.git",
+      "commit": "141be7f0a1c75f4a0a07f979da48a83471d07ef4",
+      "solo_cartelle": [
+        "container",
+        "schema",
+        "schematron",
+        "transform"
+      ]
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/it-fse-support",
+      "repository": "https://github.com/ministero-salute/it-fse-support.git",
+      "commit": "e4fb88904d7712745ad31856657d36cbe06cc6b8"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/it-fse-gtw-tools",
+      "repository": "https://github.com/ministero-salute/it-fse-gtw-tools.git",
+      "commit": "6967f3ab916ec2b977de521497cfdba61d19659b"
+    },
+    {
+      "gruppo": "fse-riferimento",
+      "destinazione": "fse/it-fse-gtw-test-container",
+      "repository": "https://github.com/ministero-salute/it-fse-gtw-test-container.git",
+      "commit": "d9e763a3774650b287affa1b13e7e8965b5494d0"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "OFF-001",
+  "famiglia": "offline",
+  "titolo": "Lettura ricevuta di invio riuscito",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.1 (InvioPrescrittoRicevuta)",
+  "passi": [
+    {
+      "operazione": "leggi_invio",
+      "risposta": "invio_ok.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre_formato": true,
+        "nre": "1300A4019294833",
+        "presenti": [
+          "codice_autenticazione",
+          "data_inserimento"
+        ],
+        "comunicazioni_presenti": [
+          "0199",
+          "0198"
+        ],
+        "pdf_promemoria": true,
+        "campi": {
+          "cognome_medico": "PRO",
+          "nome_medico": "VA",
+          "codice_autenticazione": "300920261644168700000050622782"
+        }
+      }
+    }
+  ]
+}

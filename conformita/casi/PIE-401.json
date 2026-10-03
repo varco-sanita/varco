@@ -1,0 +1,27 @@
+{
+  "id": "PIE-401",
+  "famiglia": "piemonte",
+  "titolo": "SIRPED, JWT firmato: firma valida con la chiave del JWKS, campi letti",
+  "riferimento": "Regione Piemonte, SIRPED, REL-STC-01 V04 del 02/03/2026 «Accesso ai servizi delle ricette dematerializzate mediante autenticazione forte», par. 4.3.2 (formato dell'access_token: sub, aud, userData.cfutente, userData.idSessione, scope) e 4.3.3 (JWKS, una sola chiave RSA, kid «rel-oauth2-key»). JWT e JWKS SINTETICI (conformita/risposte/piemonte/LEGGIMI.md)",
+  "passi": [
+    {
+      "operazione": "leggi_piemonte_jwt",
+      "token": "piemonte/jwt_valido.txt",
+      "jwks": "piemonte/jwks.json",
+      "atteso": {
+        "campi": {
+          "firma_valida": true,
+          "alg": "RS256",
+          "kid": "rel-oauth2-key",
+          "sub": "PROVAX00X00X000Y",
+          "cf_utente": "PROVAX00X00X000Y",
+          "aud": "VARCO_301",
+          "id_sessione": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
+          "scope": [
+            "prescrizione"
+          ]
+        }
+      }
+    }
+  ]
+}

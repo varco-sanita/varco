@@ -1,0 +1,15 @@
+{
+  "id": "FSE-102",
+  "famiglia": "fse",
+  "titolo": "Generazione del PSS con i codici di assenza: il documento deve essere valido",
+  "riferimento": "schematron_PSS_v4.0.sch e schema CDA POCD_MT000040UV02 (it-fse-catalogs); dizionari del gateway (mongo-dump); esito come RawValidationEnum di it-fse-gtw-validator",
+  "passi": [
+    {
+      "operazione": "genera_pss",
+      "dati": "dati/pss_02_assenze.json",
+      "atteso": {
+        "esito": "OK"
+      }
+    }
+  ]
+}

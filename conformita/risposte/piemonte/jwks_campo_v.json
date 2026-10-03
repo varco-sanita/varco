@@ -1,0 +1,10 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "e": "AQAB",
+      "kid": "rel-oauth2-key",
+      "v": "3_9OqV23E7XUXfrZdiiSs4do0sTsw-bHtHEcbLhSThK0C95W6NMWQgnYkeCB8oWH0zj_SyvWJX0MlNja29wKsWMcgWRT4Ir-oO5-mGJZivTCI4bgFcg_ne2p__efnL27xQCWOGQR5vHOD3hIdNuE5MM8nQb1TM1WCsYk44I6PF2VoffOCg-AMSKYwKULy8tVSdb5XwqbkBXXxVmqnHTaed3V1fwL6RoC0c-beGZKP8mLw739cm1RLiyGrXvPP51RTtpAQV_RkMER6YJLWZs6Hj-imJ9K9wJBxuDb7EtkTV1SxVQK33vXluCByUuNeLKV_2Ty4YiKb_RDWcq4hI0whw"
+    }
+  ]
+}

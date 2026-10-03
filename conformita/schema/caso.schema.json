@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://varco.invalid/conformita/schema/caso.schema.json",
+  "title": "Caso di conformità Varco",
+  "description": "Un caso = una sequenza di passi (operazione, dati, esito atteso). Il formato non dipende da nessun linguaggio: un esecutore legge il file, esegue ogni passo con la PROPRIA implementazione, ricava dall'esito l'oggetto 'osservato' (vedi $defs/osservatoSac e $defs/osservatoFse) e lo confronta con 'atteso'. I percorsi di file ('risposta', 'documento', 'dati') sono relativi alla cartella conformita/ (per 'risposta': conformita/risposte/). Esito di un caso: SUPERATO se ogni passo rispetta le sue aspettative; FALLITO al primo passo che non le rispetta (i passi successivi non si eseguono); SALTATO se all'esecutore manca qualcosa (credenziali, validatore) per giudicare; ERRORE se l'implementazione solleva un errore imprevisto. Ogni aspettativa dichiarata si confronta: un'aspettativa che l'esecutore non conosce, che non si applica all'operazione o che ne contraddice un'altra dello stesso passo (es. rifiuto_locale con altre aspettative, valido:true con esito SYNTAX_ERROR, senza_errori con errori_contengono) rende il passo FALLITO, mai ignorata. SALTATO non è mai SUPERATO: se manca lo schema o il validatore che un'aspettativa richiede, il passo è SALTATO anche quando le altre aspettative sono rispettate. I passi di 'finale' (pulizia) si eseguono sempre e non contano nell'esito; un passo di pulizia che usa una variabile non valorizzata si salta.\n\nSegnaposti: una stringa \"${nome}\" (intera) si sostituisce con il valore della variabile, anche se è un oggetto; dentro una stringa più lunga si sostituisce il testo. Variabili fornite dall'esecutore: prescrittore (oggetto Prescrittore del medico titolare di test), prescrittore_con_sostituto (lo stesso con codice_fiscale_sostituto), assistito_cf, medico_cf, sostituto_cf, regione (3 cifre), oggi_inizio e oggi_fine (\"AAAA-MM-GG hh:mm:ss\", ora italiana). Le altre le crea 'salva'. La sostituzione vale per tutti i campi del passo, 'atteso' compreso, tranne 'salva'.",
+  "type": "object",
+  "required": ["id", "famiglia", "titolo", "riferimento", "passi"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^(OFF|SAC|FSE|SIS|FVG|PIE)-[0-9]{3}$", "description": "Identificativo stabile. OFF offline, SAC online contro il SAC di test, FSE documenti FSE 2.0. SIS SIST Regione Puglia (codifica e risposte sintetiche, nessuna rete). FVG SAR Regione Friuli-Venezia Giulia (codifica e risposte sintetiche, nessuna rete). PIE SIRPED Regione Piemonte (codifica, intestazioni, PKCE, JWT e risposte sintetiche, nessuna rete)."},
+    "famiglia": {"enum": ["offline", "online", "fse", "sist", "fvg", "piemonte"], "description": "offline: nessuna rete (risposte reali registrate, codifica delle richieste). online: chiamate all'ambiente di TEST del MEF con le utenze pubbliche del kit. fse: documenti CDA2 e loro validazione, nessuna rete. sist: SIST della Regione Puglia, nessuna rete: codifica delle richieste CVP (contro CVPService.xsd, che l'esecutore riceve da fuori: senza, il passo è SALTATO) e del CDA2 di prescrizione (contro lo schema CDA), lettura di risposte SINTETICHE scritte sullo schema (conformita/risposte/sist/LEGGIMI.md): nessuna risposta reale del SIST è disponibile. fvg: SAR della Regione Friuli-Venezia Giulia (Insiel), nessuna rete: codifica delle richieste contro gli XSD di wsdl_prescritto.zip (che l'esecutore riceve da fuori: senza, il passo è SALTATO), lettura di risposte SINTETICHE scritte su quegli XSD (conformita/risposte/fvg/LEGGIMI.md): nessuna risposta reale del SAR FVG è disponibile. piemonte: SIRPED, SAR della Regione Piemonte (CSI Piemonte), nessuna rete: codifica delle richieste di prescrizione (tracciato e XSD del MEF, inclusi nel kit) e di CreateAuth/CheckToken/RevokeAuth (XSD del kit A2F del Sistema TS, che l'esecutore riceve da fuori: senza, il passo è SALTATO), intestazioni HTTP delle due modalità di secondo fattore, PKCE (RFC 7636), firma del JWT, lettura di risposte SINTETICHE (conformita/risposte/piemonte/LEGGIMI.md): nessuna risposta reale di SIRPED è disponibile."},
+    "titolo": {"type": "string", "minLength": 1},
+    "riferimento": {"type": "string", "minLength": 1, "description": "Da dove viene la regola: specifica, paragrafo, file ufficiale, o la prova reale che l'ha mostrata."},
+    "passi": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/passo"}},
+    "finale": {"type": "array", "items": {"$ref": "#/$defs/passo"}, "description": "Pulizia: sempre eseguita, non conta nell'esito (es. annullare la ricetta creata)."}
+  },
+  "$defs": {
+    "passo": {
+      "type": "object",
+      "required": ["operazione"],
+      "properties": {
+        "operazione": {"enum": ["invia", "visualizza", "annulla", "interroga_nre", "leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre", "codifica_invio", "codifica_interroga_nre", "valida_documento", "genera_pss", "leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata", "leggi_sist_ricerca", "codifica_sist_chk", "codifica_sist_ricerca", "codifica_sist_cda", "leggi_fvg", "codifica_fvg", "codifica_piemonte", "leggi_piemonte_a2f", "intestazioni_piemonte", "pkce_piemonte", "leggi_piemonte_jwt"]}
+      },
+      "allOf": [
+        {"if": {"properties": {"operazione": {"const": "invia"}}}, "then": {"$ref": "#/$defs/opInvia"}},
+        {"if": {"properties": {"operazione": {"enum": ["visualizza", "annulla"]}}}, "then": {"$ref": "#/$defs/opNre"}},
+        {"if": {"properties": {"operazione": {"const": "interroga_nre"}}}, "then": {"$ref": "#/$defs/opInterroga"}},
+        {"if": {"properties": {"operazione": {"enum": ["leggi_invio", "leggi_visualizza", "leggi_annulla", "leggi_interroga_nre"]}}}, "then": {"$ref": "#/$defs/opLeggi"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_invio"}}}, "then": {"$ref": "#/$defs/opCodificaInvio"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_interroga_nre"}}}, "then": {"$ref": "#/$defs/opCodificaInterroga"}},
+        {"if": {"properties": {"operazione": {"const": "valida_documento"}}}, "then": {"$ref": "#/$defs/opValidaDocumento"}},
+        {"if": {"properties": {"operazione": {"const": "genera_pss"}}}, "then": {"$ref": "#/$defs/opGeneraPss"}},
+        {"if": {"properties": {"operazione": {"enum": ["leggi_sist_chk", "leggi_sist_registra", "leggi_sist_annulla", "leggi_sist_identificata", "leggi_sist_ricerca"]}}}, "then": {"$ref": "#/$defs/opLeggiSist"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_sist_chk"}}}, "then": {"$ref": "#/$defs/opCodificaSistChk"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_sist_ricerca"}}}, "then": {"$ref": "#/$defs/opCodificaSistRicerca"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_sist_cda"}}}, "then": {"$ref": "#/$defs/opCodificaSistCda"}},
+        {"if": {"properties": {"operazione": {"const": "leggi_fvg"}}}, "then": {"$ref": "#/$defs/opLeggiFvg"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_fvg"}}}, "then": {"$ref": "#/$defs/opCodificaFvg"}},
+        {"if": {"properties": {"operazione": {"const": "codifica_piemonte"}}}, "then": {"$ref": "#/$defs/opCodificaPiemonte"}},
+        {"if": {"properties": {"operazione": {"const": "leggi_piemonte_a2f"}}}, "then": {"$ref": "#/$defs/opLeggiPiemonteA2f"}},
+        {"if": {"properties": {"operazione": {"const": "intestazioni_piemonte"}}}, "then": {"$ref": "#/$defs/opIntestazioniPiemonte"}},
+        {"if": {"properties": {"operazione": {"const": "pkce_piemonte"}}}, "then": {"$ref": "#/$defs/opPkcePiemonte"}},
+        {"if": {"properties": {"operazione": {"const": "leggi_piemonte_jwt"}}}, "then": {"$ref": "#/$defs/opLeggiPiemonteJwt"}}
+      ]
+    },
+    "comuniOnline": {
+      "credenziali": {"enum": ["kit", "sostituto", "inesistente"], "default": "kit", "description": "kit: utenza medico di test del kit MEF (PosizioniTestMedico.xlsx). sostituto: medico sostituto di test (PosizioniTestMedicoSostituto.txt). inesistente: un'utenza che non esiste, per provare il rifiuto delle credenziali SENZA rischiare di bloccare l'utenza condivisa."},
+      "valida_localmente": {"type": "boolean", "default": true, "description": "false = l'implementazione salta i propri controlli locali: si collauda la regola lato SAC."},
+      "salva": {"type": "object", "additionalProperties": {"type": "string"}, "description": "{\"variabile\": \"campo dell'osservato\"}: rende disponibile un valore ai passi successivi, es. {\"nre\": \"nre\"}."},
+      "cf_medico": {"type": "string", "description": "cfMedico della richiesta (visualizza, annulla, interroga). Assente = CF dell'utenza usata."}
+    },
+    "opInvia": {
+      "description": "Invia una ricetta (InvioPrescritto). Online.",
+      "type": "object",
+      "required": ["ricetta", "atteso"],
+      "properties": {
+        "operazione": true,
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}]},
+        "credenziali": {"$ref": "#/$defs/comuniOnline/credenziali"},
+        "valida_localmente": {"$ref": "#/$defs/comuniOnline/valida_localmente"},
+        "salva": {"$ref": "#/$defs/comuniOnline/salva"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
+    },
+    "opNre": {
+      "description": "visualizza (VisualizzaPrescritto) o annulla (AnnullaPrescritto) un NRE. Online.",
+      "type": "object",
+      "required": ["nre"],
+      "properties": {
+        "operazione": true,
+        "nre": {"type": "string"},
+        "cf_medico": {"$ref": "#/$defs/comuniOnline/cf_medico"},
+        "credenziali": {"$ref": "#/$defs/comuniOnline/credenziali"},
+        "valida_localmente": {"$ref": "#/$defs/comuniOnline/valida_localmente"},
+        "salva": {"$ref": "#/$defs/comuniOnline/salva"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
+    },
+    "opInterroga": {
+      "description": "Lista degli NRE utilizzati (InterrogaNreUtilizzati, par. 4.2.4). Online.",
+      "type": "object",
+      "required": ["criteri", "atteso"],
+      "properties": {
+        "operazione": true,
+        "criteri": {"$ref": "#/$defs/criteriNre"},
+        "cf_medico": {"$ref": "#/$defs/comuniOnline/cf_medico"},
+        "credenziali": {"$ref": "#/$defs/comuniOnline/credenziali"},
+        "valida_localmente": {"$ref": "#/$defs/comuniOnline/valida_localmente"},
+        "salva": {"$ref": "#/$defs/comuniOnline/salva"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
+    },
+    "opLeggi": {
+      "description": "Legge una risposta REALE registrata dal SAC (busta SOAP completa in conformita/risposte/) con il lettore dell'implementazione. Offline. leggi_invio/leggi_visualizza/leggi_annulla/leggi_interroga_nre si riferiscono al tipo di ricevuta attesa.",
+      "type": "object",
+      "required": ["risposta", "atteso"],
+      "properties": {
+        "operazione": true,
+        "risposta": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.xml$"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
+    },
+    "opCodificaInvio": {
+      "description": "Codifica la ricetta in <InvioPrescrittoRichiesta> SENZA mandarla (pincode e CF assistito cifrati con un valore finto) e la valida contro l'XSD ufficiale del kit MEF. Offline.",
+      "type": "object",
+      "required": ["ricetta", "atteso"],
+      "properties": {
+        "operazione": true,
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}]},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "additionalProperties": false
+    },
+    "opCodificaInterroga": {
+      "description": "Codifica i criteri in <InterrogaNreUtilRichiesta> senza mandarla e la valida contro l'XSD ufficiale (TipiDatiInterrogaNreUtilizzati.xsd ha un difetto noto: minOccurs su un complexType, da ignorare). Offline.",
+      "type": "object",
+      "required": ["criteri", "atteso"],
+      "properties": {
+        "operazione": true,
+        "criteri": {"$ref": "#/$defs/criteriNre"},
+        "cf_medico": {"type": "string"},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "additionalProperties": false
+    },
+    "opValidaDocumento": {
+      "description": "Valida un documento CDA2 FISSO (conformita/documenti/) con il validatore dell'esecutore. Collauda un VALIDATORE: chi ne scrive uno (middleware regionale, gestionale) deve ottenere lo stesso esito del gateway.",
+      "type": "object",
+      "required": ["documento", "atteso"],
+      "properties": {
+        "operazione": true,
+        "documento": {"type": "string", "pattern": "^documenti/[A-Za-z0-9_.-]+\\.xml$"},
+        "atteso": {"$ref": "#/$defs/attesoFse"}
+      },
+      "additionalProperties": false
+    },
+    "opGeneraPss": {
+      "description": "L'implementazione GENERA il CDA2 del Profilo Sanitario Sintetico dai dati (formato pss.schema.json) e l'esecutore lo valida. Collauda un GENERATORE. Se l'implementazione rifiuta di generare (controlli locali), l'osservato è {\"rifiuto_locale\": motivo}.",
+      "type": "object",
+      "required": ["dati", "atteso"],
+      "properties": {
+        "operazione": true,
+        "dati": {"oneOf": [{"type": "string", "pattern": "^dati/[A-Za-z0-9_.-]+\\.json$"}, {"$ref": "pss.schema.json"}]},
+        "atteso": {"$ref": "#/$defs/attesoFse"}
+      },
+      "additionalProperties": false
+    },
+    "segnaposto": {"type": "string", "pattern": "^\\$\\{[a-zA-Z_][a-zA-Z0-9_]*\\}$"},
+    "criteriNre": {
+      "type": "object",
+      "description": "Criteri di InterrogaNreUtilRichiesta. O 'nre' puntuale, o 'dal'+'al' (+ 'tipo': il SAC di test lo esige, errore 1153, anche se la specifica lo dà facoltativo).",
+      "required": ["codice_regione"],
+      "additionalProperties": false,
+      "properties": {
+        "codice_regione": {"type": "string"},
+        "nre": {"type": "string"},
+        "codice_lotto": {"type": "string"},
+        "cf_assistito": {"type": "string"},
+        "tipo": {"enum": ["F", "P"]},
+        "dal": {"type": "string", "description": "AAAA-MM-GG hh:mm:ss"},
+        "al": {"type": "string", "description": "AAAA-MM-GG hh:mm:ss"}
+      }
+    },
+    "osservatoSac": {
+      "description": "Cosa l'esecutore ricava da una risposta del SAC, e su cui si confronta 'atteso'. Se la risposta è un SOAP Fault: solo {\"fault\": faultstring}. Altrimenti: codice (codEsito... della ricevuta), messaggi (ElencoErroriRicette: codice, testo, tipo grezzo, bloccante, avviso), comunicazioni (codici di ElencoComunicazioni), e se presenti nre, codice_autenticazione, data_inserimento, stato_processo, righe (numero di prescrizioni), pdf_promemoria (true se il PDF c'è e inizia con %PDF), cognome_medico e nome_medico (comunicazioni 0199 e 0198, parte dopo '='), cfMedico1 e cfMedico2 (testata della visualizzazione), ricette (lista degli NRE di ElencoNreUtilRecord), note (ElencoNota della ricevuta d'invio, se c'è: lista di oggetti {progressivo, codice_prestazione, tipo_ambulatorio} da progrPresc, codProdPrest, tipoAmbulatorio, nell'ordine della ricevuta). Gravità: 'bloccante' se tipoErrore è 'E', 'Bloccante', o un valore sconosciuto; 'avviso' se è 'W', 'Avviso', 'Warning' o 'Non bloccante'. Il SAC di test risponde 'Bloccante' e 'Avviso', la specifica dice E/W. Esiti dei SAR (SIST): in più stato_sar (stato nel SIST: 0 annullata, 1 prescritta), oscurato (oscuramento nel fascicolo), solo_ricetta_rossa (NRE senza codice di autenticazione: SAC non disponibile), cda (true se la risposta contiene il CDA). SAR FVG: per l'invio in più downgrade_mir (true se tra i messaggi c'è un codice 060120-060130: la ricetta di specialistica va emessa come ricetta rossa MIR; un SOAP Fault con uno di quei codici nel faultstring diventa un esito 9999 con quel messaggio, non un fault); per verifica_sostituto abilitato (isAbilitato), cfMedico1 e cfMedico2 (titolare e sostituto della ricevuta), messaggi e comunicazioni, senza codice.",
+      "type": "object"
+    },
+    "attesoSac": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codice": {"type": "array", "items": {"type": "string", "pattern": "^[0-9]{4}$"}, "description": "Il codice esito deve essere uno di questi."},
+        "nre_formato": {"type": "boolean", "description": "NRE di 15 caratteri: 3 cifre, 2 alfanumerici, 10 cifre."},
+        "presenti": {"type": "array", "items": {"type": "string"}, "description": "Campi dell'osservato che devono essere valorizzati."},
+        "stato_processo": {"type": "string"},
+        "errore_codice": {"type": "string", "description": "Tra i messaggi deve esserci questo codice."},
+        "errore_bloccante": {"const": true, "description": "Almeno un messaggio bloccante."},
+        "nessun_bloccante": {"const": true, "description": "Nessun messaggio bloccante."},
+        "avvisi_codici": {"type": "array", "items": {"type": "string"}, "description": "Questi codici devono comparire come avvisi."},
+        "comunicazioni_presenti": {"type": "array", "items": {"type": "string"}},
+        "righe": {"type": "integer"},
+        "nre": {"type": "string"},
+        "pdf_promemoria": {"const": true},
+        "ricette_numero": {"type": "integer", "minimum": 0},
+        "ricette_almeno": {"type": "integer", "minimum": 0},
+        "ricette_contengono": {"type": "array", "items": {"type": "string"}},
+        "campi": {"type": "object", "description": "Uguaglianza esatta su campi dell'osservato (es. cognome_medico, cfMedico2)."},
+        "fault_contiene": {"type": "string", "description": "Si attende un SOAP Fault con questo testo (senza distinzione di maiuscole). Va da solo: con altre aspettative nello stesso passo il caso è incoerente (FALLITO)."},
+        "rifiuto_locale": {"const": true, "description": "L'implementazione deve rifiutare la richiesta PRIMA di mandarla (controlli locali): nessuna chiamata. Va da solo (un rifiuto non produce niente da confrontare). Su una risposta riuscita, o su una lettura che non rifiuta, è FALLITO; e un rifiuto locale NON atteso è FALLITO."}
+      }
+    },
+    "attesoCodifica": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "xsd_valido": {"type": "boolean", "default": true, "description": "true: la richiesta deve essere valida contro lo XSD. false: deve NON esserlo (si collauda un rifiuto dello schema): non vuol dire «salta lo XSD». Se lo schema non è disponibile all'esecutore il passo è SALTATO (FALLITO se un'altra aspettativa è già violata), mai SUPERATO."},
+        "tag": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Valore testuale dei figli diretti dell'elemento radice (nome locale del tag)."},
+        "tag_assenti": {"type": "array", "items": {"type": "string"}, "description": "Figli diretti che non devono esserci."},
+        "attributi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_sist_* e codifica_fvg: 'percorso@attributo' -> valore atteso (es. 'templateId@extension'). L'attributo si cerca per nome locale ('@prodottoCme' trova tip:prodottoCme)."},
+        "rifiuto_locale": {"const": true, "description": "Solo codifica_sist_*, codifica_fvg e codifica_piemonte: l'implementazione deve rifiutare PRIMA di codificare (controlli locali)."},
+        "testi": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Solo codifica_piemonte: 'nome/nome/...' (nomi locali, a partire dalla radice) -> testo del primo elemento corrispondente (es. 'identificativo/tipo', 'infoAggiuntive/opzione/valore')."}
+      }
+    },
+    "osservatoFse": {
+      "description": "Cosa l'esecutore ricava dalla validazione di un CDA2: esito (come RawValidationEnum del gateway: OK, SYNTAX_ERROR, SEMANTIC_ERROR, SEMANTIC_WARNING, VOCABULARY_ERROR), errori (testi: errori di schema, assert schematron falliti, oppure il messaggio dei vocabolari), avvisi (report schematron W00x), vocabolario_verificato (il validatore ha controllato i codici contro i dizionari?). Ordine come nel gateway: schema; se valido, schematron; se OK o solo avvisi, vocabolari. Un esecutore che NON controlla i vocabolari deve dare SALTATO, né SUPERATO né FALLITO, quando il verdetto dipende dai vocabolari: l'esito osservato è OK o SEMANTIC_WARNING (i vocabolari si sarebbero controllati dopo) e il confronto darebbe un verdetto diverso se l'esito fosse VOCABULARY_ERROR con un errore in più di testo non noto. Esempi: esito OK atteso (verde non confermabile), VOCABULARY_ERROR atteso (rosso non certo). Con esito osservato SYNTAX_ERROR o SEMANTIC_ERROR il verdetto è certo.",
+      "type": "object"
+    },
+    "attesoFse": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "esito": {"oneOf": [{"$ref": "#/$defs/esitoFse"}, {"type": "array", "items": {"$ref": "#/$defs/esitoFse"}}]},
+        "valido": {"type": "boolean", "description": "true: esito OK o SEMANTIC_WARNING. false: esito diverso, OPPURE rifiuto locale dell'implementazione (genera_pss). Un rifiuto locale soddisfa SOLO valido:false: ogni altra aspettativa dello stesso passo (esito, errori_contengono, senza_errori) riguarda un documento che non esiste ed è quindi non rispettata."},
+        "errori_contengono": {"type": "array", "items": {"type": "string"}, "description": "Ogni frammento deve comparire in almeno un errore."},
+        "senza_errori": {"const": true}
+      }
+    },
+    "esitoFse": {"enum": ["OK", "SYNTAX_ERROR", "SEMANTIC_ERROR", "SEMANTIC_WARNING", "VOCABULARY_ERROR"]},
+    "opLeggiSist": {
+      "description": "Legge una risposta del SIST (busta SOAP in conformita/risposte/sist/) con il lettore dell'implementazione. Le risposte sono SINTETICHE. Osservato: come osservatoSac; leggi_sist_registra riporta esito TRUE/FALSE a codice 0000/9999. Un SoapFaultException dà {\"fault\": faultstring}.",
+      "type": "object",
+      "required": ["risposta", "atteso"],
+      "properties": {
+        "operazione": true,
+        "risposta": {"type": "string", "pattern": "^sist/[A-Za-z0-9_.-]+\\.xml$"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
+    },
+    "opCodificaSistChk": {
+      "description": "Codifica la ricetta in <chkPrescrizione> (SIST, CVPService) SENZA mandarla, con datiOperatore/datiApplicativo fittizi, e la valida contro CVPService.xsd. Prima applica i controlli locali (rifiuto_locale). 'tag': figli diretti di <chkPrescrizione>.",
+      "type": "object",
+      "required": ["ricetta", "codici_regionali", "atteso"],
+      "properties": {
+        "operazione": true,
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}]},
+        "codici_regionali": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Codice fiscale del medico -> codice regionale SIST (codMedicoPrescrittore, author del CDA). Un CF assente = rifiuto locale."},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "additionalProperties": false
+    },
+    "opCodificaSistRicerca": {
+      "description": "Codifica i criteri in <getPrescrizioniIdentificate> (la ricerca del SIST: per periodo, prescrittore, assistito e tipo; niente NRE puntuale né lotto) e la valida contro CVPService.xsd. 'operatore': CF del medico che chiama (default il titolare di test).",
+      "type": "object",
+      "required": ["criteri", "codici_regionali", "atteso"],
+      "properties": {
+        "operazione": true,
+        "criteri": {"$ref": "#/$defs/criteriNre"},
+        "operatore": {"type": "string"},
+        "codici_regionali": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Codice fiscale del medico -> codice regionale SIST (codMedicoPrescrittore, author del CDA). Un CF assente = rifiuto locale."},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "additionalProperties": false
+    },
+    "opCodificaSistCda": {
+      "description": "Genera il CDA2 di prescrizione (CDA2_Prescrizione Regione Puglia) con NRE e codice di autenticazione dati, e lo valida contro lo schema CDA (POCD_MT000040). Senza codice_autenticazione = ricetta rossa (setId = NRE). 'attributi': 'percorso/di/nomi/locali@attributo' sul primo elemento corrispondente, percorso vuoto = radice.",
+      "type": "object",
+      "required": ["ricetta", "nre", "codici_regionali", "atteso"],
+      "properties": {
+        "operazione": true,
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}]},
+        "nre": {"type": "string"},
+        "codice_autenticazione": {"type": "string"},
+        "maggior_tutela": {"type": "boolean", "default": false},
+        "codici_regionali": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Codice fiscale del medico -> codice regionale SIST (codMedicoPrescrittore, author del CDA). Un CF assente = rifiuto locale."},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "additionalProperties": false
+    },
+    "opLeggiFvg": {
+      "description": "Legge una risposta del SAR FVG (busta SOAP in conformita/risposte/fvg/, SINTETICA) con il lettore dell'implementazione per il servizio indicato. Osservato: come osservatoSac, con le aggiunte FVG (downgrade_mir, abilitato).",
+      "type": "object",
+      "required": ["servizio", "risposta", "atteso"],
+      "properties": {
+        "operazione": true,
+        "servizio": {"enum": ["invio", "visualizza", "annulla", "interroga_nre", "verifica_sostituto"]},
+        "risposta": {"type": "string", "pattern": "^fvg/[A-Za-z0-9_.-]+\\.xml$"},
+        "atteso": {"$ref": "#/$defs/attesoSac"}
+      },
+      "additionalProperties": false
+    },
+    "opCodificaFvg": {
+      "description": "Codifica una richiesta del SAR FVG SENZA mandarla (CF dell'assistito cifrato con un valore finto, pinCode vuoto, attributo prodottoCme) e la valida contro lo XSD ufficiale FVG del servizio (cartella wsdl/sar di wsdl_prescritto.zip, che l'esecutore riceve da fuori: senza, il passo è SALTATO). Per l'invio applica prima i controlli locali (rifiuto_locale). 'tag': figli diretti della radice.",
+      "type": "object",
+      "required": ["servizio", "atteso"],
+      "properties": {
+        "operazione": true,
+        "servizio": {"enum": ["invio", "visualizza", "annulla", "interroga_nre", "verifica_sostituto"]},
+        "prodotto_cme": {"type": "string", "description": "Attributo prodottoCme (default VARCO-PROVA): il codice vero lo attribuisce Insiel con l'accreditamento."},
+        "versione_cr": {"type": "string", "description": "Solo invio: versione del catalogo regionale (attributo versioneCR di ElencoDettagliPrescrizioni)."},
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}], "description": "Solo invio."},
+        "nre": {"type": "string", "description": "Solo visualizza e annulla."},
+        "cf_medico": {"type": "string", "description": "visualizza, annulla, interroga_nre."},
+        "criteri": {"$ref": "#/$defs/criteriNre", "description": "Solo interroga_nre."},
+        "cf_titolare": {"type": "string", "description": "Solo verifica_sostituto."},
+        "cf_sostituto": {"type": "string", "description": "Solo verifica_sostituto."},
+        "codice_asl": {"type": "string", "description": "Solo verifica_sostituto."},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "allOf": [
+        {"if": {"properties": {"servizio": {"const": "invio"}}}, "then": {"required": ["ricetta"]}},
+        {"if": {"properties": {"servizio": {"enum": ["visualizza", "annulla"]}}}, "then": {"required": ["nre", "cf_medico"]}},
+        {"if": {"properties": {"servizio": {"const": "interroga_nre"}}}, "then": {"required": ["criteri", "cf_medico"]}},
+        {"if": {"properties": {"servizio": {"const": "verifica_sostituto"}}}, "then": {"required": ["cf_titolare", "cf_sostituto", "codice_asl"]}}
+      ],
+      "additionalProperties": false
+    },
+    "opCodificaPiemonte": {
+      "description": "Codifica una richiesta per SIRPED SENZA mandarla e la valida. Prescrizione (invio, visualizza, annulla, interroga_nre): tracciato del MEF, CF dell'assistito e pincode «cifrati» con il valore finto 'CIFRATO==' (modalità mail) oppure pinCode vuoto (modalità oauth2); validazione contro gli XSD del MEF. Id-Sessione (crea/verifica/revoca_id_sessione: CreateAuthReq, CheckTokenReq, RevokeAuthReq): validazione contro gli XSD del kit A2F del Sistema TS, che l'esecutore riceve da fuori (senza, SALTATO). Prima della codifica si applicano i controlli locali (rifiuto_locale).",
+      "type": "object",
+      "required": ["servizio", "atteso"],
+      "additionalProperties": false,
+      "properties": {
+        "operazione": true,
+        "servizio": {"enum": ["invio", "visualizza", "annulla", "interroga_nre", "crea_id_sessione", "verifica_id_sessione", "revoca_id_sessione"]},
+        "modalita": {"enum": ["mail", "oauth2"], "default": "mail", "description": "mail: Id-Sessione via mail certificata (Basic RUPAR, pincode cifrato, X-idSessione, X-Gestionale). oauth2: JWT nell'header X-OAuth2-Authorization, niente Basic, pinCode vuoto (REL-STC-01 V04, par. 4.2.5 e 4.3.6)."},
+        "ricetta": {"oneOf": [{"$ref": "ricetta.schema.json"}, {"$ref": "#/$defs/segnaposto"}], "description": "Solo invio."},
+        "nre": {"type": "string", "description": "Solo visualizza e annulla."},
+        "cf_medico": {"type": "string", "description": "visualizza, annulla, interroga_nre."},
+        "criteri": {"$ref": "#/$defs/criteriNre", "description": "Solo interroga_nre."},
+        "utente_rupar": {"type": "string", "description": "Id-Sessione: userId (utente RUPAR)."},
+        "cf_utente": {"type": "string", "description": "Id-Sessione: cfUtente."},
+        "codice_asl": {"type": "string", "description": "Solo crea_id_sessione: codAslAo."},
+        "codice_ssa": {"type": "string", "description": "Solo crea_id_sessione: codSsa, facoltativo."},
+        "permessi": {"type": "array", "items": {"type": "string"}, "description": "Solo crea_id_sessione: campo applicazione (default ['prescrizione'])."},
+        "id_sessione": {"type": "string", "description": "verifica_id_sessione e revoca_id_sessione: token."},
+        "gestionale": {"type": "object", "required": ["codice", "azienda"], "additionalProperties": false, "properties": {"codice": {"type": "string", "description": "Codice del gestionale (lo rilascia la Regione con l'autocertificazione; nei casi un valore di prova)."}, "azienda": {"type": "string", "pattern": "^[0-9A-Za-z]{3}$", "description": "Codice a 3 caratteri dell'Azienda. Valore di X-Gestionale, APP e client_id: <codice>_<azienda>."}}},
+        "atteso": {"$ref": "#/$defs/attesoCodifica"}
+      },
+      "allOf": [
+        {"if": {"properties": {"servizio": {"const": "invio"}}}, "then": {"required": ["ricetta"]}},
+        {"if": {"properties": {"servizio": {"enum": ["visualizza", "annulla"]}}}, "then": {"required": ["nre", "cf_medico"]}},
+        {"if": {"properties": {"servizio": {"const": "interroga_nre"}}}, "then": {"required": ["criteri", "cf_medico"]}},
+        {"if": {"properties": {"servizio": {"const": "crea_id_sessione"}}}, "then": {"required": ["utente_rupar", "cf_utente", "codice_asl", "gestionale"]}},
+        {"if": {"properties": {"servizio": {"enum": ["verifica_id_sessione", "revoca_id_sessione"]}}}, "then": {"required": ["utente_rupar", "cf_utente", "id_sessione", "gestionale"]}}
+      ]
+    },
+    "osservatoPiemonte": {
+      "description": "Cosa l'esecutore ricava nei passi piemontesi diversi dalla codifica. leggi_piemonte_a2f: se SOAP Fault solo {fault}; altrimenti codice (codEsito: 0 positivo, 1 negativo), ok (codice 0 e nessun errore bloccante), errori [{codice, tipo, bloccante}] (bloccante: tipo E, F o assente; W è avviso), info (chiave -> valore), comunicazioni (codice -> messaggio), ambiente_test (comunicazione Working-mode = TEST), id_sessione_di_test (la comunicazione 'token', SOLO se ambiente_test: in produzione l'Id-Sessione arriva per mail e non si prende dalla risposta), permessi (comunicazione 'permessi' divisa sugli spazi), fine_validita, stato_token (infoToken/stato: 0 valido, 1 revocato, 2 scaduto). Lettura tollerante: 'errore', 'info', 'comunicazione', 'infoToken' si cercano ovunque sotto la radice. intestazioni_piemonte: {intestazioni: header HTTP che l'implementazione manderebbe}. pkce_piemonte: {code_challenge}. leggi_piemonte_jwt: firma_valida, alg, kid, sub, cf_utente (sub o userData.cfutente), aud, id_sessione (userData.idSessione), scope (lista).",
+      "type": "object"
+    },
+    "attesoPiemonte": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codice": {"type": "array", "items": {"type": "string", "pattern": "^[0-9]{1,4}$"}, "description": "codEsito A2F: deve essere uno di questi."},
+        "ok": {"type": "boolean"},
+        "campi": {"type": "object", "description": "Uguaglianza esatta su campi dell'osservato (null compreso)."},
+        "errore_codice": {"type": "string"},
+        "errore_bloccante": {"const": true},
+        "nessun_bloccante": {"const": true},
+        "intestazioni": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Header HTTP -> valore esatto."},
+        "intestazioni_prefisso": {"type": "object", "additionalProperties": {"type": "string"}, "description": "Header HTTP -> inizio del valore."},
+        "assenti": {"type": "array", "items": {"type": "string"}, "description": "Header HTTP che non devono esserci."},
+        "rifiuto_locale": {"const": true, "description": "L'implementazione deve rifiutare prima di andare avanti (controlli locali)."}
+      }
+    },
+    "opLeggiPiemonteA2f": {
+      "description": "Legge una risposta SINTETICA di CreateAuth, CheckToken o RevokeAuth (conformita/risposte/piemonte/). Osservato: osservatoPiemonte.",
+      "type": "object",
+      "required": ["risposta", "atteso"],
+      "additionalProperties": false,
+      "properties": {
+        "operazione": true,
+        "risposta": {"type": "string", "pattern": "^piemonte/[A-Za-z0-9_.-]+\\.xml$"},
+        "atteso": {"$ref": "#/$defs/attesoPiemonte"}
+      }
+    },
+    "opIntestazioniPiemonte": {
+      "description": "Header HTTP che l'implementazione metterebbe su una chiamata a SIRPED, SENZA chiamare. Credenziali, Id-Sessione e JWT sono di prova; il JWT si costruisce da 'jwt_payload' con una firma finta (il canale lo legge soltanto).",
+      "type": "object",
+      "required": ["servizio", "modalita", "gestionale", "atteso"],
+      "additionalProperties": false,
+      "properties": {
+        "operazione": true,
+        "servizio": {"enum": ["invio", "visualizza", "annulla", "interroga_nre", "crea_id_sessione", "verifica_id_sessione", "revoca_id_sessione"]},
+        "modalita": {"enum": ["mail", "oauth2"], "default": "mail", "description": "mail: Id-Sessione via mail certificata (Basic RUPAR, pincode cifrato, X-idSessione, X-Gestionale). oauth2: JWT nell'header X-OAuth2-Authorization, niente Basic, pinCode vuoto (REL-STC-01 V04, par. 4.2.5 e 4.3.6)."},
+        "gestionale": {"type": "object", "required": ["codice", "azienda"], "additionalProperties": false, "properties": {"codice": {"type": "string", "description": "Codice del gestionale (lo rilascia la Regione con l'autocertificazione; nei casi un valore di prova)."}, "azienda": {"type": "string", "pattern": "^[0-9A-Za-z]{3}$", "description": "Codice a 3 caratteri dell'Azienda. Valore di X-Gestionale, APP e client_id: <codice>_<azienda>."}}},
+        "credenziali": {"type": "object", "required": ["utente", "password", "pincode", "cf"], "additionalProperties": false, "properties": {"utente": {"type": "string"}, "password": {"type": "string"}, "pincode": {"type": "string"}, "cf": {"type": "string"}}, "description": "Solo mail: credenziali RUPAR DI PROVA."},
+        "id_sessione": {"type": "string", "description": "Solo mail: l'Id-Sessione arrivato per mail."},
+        "jwt_payload": {"type": "object", "description": "Solo oauth2: payload del JWT."},
+        "cf_medico": {"type": "string", "description": "Solo oauth2: il medico del canale."},
+        "atteso": {"$ref": "#/$defs/attesoPiemonte"}
+      },
+      "allOf": [
+        {"if": {"properties": {"modalita": {"const": "oauth2"}}}, "then": {"required": ["jwt_payload", "cf_medico"]}, "else": {"required": ["credenziali"]}}
+      ]
+    },
+    "opPkcePiemonte": {
+      "description": "code_challenge S256 = BASE64URL(SHA256(code_verifier)) senza '=' (RFC 7636 par. 4.2). Un code_verifier fuori dai 43-128 caratteri non riservati va rifiutato.",
+      "type": "object",
+      "required": ["code_verifier", "atteso"],
+      "additionalProperties": false,
+      "properties": {
+        "operazione": true,
+        "code_verifier": {"type": "string"},
+        "atteso": {"$ref": "#/$defs/attesoPiemonte"}
+      }
+    },
+    "opLeggiPiemonteJwt": {
+      "description": "Verifica la firma di un JWT con un JWKS (RS256/384/512; il modulo RSA in 'n', oppure in 'v' come nella tabella del par. 4.3.3) e ne legge i campi. Osservato: osservatoPiemonte.",
+      "type": "object",
+      "required": ["token", "jwks", "atteso"],
+      "additionalProperties": false,
+      "properties": {
+        "operazione": true,
+        "token": {"type": "string", "pattern": "^piemonte/[A-Za-z0-9_.-]+\\.txt$"},
+        "jwks": {"type": "string", "pattern": "^piemonte/[A-Za-z0-9_.-]+\\.json$"},
+        "atteso": {"$ref": "#/$defs/attesoPiemonte"}
+      }
+    }
+  }
+}

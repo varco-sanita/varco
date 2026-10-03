@@ -1,0 +1,30 @@
+{
+  "id": "FVG-016",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, invio con ElencoNota: per la prestazione con numero nota la ricevuta indica il tipo di ambulatorio",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, p. 22 (ElencoNota della ricevuta d'invio); TipiDati, notaType (progrPresc, codProdPrest, tipoAmbulatorio); DM 9/12/2015. Risposta SINTETICA scritta sugli XSD FVG (conformita/risposte/fvg/LEGGIMI.md)",
+  "passi": [
+    {
+      "operazione": "leggi_fvg",
+      "servizio": "invio",
+      "risposta": "fvg/invio_ok_nota_amb01.xml",
+      "atteso": {
+        "codice": [
+          "0000"
+        ],
+        "nre_formato": true,
+        "nessun_bloccante": true,
+        "campi": {
+          "note": [
+            {
+              "progressivo": "1",
+              "codice_prestazione": "88.39.9",
+              "tipo_ambulatorio": "AMB01"
+            }
+          ],
+          "downgrade_mir": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "FVG-107",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, visualizzazione: NRE, cfMedico, pinCode vuoto, prodottoCme",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.4; wsdl_prescritto.zip (medicinrete.insiel.it), VisualizzaPrescrittoRichiesta-v1.0.xsd",
+  "passi": [
+    {
+      "operazione": "codifica_fvg",
+      "servizio": "visualizza",
+      "nre": "0600A0000000001",
+      "cf_medico": "PROVAX00X00X000Y",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "nre": "0600A0000000001",
+          "cfMedico": "PROVAX00X00X000Y"
+        },
+        "attributi": {
+          "@prodottoCme": "VARCO-PROVA"
+        }
+      }
+    }
+  ]
+}

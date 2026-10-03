@@ -1,0 +1,20 @@
+{
+  "id": "OFF-015",
+  "famiglia": "offline",
+  "titolo": "Lista NRE: senza tipo prescrizione il SAC rifiuta (1153), anche se la specifica lo dà facoltativo",
+  "riferimento": "Progetto TS - Web services ricette dematerializzate, parte 1: prescrizione (vers. 08/07/2026), par. 4.2.4 (tipoPrescr facoltativo); Risposta reale del SAC di test, prove/20260930-171334-sostituto-nre",
+  "passi": [
+    {
+      "operazione": "leggi_interroga_nre",
+      "risposta": "interroga_nre_senza_tipo_1153.xml",
+      "atteso": {
+        "codice": [
+          "9999"
+        ],
+        "errore_codice": "1153",
+        "errore_bloccante": true,
+        "ricette_numero": 0
+      }
+    }
+  ]
+}

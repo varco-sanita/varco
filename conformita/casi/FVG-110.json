@@ -1,0 +1,33 @@
+{
+  "id": "FVG-110",
+  "famiglia": "fvg",
+  "titolo": "SAR FVG, lista degli NRE per intervallo e lotto: codLotto di sole cifre (max 7), niente prodottoCme",
+  "riferimento": "Insiel, Specifiche di interfaccia applicativa del servizio SAR - Prescrizione ricetta dematerializzata, Idof-dem-AT-01 dell'11/02/2026, par. 4.2 (composizione dell'NRE) e 4.5; wsdl_prescritto.zip (medicinrete.insiel.it), TipiDatiInterrogaNreUtilizzati.xsd (codLottoType [0-9]{1,7}). La corrispondenza lotto SAC -> codLotto FVG è DA CONFERMARE",
+  "passi": [
+    {
+      "operazione": "codifica_fvg",
+      "servizio": "interroga_nre",
+      "criteri": {
+        "codice_regione": "060",
+        "codice_lotto": "0600A01234567",
+        "tipo": "F",
+        "dal": "2026-10-01 00:00:00",
+        "al": "2026-10-01 23:59:59"
+      },
+      "cf_medico": "PROVAX00X00X000Y",
+      "atteso": {
+        "xsd_valido": true,
+        "tag": {
+          "pinCode": "",
+          "codRegione": "060",
+          "codLotto": "1234567",
+          "cfMedico": "PROVAX00X00X000Y",
+          "tipoPrescr": "F"
+        },
+        "tag_assenti": [
+          "nre"
+        ]
+      }
+    }
+  ]
+}
