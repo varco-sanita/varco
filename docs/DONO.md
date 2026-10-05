@@ -161,8 +161,8 @@ Legenda: **fatto** · **parziale** · **manca**
    Le richieste di terzi aperte tra luglio e settembre 2026 sono ancora in attesa
    (<https://github.com/italia/catalogo-software/issues>): ci vorrà tempo.
 5. **Presentarlo alla comunità tecnica del FSE** (vedi sotto, primo contatto).
-6. **Mandare la mail a Sogei** già scritta (`docs/bozza_mail_sogei.md`) per i
-   certificati di test del gateway, così si chiude il punto 16.
+6. **Mail a Sogei** per i certificati di test del gateway: inviata il 05/10/2026,
+   si aspetta la risposta per chiudere il punto 16.
 7. **Cercare la prima PA** e un secondo manutentore: sono i due punti che pesano
    di più nella valutazione comparativa.
 

@@ -70,8 +70,8 @@ sul 03/10/2026: nessun file sotto `specifiche/` in nessun commit, nessun file de
 nome o per contenuto, tra gli oggetti del repository). La copia del modulo è conservata fuori dal
 repository, per riprenderlo se arriva il permesso.
 
-**Cosa resta da fare.** La domanda è la prima della mail preparata per InnovaPuglia (helpdesk SIST),
-che parte solo col via del manutentore: il materiale si può usare per un progetto aperto e gratuito?
+**Cosa resta da fare.** La domanda è partita il 05/10/2026 con una mail all'helpdesk SIST di
+InnovaPuglia, e aspettiamo la risposta: il materiale si può usare per un progetto aperto e gratuito?
 Se no, cosa serve? Se la risposta è sì, il modulo torna e `docs/TERZE_PARTI.md` cita la risposta. Se
 serve l'accordo, il modulo resta fuori finché un accordo non permette un client open source.
 
